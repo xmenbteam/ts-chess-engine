@@ -1,6 +1,6 @@
 # TypeScript Chess
 
-TypeScript DevLabs Day 3
+TypeScript Language Track Day 3
 
 ## Introduction
 
