@@ -1,8 +1,10 @@
 # TypeScript Chess
 
-TypeScript Language Track Day 3
+TypeScript Language Track Days 4 - 6
 
-## Introduction
+## Day 1 - 2
+
+## Chess Engine
 
 This is an opportunity to explore all of the new class based syntax that TypeScript provides!
 
@@ -46,7 +48,7 @@ Once you have implemented a few `Piece` subclasses move on to the Game Class, yo
 `Game` should:
 
 - have a `makePieces` method that will automatically generate the pieces in their starting positions upon creation
-  - this could be a private static method as the pieces only want to be 'made' once per game as part of instanciating a new game
+  - this could be a private static method as the pieces only want to be 'made' once per game as part of instantiating a new game
 - have a `pieces` property that will store all the game pieces
   - this could be a private property that makes use of `makePieces`
 - have a means to keep track of whose turn it is - `b/w`?
