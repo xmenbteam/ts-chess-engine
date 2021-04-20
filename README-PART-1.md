@@ -1,10 +1,12 @@
-# TypeScript Chess
+# TypeScript Chess - Part 1
 
 TypeScript Language Track Days 4 - 6
 
 ### Days 1 - 2
 
-## Chess Engine
+</br>
+
+# Chess Engine
 
 This is an opportunity to explore all of the new class based syntax that TypeScript provides!
 
