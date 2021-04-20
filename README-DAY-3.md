@@ -46,3 +46,7 @@ To store and persist the state of the chess game we will implement [http.createS
 ```json
 { "reset": true }
 ```
+
+### Hints
+
+Remember the steps needed to set up a project in TypeScript such as the creation of a `tsconfig.json` and installing the correct types to allow TypeScript to use Node and the testing suite of your choosing.
