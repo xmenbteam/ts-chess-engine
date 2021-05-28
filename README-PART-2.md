@@ -18,7 +18,7 @@ To store and persist the state of the chess matches we will implement [http.crea
 
 ### POST /api/board
 
-- accepts the following body and instantiates a new game, effectively resetting the board yet allowing the status of previous matches to .
+- accepts the following body and instantiates a new game, effectively resetting the board yet allowing the status of the current match to be stored in a file system.
 
 ```json
 { "reset": true }
@@ -26,7 +26,7 @@ To store and persist the state of the chess matches we will implement [http.crea
 
 ### GET /api/board/:board_id
 
-- returns an array of all of the pieces currently on the board matching the given board_id
+- returns an array of all of the pieces currently on the board matching the given board_id.
 
 ```json
 {
@@ -56,6 +56,7 @@ To store and persist the state of the chess matches we will implement [http.crea
 }
 ```
 
+- chess notation should be used as the request body positions.
 - think about what errors could occur for this request and how you might handle them.
 
 ### Hints
