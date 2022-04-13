@@ -1,4 +1,4 @@
-import { Piece, Position } from "../classes";
+import { Piece, Position } from "../Classes";
 import { Colour } from "../Types";
 
 describe("Position Class", () => {
@@ -79,4 +79,8 @@ describe("Piece Class", () => {
 
     expect(typeof piece.canMoveTo).toBe("function");
   });
+});
+
+describe("Piece subclasses", () => {
+  describe("Pawn", () => {});
 });
