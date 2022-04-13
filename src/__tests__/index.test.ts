@@ -72,4 +72,11 @@ describe("Piece Class", () => {
     piece.setIsCaptured();
     expect(piece.getIsCaptured()).toBe(false);
   });
+  test("canMoveTo", () => {
+    const file = "a";
+    const rank = 2;
+    const piece = new Piece(Colour[1], file, rank);
+
+    expect(typeof piece.canMoveTo).toBe("function");
+  });
 });
