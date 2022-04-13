@@ -1,4 +1,6 @@
-import { Piece, Position } from "../Classes";
+import { Piece, Position } from "../Pieces/Pieces";
+import { Pawn } from "../Pieces/Pawn";
+import { Rook } from "../Pieces/Rook";
 import { Colour } from "../Types";
 
 describe("Position Class", () => {
@@ -35,52 +37,85 @@ describe("Position Class", () => {
   });
 });
 
-describe("Piece Class", () => {
-  test("Has position", () => {
-    const file = "a";
-    const rank = 2;
-    const piece = new Piece(Colour[0], file, rank);
-
-    const pos = piece.position.getPosition();
-    expect(pos).toEqual({ file: "a", rank: 2 });
-  });
-  test("Has Colour", () => {
-    const file = "a";
-    const rank = 2;
-    const piece = new Piece(Colour[0], file, rank);
-
-    const colour = piece.getColour();
-    expect(colour).toBe("BLACK");
-  });
-  test("moveTo", () => {
-    const file = "a";
-    const rank = 2;
-    const piece = new Piece(Colour[0], file, rank);
-
-    piece.position.setPosition("c", 5);
-
-    expect(piece.position.getPosition()).toEqual({ file: "c", rank: 5 });
-  });
-  test("setIsCaptured", () => {
-    const file = "a";
-    const rank = 2;
-    const piece = new Piece(Colour[0], file, rank);
-
-    expect(piece.getIsCaptured()).toBe(false);
-    piece.setIsCaptured();
-    expect(piece.getIsCaptured()).toBe(true);
-    piece.setIsCaptured();
-    expect(piece.getIsCaptured()).toBe(false);
-  });
-  test("canMoveTo", () => {
-    const file = "a";
-    const rank = 2;
-    const piece = new Piece(Colour[1], file, rank);
-
-    expect(typeof piece.canMoveTo).toBe("function");
-  });
-});
-
 describe("Piece subclasses", () => {
-  describe("Pawn", () => {});
+  describe("Pawn", () => {
+    test("Properties", () => {
+      const file = "a";
+      const rank = 2;
+      const p1 = new Pawn(Colour[1], file, rank);
+
+      const pos = p1.position.getPosition();
+      const colour = p1.getColour();
+
+      expect(pos).toEqual({ file: "a", rank: 2 });
+      expect(colour).toBe("WHITE");
+    });
+    test("setIsCaptured", () => {
+      const file = "a";
+      const rank = 2;
+      const p1 = new Pawn(Colour[0], file, rank);
+
+      expect(p1.getIsCaptured()).toBe(false);
+      p1.setIsCaptured();
+      expect(p1.getIsCaptured()).toBe(true);
+      p1.setIsCaptured();
+      expect(p1.getIsCaptured()).toBe(false);
+    });
+    test("moveTo", () => {
+      const file = "a";
+      const rank = 2;
+      const p1 = new Pawn(Colour[0], file, rank);
+
+      p1.position.setPosition("c", 5);
+
+      expect(p1.position.getPosition()).toEqual({ file: "c", rank: 5 });
+    });
+    test("hasMoved", () => {
+      const file = "a";
+      const rank = 2;
+      const p1 = new Pawn(Colour[1], file, rank);
+
+      expect(p1.hasMoved).toBe(false);
+
+      p1.setHasmoved();
+
+      expect(p1.hasMoved).toBe(true);
+    });
+    test("first move", () => {
+      const file = "a";
+      const rank = 2;
+      const p1 = new Pawn(Colour[1], file, rank);
+
+      const moves = p1.canMoveTo();
+
+      expect(moves.length).toBe(2);
+      expect(moves).toEqual([
+        { file, rank: rank + 1 },
+        { file, rank: rank + 2 },
+      ]);
+    });
+    test("not first move", () => {
+      const file = "a";
+      const rank = 2;
+      const p1 = new Pawn(Colour[1], file, rank);
+
+      p1.setHasmoved();
+
+      const moves = p1.canMoveTo();
+
+      expect(moves.length).toBe(1);
+      expect(moves).toEqual([{ file, rank: rank + 1 }]);
+    });
+  });
+  describe("Rook", () => {
+    test("canMoveTo", () => {
+      const file = "a";
+      const rank = 2;
+      const r1 = new Rook(Colour[1], file, rank);
+
+      const moves = r1.canMoveTo();
+
+      expect(moves.length).toBe(14);
+    });
+  });
 });

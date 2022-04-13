@@ -1,5 +1,5 @@
-import { PositionDiff } from "./Types";
-import { letterRef } from "./utils/utils";
+import { PositionDiff } from "../Types";
+import { letterRef } from "../utils/utils";
 
 export class Position {
   private file: string;
@@ -26,7 +26,7 @@ export class Position {
   }
 }
 
-export class Piece {
+export abstract class Piece {
   position: Position;
   private colour: string;
   private captured: boolean;
@@ -47,7 +47,7 @@ export class Piece {
     return this.colour;
   }
 
-  canMoveTo() {}
+  abstract canMoveTo(): void;
 
   constructor(pieceColour: string, file: string, rank: number) {
     this.position = new Position(file, rank);

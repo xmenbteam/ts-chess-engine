@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Piece = exports.Position = void 0;
-const utils_1 = require("./utils/utils");
+const utils_1 = require("../utils/utils");
 class Position {
     constructor(file, rank) {
         this.file = file;

@@ -39,6 +39,5 @@ class Piece {
     getColour() {
         return this.colour;
     }
-    canMoveTo() { }
 }
 exports.Piece = Piece;
