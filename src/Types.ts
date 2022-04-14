@@ -4,8 +4,8 @@ export type PositionDiff = {
 };
 
 export enum Colour {
-  "BLACK",
   "WHITE",
+  "BLACK",
 }
 
 export enum FileEnum {

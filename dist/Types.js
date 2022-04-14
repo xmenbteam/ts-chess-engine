@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileEnum = exports.Colour = void 0;
 var Colour;
 (function (Colour) {
-    Colour[Colour["BLACK"] = 0] = "BLACK";
-    Colour[Colour["WHITE"] = 1] = "WHITE";
+    Colour[Colour["WHITE"] = 0] = "WHITE";
+    Colour[Colour["BLACK"] = 1] = "BLACK";
 })(Colour = exports.Colour || (exports.Colour = {}));
 var FileEnum;
 (function (FileEnum) {

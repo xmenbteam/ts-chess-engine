@@ -1,4 +1,3 @@
-import { files, ranks } from "../utils/utils";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Bishop extends Piece {
