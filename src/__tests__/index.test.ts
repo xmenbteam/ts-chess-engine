@@ -1,6 +1,7 @@
-import { Piece, Position } from "../Pieces/Pieces";
+import { Piece, Position } from "../Pieces/PiecesAndPosition";
 import { Pawn } from "../Pieces/Pawn";
 import { Rook } from "../Pieces/Rook";
+import { Bishop } from "../Pieces/Bishop";
 import { Colour } from "../Types";
 
 describe("Position Class", () => {
@@ -61,14 +62,46 @@ describe("Piece subclasses", () => {
       p1.setIsCaptured();
       expect(p1.getIsCaptured()).toBe(false);
     });
-    test("moveTo", () => {
+    test("canMoveTo - !hasMoved", () => {
       const file = "a";
       const rank = 2;
       const p1 = new Pawn(Colour[0], file, rank);
 
-      p1.position.setPosition("c", 5);
+      const newPositionOne = new Position("a", 3);
+      const newPositionTwo = new Position("a", 4);
 
-      expect(p1.position.getPosition()).toEqual({ file: "c", rank: 5 });
+      const canMoveOne = p1.canMoveTo(newPositionOne);
+      const canMoveTwo = p1.canMoveTo(newPositionTwo);
+
+      expect(canMoveOne).toBe(true);
+      expect(canMoveTwo).toBe(true);
+    });
+    test("canMoveTo - hasMoved", () => {
+      const file = "a";
+      const rank = 2;
+      const p1 = new Pawn(Colour[0], file, rank);
+      p1.setHasmoved();
+
+      const newPositionOne = new Position("a", 3);
+      const newPositionTwo = new Position("a", 4);
+
+      const canMoveOne = p1.canMoveTo(newPositionOne);
+      const canMoveTwo = p1.canMoveTo(newPositionTwo);
+
+      expect(canMoveOne).toBe(true);
+      expect(canMoveTwo).toBe(false);
+    });
+    test("canMoveTo - hasMoved", () => {
+      const file = "a";
+      const rank = 2;
+      const p1 = new Pawn(Colour[0], file, rank);
+      p1.setHasmoved();
+
+      const newPositionOne = new Position("a", 5);
+
+      const canMoveOne = p1.canMoveTo(newPositionOne);
+
+      expect(canMoveOne).toBe(false);
     });
     test("hasMoved", () => {
       const file = "a";
@@ -85,14 +118,6 @@ describe("Piece subclasses", () => {
       const file = "a";
       const rank = 2;
       const p1 = new Pawn(Colour[1], file, rank);
-
-      const moves = p1.canMoveTo();
-
-      expect(moves.length).toBe(2);
-      expect(moves).toEqual([
-        { file, rank: rank + 1 },
-        { file, rank: rank + 2 },
-      ]);
     });
     test("not first move", () => {
       const file = "a";
@@ -100,11 +125,6 @@ describe("Piece subclasses", () => {
       const p1 = new Pawn(Colour[1], file, rank);
 
       p1.setHasmoved();
-
-      const moves = p1.canMoveTo();
-
-      expect(moves.length).toBe(1);
-      expect(moves).toEqual([{ file, rank: rank + 1 }]);
     });
   });
   describe("Rook", () => {
@@ -113,9 +133,46 @@ describe("Piece subclasses", () => {
       const rank = 2;
       const r1 = new Rook(Colour[1], file, rank);
 
-      const moves = r1.canMoveTo();
+      const newPosition = new Position("h", 2);
 
-      expect(moves.length).toBe(14);
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(true);
+    });
+    test("!canMoveTo", () => {
+      const file = "a";
+      const rank = 2;
+      const r1 = new Rook(Colour[1], file, rank);
+
+      const newPosition = new Position("h", 3);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(false);
+    });
+  });
+  describe("Bishop", () => {
+    test("canMoveTo - d4", () => {
+      const file = "d";
+      const rank = 4;
+      const r1 = new Bishop(Colour[1], file, rank);
+
+      const newPosition = new Position("h", 8);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(true);
+    });
+    test("!canMoveTo - d4", () => {
+      const file = "d";
+      const rank = 4;
+      const r1 = new Bishop(Colour[1], file, rank);
+
+      const newPosition = new Position("h", 6);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(false);
     });
   });
 });

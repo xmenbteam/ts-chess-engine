@@ -1,4 +1,4 @@
-import { Piece } from "./Pieces";
+import { Piece, Position } from "./PiecesAndPosition";
 
 export class Pawn extends Piece {
   hasMoved: boolean = false;
@@ -7,16 +7,12 @@ export class Pawn extends Piece {
     this.hasMoved = true;
   }
 
-  canMoveTo(): Array<{ file: string; rank: number }> {
-    const currentPosition = this.position.getPosition();
+  canMoveTo(newPosition: Position): boolean {
+    const { file, rank } = newPosition.distanceFrom(this.position);
+    if (!file && rank === 1) return true;
+    if (!file && rank === 2 && !this.hasMoved) return true;
 
-    if (this.hasMoved)
-      return [{ file: currentPosition.file, rank: currentPosition.rank + 1 }];
-    else
-      return [
-        { file: currentPosition.file, rank: currentPosition.rank + 1 },
-        { file: currentPosition.file, rank: currentPosition.rank + 2 },
-      ];
+    return false;
   }
 
   constructor(pieceColour: string, file: string, rank: number) {

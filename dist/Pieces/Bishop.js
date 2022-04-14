@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Rook = void 0;
+exports.Bishop = void 0;
 const PiecesAndPosition_1 = require("./PiecesAndPosition");
-class Rook extends PiecesAndPosition_1.Piece {
+class Bishop extends PiecesAndPosition_1.Piece {
     canMoveTo(newPosition) {
         const { file, rank } = newPosition.distanceFrom(this.position);
-        if (!file || !rank)
+        if (Math.abs(file) === Math.abs(rank))
             return true;
         return false;
     }
@@ -13,4 +13,4 @@ class Rook extends PiecesAndPosition_1.Piece {
         super(pieceColour, file, rank);
     }
 }
-exports.Rook = Rook;
+exports.Bishop = Bishop;

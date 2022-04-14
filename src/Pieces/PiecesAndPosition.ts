@@ -47,7 +47,7 @@ export abstract class Piece {
     return this.colour;
   }
 
-  abstract canMoveTo(): void;
+  abstract canMoveTo(newPosition: Position): boolean;
 
   constructor(pieceColour: string, file: string, rank: number) {
     this.position = new Position(file, rank);
