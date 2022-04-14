@@ -1,10 +1,10 @@
 import { Piece, Position } from "./PiecesAndPosition";
 
-export class Rook extends Piece {
+export class Knight extends Piece {
   canMoveTo(newPosition: Position): boolean {
     const { file, rank } = newPosition.distanceFrom(this.position);
-
-    if (!file || !rank) return true;
+    if (Math.abs(file) === 2 && Math.abs(rank) === 1) return true;
+    if (Math.abs(file) === 1 && Math.abs(rank) === 2) return true;
 
     return false;
   }

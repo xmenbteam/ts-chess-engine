@@ -2,6 +2,9 @@ import { Piece, Position } from "../Pieces/PiecesAndPosition";
 import { Pawn } from "../Pieces/Pawn";
 import { Rook } from "../Pieces/Rook";
 import { Bishop } from "../Pieces/Bishop";
+import { Knight } from "../Pieces/Knight";
+import { King } from "../Pieces/King";
+import { Queen } from "../Pieces/Queen";
 import { Colour } from "../Types";
 
 describe("Position Class", () => {
@@ -169,6 +172,122 @@ describe("Piece subclasses", () => {
       const r1 = new Bishop(Colour[1], file, rank);
 
       const newPosition = new Position("h", 6);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(false);
+    });
+  });
+  describe("Knight", () => {
+    test("canMoveTo", () => {
+      const file = "d";
+      const rank = 4;
+      const r1 = new Knight(Colour[1], file, rank);
+
+      const newPosition = new Position("f", 3);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(true);
+    });
+    test("!canMoveTo", () => {
+      const file = "d";
+      const rank = 4;
+      const r1 = new Knight(Colour[1], file, rank);
+
+      const newPosition = new Position("f", 4);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(false);
+    });
+  });
+  describe("King", () => {
+    test("canMoveTo - diagonal", () => {
+      const file = "d";
+      const rank = 4;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("e", 3);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(true);
+    });
+    test("canMoveTo - file", () => {
+      const file = "d";
+      const rank = 4;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("e", 4);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(true);
+    });
+    test("canMoveTo - rank", () => {
+      const file = "d";
+      const rank = 4;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("d", 5);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(true);
+    });
+    test("!canMoveTo", () => {
+      const file = "d";
+      const rank = 4;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("e", 7);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(false);
+    });
+  });
+  describe("Queen", () => {
+    test("canMoveTo - d4", () => {
+      const file = "d";
+      const rank = 4;
+      const r1 = new Queen(Colour[1], file, rank);
+
+      const newPosition = new Position("h", 8);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(true);
+    });
+    test("!canMoveTo - d4", () => {
+      const file = "d";
+      const rank = 4;
+      const r1 = new Queen(Colour[1], file, rank);
+
+      const newPosition = new Position("h", 6);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(false);
+    });
+    test("canMoveTo", () => {
+      const file = "a";
+      const rank = 2;
+      const r1 = new Queen(Colour[1], file, rank);
+
+      const newPosition = new Position("h", 2);
+
+      const canMove = r1.canMoveTo(newPosition);
+
+      expect(canMove).toBe(true);
+    });
+    test("!canMoveTo", () => {
+      const file = "a";
+      const rank = 2;
+      const r1 = new Queen(Colour[1], file, rank);
+
+      const newPosition = new Position("h", 3);
 
       const canMove = r1.canMoveTo(newPosition);
 
