@@ -7,7 +7,10 @@ class Pawn extends PiecesAndPosition_1.Piece {
         super(pieceColour, file, rank);
         this.hasMoved = false;
     }
-    setHasmoved() {
+    getHasMoved() {
+        return this.hasMoved;
+    }
+    setHasMoved() {
         this.hasMoved = true;
     }
     canMoveTo(newPosition) {

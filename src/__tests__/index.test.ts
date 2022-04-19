@@ -5,6 +5,7 @@ import { Bishop } from "../Pieces/Bishop";
 import { Knight } from "../Pieces/Knight";
 import { King } from "../Pieces/King";
 import { Queen } from "../Pieces/Queen";
+import { Game } from "../Game";
 import { Colour } from "../Types";
 
 describe("Position Class", () => {
@@ -52,7 +53,7 @@ describe("Piece subclasses", () => {
       const colour = p1.getColour();
 
       expect(pos).toEqual({ file: "a", rank: 2 });
-      expect(colour).toBe("WHITE");
+      expect(colour).toBe("BLACK");
     });
     test("setIsCaptured", () => {
       const file = "a";
@@ -83,7 +84,7 @@ describe("Piece subclasses", () => {
       const file = "a";
       const rank = 2;
       const p1 = new Pawn(Colour[0], file, rank);
-      p1.setHasmoved();
+      p1.setHasMoved();
 
       const newPositionOne = new Position("a", 3);
       const newPositionTwo = new Position("a", 4);
@@ -98,7 +99,7 @@ describe("Piece subclasses", () => {
       const file = "a";
       const rank = 2;
       const p1 = new Pawn(Colour[0], file, rank);
-      p1.setHasmoved();
+      p1.setHasMoved();
 
       const newPositionOne = new Position("a", 5);
 
@@ -111,11 +112,11 @@ describe("Piece subclasses", () => {
       const rank = 2;
       const p1 = new Pawn(Colour[1], file, rank);
 
-      expect(p1.hasMoved).toBe(false);
+      expect(p1.getHasMoved()).toBe(false);
 
-      p1.setHasmoved();
+      p1.setHasMoved();
 
-      expect(p1.hasMoved).toBe(true);
+      expect(p1.getHasMoved()).toBe(true);
     });
     test("first move", () => {
       const file = "a";
@@ -127,7 +128,7 @@ describe("Piece subclasses", () => {
       const rank = 2;
       const p1 = new Pawn(Colour[1], file, rank);
 
-      p1.setHasmoved();
+      p1.setHasMoved();
     });
   });
   describe("Rook", () => {
@@ -152,6 +153,17 @@ describe("Piece subclasses", () => {
       const canMove = r1.canMoveTo(newPosition);
 
       expect(canMove).toBe(false);
+    });
+    test("hasMoved", () => {
+      const file = "a";
+      const rank = 2;
+      const r1 = new Rook(Colour[1], file, rank);
+
+      expect(r1.getHasMoved()).toBe(false);
+
+      r1.setHasMoved();
+
+      expect(r1.getHasMoved()).toBe(true);
     });
   });
   describe("Bishop", () => {
@@ -247,6 +259,17 @@ describe("Piece subclasses", () => {
 
       expect(canMove).toBe(false);
     });
+    test("hasMoved", () => {
+      const file = "a";
+      const rank = 2;
+      const r1 = new King(Colour[1], file, rank);
+
+      expect(r1.getHasMoved()).toBe(false);
+
+      r1.setHasMoved();
+
+      expect(r1.getHasMoved()).toBe(true);
+    });
   });
   describe("Queen", () => {
     test("canMoveTo - d4", () => {
@@ -293,5 +316,17 @@ describe("Piece subclasses", () => {
 
       expect(canMove).toBe(false);
     });
+  });
+});
+
+describe("Game", () => {
+  test("Has a turnCount/white goes first", () => {
+    const game = new Game();
+
+    expect(game.getColourTurn()).toBe("WHITE");
+    game.incTurnCount();
+    expect(game.getColourTurn()).toBe("BLACK");
+    game.incTurnCount();
+    expect(game.getColourTurn()).toBe("WHITE");
   });
 });

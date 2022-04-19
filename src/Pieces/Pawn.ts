@@ -1,9 +1,13 @@
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Pawn extends Piece {
-  hasMoved: boolean = false;
+  private hasMoved: boolean = false;
 
-  setHasmoved() {
+  getHasMoved() {
+    return this.hasMoved;
+  }
+
+  setHasMoved() {
     this.hasMoved = true;
   }
 
