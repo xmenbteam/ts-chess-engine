@@ -329,4 +329,10 @@ describe("Game", () => {
     game.incTurnCount();
     expect(game.getColourTurn()).toBe("WHITE");
   });
+  test.only("isPieceThere", () => {
+    const game = new Game();
+
+    expect(game.isPieceThere("e", 7)).toBe(true);
+    expect(game.isPieceThere("f", 6)).toBe(false);
+  });
 });

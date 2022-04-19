@@ -59,6 +59,15 @@ class Game {
     incTurnCount() {
         this.turnCount++;
     }
+    isPieceThere(file, rank) {
+        for (let piece in this.pieces) {
+            const rankCheck = this.pieces[piece].position.getPosition().rank;
+            const fileCheck = this.pieces[piece].position.getPosition().file;
+            if (file === fileCheck && rank === rankCheck)
+                return true;
+        }
+        return false;
+    }
     makeMove(move) { }
 }
 exports.Game = Game;
