@@ -329,7 +329,7 @@ describe("Game", () => {
     game.incTurnCount();
     expect(game.getColourTurn()).toBe("WHITE");
   });
-  test.only("isPieceThere", () => {
+  test("isPieceThere", () => {
     const game = new Game();
 
     expect(game.isPieceThere("e", 7)).toBe(true);
