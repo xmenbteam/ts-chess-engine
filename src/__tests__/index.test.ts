@@ -335,4 +335,28 @@ describe("Game", () => {
     expect(game.isPieceThere("e", 7)).toBe(true);
     expect(game.isPieceThere("f", 6)).toBe(false);
   });
+  test("isPieceSameColour", () => {
+    const game = new Game();
+
+    const pieces = game.getPieces();
+
+    const whiteRook = pieces.Ra1;
+    const whiteKnight = pieces.Nb1;
+
+    const isSame = game.isPieceSameColour(whiteRook, whiteKnight);
+
+    expect(isSame).toBe(true);
+  });
+  test("!isPieceSameColour", () => {
+    const game = new Game();
+
+    const pieces = game.getPieces();
+
+    const blackKnight = pieces.Ng8;
+    const whiteKnight = pieces.Nb1;
+
+    const isSame = game.isPieceSameColour(blackKnight, whiteKnight);
+
+    expect(isSame).toBe(false);
+  });
 });

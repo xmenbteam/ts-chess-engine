@@ -61,11 +61,19 @@ class Game {
     }
     isPieceThere(file, rank) {
         for (let piece in this.pieces) {
-            const rankCheck = this.pieces[piece].position.getPosition().rank;
-            const fileCheck = this.pieces[piece].position.getPosition().file;
-            if (file === fileCheck && rank === rankCheck)
+            const rankCheck = this.pieces[piece].position.getPosition().rank === rank;
+            const fileCheck = this.pieces[piece].position.getPosition().file === file;
+            if (fileCheck && rankCheck)
                 return true;
         }
+        return false;
+    }
+    isPieceSameColour(pieceOne, pieceTwo) {
+        const p1Colour = pieceOne.getColour();
+        const p2Colour = pieceTwo.getColour();
+        return p1Colour === p2Colour ? true : false;
+    }
+    isPieceInTheWay(pieceOne, pieceTwo) {
         return false;
     }
     makeMove(move) { }

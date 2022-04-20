@@ -52,7 +52,7 @@ export class Game {
     return this.pieces;
   }
 
-  getColourTurn() {
+  getColourTurn(): string {
     return this.turnCount % 2 === 0 ? Colour[0] : Colour[1];
   }
 
@@ -60,12 +60,23 @@ export class Game {
     this.turnCount++;
   }
 
-  isPieceThere(file: string, rank: number) {
+  isPieceThere(file: string, rank: number): boolean {
     for (let piece in this.pieces) {
-      const rankCheck = this.pieces[piece].position.getPosition().rank;
-      const fileCheck = this.pieces[piece].position.getPosition().file;
-      if (file === fileCheck && rank === rankCheck) return true;
+      const rankCheck = this.pieces[piece].position.getPosition().rank === rank;
+      const fileCheck = this.pieces[piece].position.getPosition().file === file;
+      if (fileCheck && rankCheck) return true;
     }
+    return false;
+  }
+
+  isPieceSameColour(pieceOne: Piece, pieceTwo: Piece): boolean {
+    const p1Colour = pieceOne.getColour();
+    const p2Colour = pieceTwo.getColour();
+
+    return p1Colour === p2Colour ? true : false;
+  }
+
+  isPieceInTheWay(pieceOne: Piece, pieceTwo: Piece): boolean {
     return false;
   }
 
