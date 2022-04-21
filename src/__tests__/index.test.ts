@@ -359,4 +359,43 @@ describe("Game", () => {
 
     expect(isSame).toBe(false);
   });
+  test("isPieceInTheWay - bishop", () => {
+    const game = new Game();
+
+    const pieces = game.getPieces();
+
+    const bishop = pieces.Bc1;
+
+    const newPosition = new Position("e", 3);
+
+    const isPieceInTheWay = game.isPieceInTheWay(bishop, newPosition);
+
+    expect(isPieceInTheWay).toBe(true);
+  });
+  test("isPieceInTheWay - rook", () => {
+    const game = new Game();
+
+    const pieces = game.getPieces();
+
+    const rook = pieces.Ra1;
+
+    const newPosition = new Position("a", 3);
+
+    const isPieceInTheWay = game.isPieceInTheWay(rook, newPosition);
+
+    expect(isPieceInTheWay).toBe(true);
+  });
+  test("!isPieceInTheWay - pawn", () => {
+    const game = new Game();
+
+    const pieces = game.getPieces();
+
+    const pawn = pieces.a2;
+
+    const newPosition = new Position("a", 3);
+
+    const isPieceInTheWay = game.isPieceInTheWay(pawn, newPosition);
+
+    expect(isPieceInTheWay).toBe(false);
+  });
 });

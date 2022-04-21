@@ -8,6 +8,7 @@ const Pawn_1 = require("./Pieces/Pawn");
 const Queen_1 = require("./Pieces/Queen");
 const Rook_1 = require("./Pieces/Rook");
 const Types_1 = require("./Types");
+const utils_1 = require("./utils/utils");
 class Game {
     constructor() {
         this.turnCount = 0;
@@ -73,7 +74,32 @@ class Game {
         const p2Colour = pieceTwo.getColour();
         return p1Colour === p2Colour ? true : false;
     }
-    isPieceInTheWay(pieceOne, pieceTwo) {
+    isPieceInTheWay(piece, newPosition) {
+        const { file: newFile, rank: newRank } = newPosition.getPosition();
+        const { file: pieceFile, rank: pieceRank } = piece.position.getPosition();
+        const pieceObj = this.getPieces();
+        const minRank = Math.min(pieceRank, newRank);
+        const maxRank = Math.max(pieceRank, newRank);
+        const minFile = Math.min(utils_1.letterRef[pieceFile], utils_1.letterRef[newFile]);
+        const maxFile = Math.max(utils_1.letterRef[pieceFile], utils_1.letterRef[newFile]);
+        const positions = [];
+        for (let i = minFile; i <= maxFile; i++) {
+            positions.push(utils_1.files[i]);
+        }
+        for (let i = minRank - 1; i < maxRank; i++) {
+            positions[i] += (i + 1).toString();
+        }
+        const allPieces = [];
+        for (let gamePiece in pieceObj) {
+            const file = pieceObj[gamePiece].position.getPosition().file;
+            const rank = pieceObj[gamePiece].position.getPosition().rank;
+            allPieces.push(`${file}${rank}`);
+        }
+        for (let i = 0; i < positions.length; i++) {
+            if (allPieces.includes(positions[i])) {
+                return true;
+            }
+        }
         return false;
     }
     makeMove(move) { }

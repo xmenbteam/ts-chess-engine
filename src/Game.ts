@@ -2,10 +2,11 @@ import { Bishop } from "./Pieces/Bishop";
 import { King } from "./Pieces/King";
 import { Knight } from "./Pieces/Knight";
 import { Pawn } from "./Pieces/Pawn";
-import { Piece } from "./Pieces/PiecesAndPosition";
+import { Piece, Position } from "./Pieces/PiecesAndPosition";
 import { Queen } from "./Pieces/Queen";
 import { Rook } from "./Pieces/Rook";
 import { Colour } from "./Types";
+import { files, letterRef } from "./utils/utils";
 
 export class Game {
   private turnCount: number;
@@ -76,7 +77,40 @@ export class Game {
     return p1Colour === p2Colour ? true : false;
   }
 
-  isPieceInTheWay(pieceOne: Piece, pieceTwo: Piece): boolean {
+  isPieceInTheWay(piece: Piece, newPosition: Position): boolean {
+    const { file: newFile, rank: newRank } = newPosition.getPosition();
+    const { file: pieceFile, rank: pieceRank } = piece.position.getPosition();
+    const pieceObj = this.getPieces();
+
+    const minRank = Math.min(pieceRank, newRank);
+    const maxRank = Math.max(pieceRank, newRank);
+
+    const minFile = Math.min(letterRef[pieceFile], letterRef[newFile]);
+    const maxFile = Math.max(letterRef[pieceFile], letterRef[newFile]);
+
+    const positions = [];
+
+    for (let i = minFile; i <= maxFile; i++) {
+      positions.push(files[i]);
+    }
+    for (let i = minRank - 1; i < maxRank; i++) {
+      positions[i] += (i + 1).toString();
+    }
+
+    const allPieces = [];
+
+    for (let gamePiece in pieceObj) {
+      const file = pieceObj[gamePiece].position.getPosition().file;
+      const rank = pieceObj[gamePiece].position.getPosition().rank;
+      allPieces.push(`${file}${rank}`);
+    }
+
+    for (let i = 0; i < positions.length; i++) {
+      if (allPieces.includes(positions[i])) {
+        return true;
+      }
+    }
+
     return false;
   }
 
