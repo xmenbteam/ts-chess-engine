@@ -361,22 +361,16 @@ describe("Game", () => {
   });
   test("isPieceInTheWay - bishop", () => {
     const game = new Game();
-
     const pieces = game.getPieces();
-
     const bishop = pieces.Bc1;
-
     const newPosition = new Position("e", 3);
 
     const isPieceInTheWay = game.isPieceInTheWay(bishop, newPosition);
-
     expect(isPieceInTheWay).toBe(true);
   });
   test("isPieceInTheWay - rook", () => {
     const game = new Game();
-
     const pieces = game.getPieces();
-
     const rook = pieces.Ra1;
 
     const newPosition = new Position("a", 3);
@@ -387,9 +381,7 @@ describe("Game", () => {
   });
   test("!isPieceInTheWay - pawn", () => {
     const game = new Game();
-
     const pieces = game.getPieces();
-
     const pawn = pieces.a2;
 
     const newPosition = new Position("a", 3);
@@ -397,5 +389,18 @@ describe("Game", () => {
     const isPieceInTheWay = game.isPieceInTheWay(pawn, newPosition);
 
     expect(isPieceInTheWay).toBe(false);
+  });
+  describe("makeMove", () => {
+    test.only("e4 e7", () => {
+      const game = new Game();
+      const move = "e4 e7";
+      const beforePieces = game.getPieces();
+
+      game.makeMove(move);
+
+      const afterPieces = game.getPieces();
+
+      // expect(beforePieces).not.toEqual(afterPieces);
+    });
   });
 });

@@ -15,6 +15,7 @@ export class Pawn extends Piece {
     const { file, rank } = newPosition.distanceFrom(this.position);
     if (!file && rank === 1) return true;
     if (!file && rank === 2 && !this.hasMoved) return true;
+    if (Math.abs(file) === 1 && rank === 1) return true;
 
     return false;
   }

@@ -110,11 +110,13 @@ export class Game {
         return true;
       }
     }
-
     return false;
   }
 
-  makeMove(move: string) {}
+  makeMove(move: string) {
+    const moveArray = move.split(" ");
+    console.log({ moveArray });
+  }
 
   constructor() {
     this.turnCount = 0;

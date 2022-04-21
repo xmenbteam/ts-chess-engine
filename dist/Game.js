@@ -102,6 +102,9 @@ class Game {
         }
         return false;
     }
-    makeMove(move) { }
+    makeMove(move) {
+        const moveArray = move.split(" ");
+        console.log({ moveArray });
+    }
 }
 exports.Game = Game;

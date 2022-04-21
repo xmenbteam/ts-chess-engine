@@ -19,6 +19,8 @@ class Pawn extends PiecesAndPosition_1.Piece {
             return true;
         if (!file && rank === 2 && !this.hasMoved)
             return true;
+        if (Math.abs(file) === 1 && rank === 1)
+            return true;
         return false;
     }
 }
