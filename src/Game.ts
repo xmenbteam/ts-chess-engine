@@ -6,7 +6,7 @@ import { Piece, Position } from "./Pieces/PiecesAndPosition";
 import { Queen } from "./Pieces/Queen";
 import { Rook } from "./Pieces/Rook";
 import { Colour } from "./Types";
-import { files, letterRef } from "./utils/utils";
+import { files, letterRef, pawnTest } from "./utils/utils";
 
 export class Game {
   private turnCount: number;
@@ -115,7 +115,27 @@ export class Game {
 
   makeMove(move: string) {
     const moveArray = move.split(" ");
-    console.log({ moveArray });
+    const pieceObj = this.getPieces();
+    // console.log({ moveArray, pieceObj });
+    moveArray.forEach((move, i) => {
+      if (pawnTest.test(move)) {
+        const pos = new Position(move[0], Number(move[1]));
+        // Find the pawn
+        for (let piece in pieceObj) {
+          if (
+            pieceObj[piece].canMoveTo(pos) &&
+            pieceObj[piece].getColour() === Colour[i] &&
+            !this.isPieceInTheWay(pieceObj[piece], pos)
+          ) {
+            pieceObj[piece].position.setPosition(move[0], Number(move[1]));
+            pieceObj[`${move[0]}${move[1]}`] = pieceObj[piece];
+            delete pieceObj[piece];
+          }
+        }
+        // Check if it can move there
+      }
+    });
+    // console.log({ pieceObj });
   }
 
   constructor() {

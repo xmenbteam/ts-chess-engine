@@ -13,3 +13,5 @@ export const files: string[] = ["a", "b", "c", "d", "e", "f", "g", "h"];
 export const ranks: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
 
 // export const chessConverter = (string: string) => {};
+
+export const pawnTest = /^[a-h][1-8]/;

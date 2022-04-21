@@ -5,6 +5,7 @@ const Bishop_1 = require("./Pieces/Bishop");
 const King_1 = require("./Pieces/King");
 const Knight_1 = require("./Pieces/Knight");
 const Pawn_1 = require("./Pieces/Pawn");
+const PiecesAndPosition_1 = require("./Pieces/PiecesAndPosition");
 const Queen_1 = require("./Pieces/Queen");
 const Rook_1 = require("./Pieces/Rook");
 const Types_1 = require("./Types");
@@ -104,7 +105,25 @@ class Game {
     }
     makeMove(move) {
         const moveArray = move.split(" ");
-        console.log({ moveArray });
+        const pieceObj = this.getPieces();
+        // console.log({ moveArray, pieceObj });
+        moveArray.forEach((move, i) => {
+            if (utils_1.pawnTest.test(move)) {
+                const pos = new PiecesAndPosition_1.Position(move[0], Number(move[1]));
+                // Find the pawn
+                for (let piece in pieceObj) {
+                    if (pieceObj[piece].canMoveTo(pos) &&
+                        pieceObj[piece].getColour() === Types_1.Colour[i] &&
+                        !this.isPieceInTheWay(pieceObj[piece], pos)) {
+                        pieceObj[piece].position.setPosition(move[0], Number(move[1]));
+                        pieceObj[`${move[0]}${move[1]}`] = pieceObj[piece];
+                        delete pieceObj[piece];
+                    }
+                }
+                // Check if it can move there
+            }
+        });
+        // console.log({ pieceObj });
     }
 }
 exports.Game = Game;

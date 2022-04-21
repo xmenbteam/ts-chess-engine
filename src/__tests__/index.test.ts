@@ -391,14 +391,15 @@ describe("Game", () => {
     expect(isPieceInTheWay).toBe(false);
   });
   describe("makeMove", () => {
-    test.only("e4 e7", () => {
+    test.only("Move one piece - e2 - e4", () => {
       const game = new Game();
-      const move = "e4 e7";
+      const move = "e4";
       const beforePieces = game.getPieces();
 
+      console.log(beforePieces.e2);
       game.makeMove(move);
 
-      const afterPieces = game.getPieces();
+      console.log(beforePieces.e4);
 
       // expect(beforePieces).not.toEqual(afterPieces);
     });
