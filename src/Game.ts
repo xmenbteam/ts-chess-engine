@@ -127,6 +127,7 @@ export class Game {
             pieceObj[piece].getColour() === Colour[i] &&
             !this.isPieceInTheWay(pieceObj[piece], pos)
           ) {
+            if (pieceObj.getHasMoved) pieceObj.setHasMoved;
             pieceObj[piece].position.setPosition(move[0], Number(move[1]));
             pieceObj[`${move[0]}${move[1]}`] = pieceObj[piece];
             delete pieceObj[piece];
