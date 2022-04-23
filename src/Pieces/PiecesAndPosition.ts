@@ -30,6 +30,7 @@ export abstract class Piece {
   position: Position;
   private colour: string;
   private captured: boolean;
+  private hasMoved: boolean = false;
 
   moveTo(file: string, rank: number): void {
     this.position.setPosition(file, rank);
@@ -45,6 +46,14 @@ export abstract class Piece {
 
   getColour() {
     return this.colour;
+  }
+
+  getHasMoved() {
+    return this.hasMoved;
+  }
+
+  setHasMoved() {
+    this.hasMoved = true;
   }
 
   abstract canMoveTo(newPosition: Position): boolean;

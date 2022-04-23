@@ -77,10 +77,24 @@ export class Game {
     return p1Colour === p2Colour ? true : false;
   }
 
+  getAllPositions(): string[] {
+    const values = Object.values(this.getPieces());
+    return values.reduce((array: string[], piece: Piece) => {
+      array.push(
+        `${piece.position.getPosition().file}${
+          piece.position.getPosition().rank
+        }`
+      );
+      return array;
+    }, []);
+  }
+
   isPieceInTheWay(piece: Piece, newPosition: Position): boolean {
     const { file: newFile, rank: newRank } = newPosition.getPosition();
     const { file: pieceFile, rank: pieceRank } = piece.position.getPosition();
-    const pieceObj = this.getPieces();
+
+    const allPieces = this.getAllPositions();
+    const piecePosition = `${pieceFile}${pieceRank}`;
 
     const minRank = Math.min(pieceRank, newRank);
     const maxRank = Math.max(pieceRank, newRank);
@@ -91,43 +105,38 @@ export class Game {
     const positions = [];
 
     for (let i = minFile; i <= maxFile; i++) {
-      positions.push(files[i]);
+      const fileRank = `${files[i]}${minRank}`;
+      positions.push(fileRank);
     }
     for (let i = minRank - 1; i < maxRank; i++) {
-      positions[i] += (i + 1).toString();
+      if (!positions[i]) positions[i] = positions[0][0];
+      positions[i] = `${positions[i][0]}${(i + 1).toString()}`;
     }
 
-    const allPieces = [];
+    const notStartingSquare = positions.filter(
+      (position) => position !== piecePosition
+    );
 
-    for (let gamePiece in pieceObj) {
-      const file = pieceObj[gamePiece].position.getPosition().file;
-      const rank = pieceObj[gamePiece].position.getPosition().rank;
-      allPieces.push(`${file}${rank}`);
-    }
-
-    for (let i = 0; i < positions.length; i++) {
-      if (allPieces.includes(positions[i])) {
-        return true;
-      }
-    }
+    for (let i = 0; i < notStartingSquare.length; i++)
+      if (allPieces.includes(notStartingSquare[i])) return true;
     return false;
   }
 
   makeMove(move: string) {
     const moveArray = move.split(" ");
     const pieceObj = this.getPieces();
-    // console.log({ moveArray, pieceObj });
     moveArray.forEach((move, i) => {
+      console.log({ move });
       if (pawnTest.test(move)) {
         const pos = new Position(move[0], Number(move[1]));
-        // Find the pawn
         for (let piece in pieceObj) {
           if (
             pieceObj[piece].canMoveTo(pos) &&
             pieceObj[piece].getColour() === Colour[i] &&
             !this.isPieceInTheWay(pieceObj[piece], pos)
           ) {
-            if (pieceObj.getHasMoved) pieceObj.setHasMoved;
+            console.log(pieceObj[piece]);
+            if (!pieceObj[piece].getHasMoved()) pieceObj[piece].setHasMoved();
             pieceObj[piece].position.setPosition(move[0], Number(move[1]));
             pieceObj[`${move[0]}${move[1]}`] = pieceObj[piece];
             delete pieceObj[piece];

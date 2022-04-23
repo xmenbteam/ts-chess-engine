@@ -1,16 +1,6 @@
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class King extends Piece {
-  private hasMoved: boolean = false;
-
-  setHasMoved() {
-    this.hasMoved = true;
-  }
-
-  getHasMoved() {
-    return this.hasMoved;
-  }
-
   canMoveTo(newPosition: Position): boolean {
     const { file, rank } = newPosition.distanceFrom(this.position);
     if (Math.abs(file) === 1 && Math.abs(rank) === 1) return true;

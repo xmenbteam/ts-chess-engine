@@ -107,6 +107,18 @@ describe("Piece subclasses", () => {
 
       expect(canMoveOne).toBe(false);
     });
+    test("canMoveTo - black", () => {
+      const file = "a";
+      const rank = 8;
+      const p1 = new Pawn(Colour[1], file, rank);
+      p1.setHasMoved();
+
+      const newPositionOne = new Position("a", 7);
+
+      const canMoveOne = p1.canMoveTo(newPositionOne);
+
+      expect(canMoveOne).toBe(true);
+    });
     test("hasMoved", () => {
       const file = "a";
       const rank = 2;
@@ -368,12 +380,23 @@ describe("Game", () => {
     const isPieceInTheWay = game.isPieceInTheWay(bishop, newPosition);
     expect(isPieceInTheWay).toBe(true);
   });
-  test("isPieceInTheWay - rook", () => {
+  test("isPieceInTheWay - rook - rank", () => {
     const game = new Game();
     const pieces = game.getPieces();
     const rook = pieces.Ra1;
 
     const newPosition = new Position("a", 3);
+
+    const isPieceInTheWay = game.isPieceInTheWay(rook, newPosition);
+
+    expect(isPieceInTheWay).toBe(true);
+  });
+  test("isPieceInTheWay - rook - file", () => {
+    const game = new Game();
+    const pieces = game.getPieces();
+    const rook = pieces.Ra1;
+
+    const newPosition = new Position("c", 1);
 
     const isPieceInTheWay = game.isPieceInTheWay(rook, newPosition);
 
@@ -391,17 +414,24 @@ describe("Game", () => {
     expect(isPieceInTheWay).toBe(false);
   });
   describe("makeMove", () => {
-    test.only("Move one piece - e2 - e4", () => {
+    test("Move one piece - e2 - e4", () => {
       const game = new Game();
       const move = "e4";
-      const beforePieces = game.getPieces();
-
-      console.log(beforePieces.e2);
+      const pieces = game.getPieces();
+      expect(pieces.e2.getHasMoved()).toBe(false);
+      game.makeMove(move);
+      expect(pieces.e4.getHasMoved()).toBe(true);
+    });
+    test("Move piece - e2 e7 - e4 e6", () => {
+      const game = new Game();
+      const move = "e4 e6";
+      const pieces = game.getPieces();
+      expect(pieces.e2.getHasMoved()).toBe(false);
+      expect(pieces.e7.getHasMoved()).toBe(false);
       game.makeMove(move);
 
-      console.log(beforePieces.e4);
-
-      // expect(beforePieces).not.toEqual(afterPieces);
+      expect(pieces.e4.getHasMoved()).toBe(true);
+      expect(pieces.e6.getHasMoved()).toBe(true);
     });
   });
 });

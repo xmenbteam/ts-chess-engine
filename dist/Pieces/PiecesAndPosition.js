@@ -23,6 +23,7 @@ class Position {
 exports.Position = Position;
 class Piece {
     constructor(pieceColour, file, rank) {
+        this.hasMoved = false;
         this.position = new Position(file, rank);
         this.colour = pieceColour;
         this.captured = false;
@@ -38,6 +39,12 @@ class Piece {
     }
     getColour() {
         return this.colour;
+    }
+    getHasMoved() {
+        return this.hasMoved;
+    }
+    setHasMoved() {
+        this.hasMoved = true;
     }
 }
 exports.Piece = Piece;
