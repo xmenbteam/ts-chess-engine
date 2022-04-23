@@ -76,8 +76,7 @@ class Game {
         return p1Colour === p2Colour ? true : false;
     }
     getAllPositions() {
-        const values = Object.values(this.getPieces());
-        return values.reduce((array, piece) => {
+        return Object.values(this.getPieces()).reduce((array, piece) => {
             array.push(`${piece.position.getPosition().file}${piece.position.getPosition().rank}`);
             return array;
         }, []);

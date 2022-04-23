@@ -78,31 +78,35 @@ export class Game {
   }
 
   getAllPositions(): string[] {
-    const values = Object.values(this.getPieces());
-    return values.reduce((array: string[], piece: Piece) => {
-      array.push(
-        `${piece.position.getPosition().file}${
-          piece.position.getPosition().rank
-        }`
-      );
-      return array;
-    }, []);
+    return Object.values(this.getPieces()).reduce(
+      (array: string[], piece: Piece) => {
+        array.push(
+          `${piece.position.getPosition().file}${
+            piece.position.getPosition().rank
+          }`
+        );
+        return array;
+      },
+      []
+    );
   }
 
   isPieceInTheWay(piece: Piece, newPosition: Position): boolean {
-    const { file: newFile, rank: newRank } = newPosition.getPosition();
-    const { file: pieceFile, rank: pieceRank } = piece.position.getPosition();
+    const { file: newFile, rank: newRank }: { file: string; rank: number } =
+      newPosition.getPosition();
+    const { file: pieceFile, rank: pieceRank }: { file: string; rank: number } =
+      piece.position.getPosition();
 
-    const allPieces = this.getAllPositions();
-    const piecePosition = `${pieceFile}${pieceRank}`;
+    const allPieces: string[] = this.getAllPositions();
+    const piecePosition: string = `${pieceFile}${pieceRank}`;
 
-    const minRank = Math.min(pieceRank, newRank);
-    const maxRank = Math.max(pieceRank, newRank);
+    const minRank: number = Math.min(pieceRank, newRank);
+    const maxRank: number = Math.max(pieceRank, newRank);
 
-    const minFile = Math.min(letterRef[pieceFile], letterRef[newFile]);
-    const maxFile = Math.max(letterRef[pieceFile], letterRef[newFile]);
+    const minFile: number = Math.min(letterRef[pieceFile], letterRef[newFile]);
+    const maxFile: number = Math.max(letterRef[pieceFile], letterRef[newFile]);
 
-    const positions = [];
+    const positions: string[] = [];
 
     for (let i = minFile; i <= maxFile; i++) {
       const fileRank = `${files[i]}${minRank}`;
@@ -113,7 +117,7 @@ export class Game {
       positions[i] = `${positions[i][0]}${(i + 1).toString()}`;
     }
 
-    const notStartingSquare = positions.filter(
+    const notStartingSquare: string[] = positions.filter(
       (position) => position !== piecePosition
     );
 
