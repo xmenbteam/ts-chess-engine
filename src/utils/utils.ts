@@ -27,7 +27,7 @@ export const ranks: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
 export const pawnTest = /^[a-h]\d$/;
 export const pieceTest = /^[RNQBK][a-h]\d$/;
 export const fileReg = /[a-h]/;
-export const rankRej = /[1-8]/;
+export const rankReg = /[1-8]/;
 
 export const switchFunc = (thing: string, object: object) => {
   const entries = Object.entries(object);

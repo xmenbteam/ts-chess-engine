@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.switchFunc = exports.rankRej = exports.fileReg = exports.pieceTest = exports.pawnTest = exports.ranks = exports.files = exports.pieceRef = exports.letterRef = void 0;
+exports.switchFunc = exports.rankReg = exports.fileReg = exports.pieceTest = exports.pawnTest = exports.ranks = exports.files = exports.pieceRef = exports.letterRef = void 0;
 exports.letterRef = {
     a: 0,
     b: 1,
@@ -24,7 +24,7 @@ exports.ranks = [1, 2, 3, 4, 5, 6, 7, 8];
 exports.pawnTest = /^[a-h]\d$/;
 exports.pieceTest = /^[RNQBK][a-h]\d$/;
 exports.fileReg = /[a-h]/;
-exports.rankRej = /[1-8]/;
+exports.rankReg = /[1-8]/;
 const switchFunc = (thing, object) => {
     const entries = Object.entries(object);
     for (const [key, value] of entries) {

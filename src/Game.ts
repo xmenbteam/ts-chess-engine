@@ -12,7 +12,7 @@ import {
   letterRef,
   pawnTest,
   pieceTest,
-  rankRej,
+  rankReg,
 } from "./utils/utils";
 
 export class Game {
@@ -141,7 +141,7 @@ export class Game {
     let flag: string = "";
     moveArray.forEach((move, i) => {
       const f: string = move.match(fileReg)![0];
-      const r: string = move.match(rankRej)![0];
+      const r: string = move.match(rankReg)![0];
       const pos: Position = new Position(f, Number(r));
       for (let piece in pieceObj) {
         if (

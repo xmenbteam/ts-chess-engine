@@ -114,7 +114,7 @@ class Game {
         let flag = "";
         moveArray.forEach((move, i) => {
             const f = move.match(utils_1.fileReg)[0];
-            const r = move.match(utils_1.rankRej)[0];
+            const r = move.match(utils_1.rankReg)[0];
             const pos = new PiecesAndPosition_1.Position(f, Number(r));
             for (let piece in pieceObj) {
                 if (pieceObj[piece].canMoveTo(pos) &&
