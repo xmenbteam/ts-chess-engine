@@ -17,3 +17,5 @@ export enum FileEnum {
   "f",
   "g",
 }
+
+export type RankFile = { file: string; rank: number };

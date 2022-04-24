@@ -11,12 +11,23 @@ export const letterRef: { [file: string]: number } = {
   h: 7,
 };
 
+export const pieceRef: { [file: string]: string } = {
+  R: "Rook",
+  B: "Bishop",
+  N: "Knight",
+  K: "King",
+  Q: "Queen",
+};
+
 export const files: string[] = ["a", "b", "c", "d", "e", "f", "g", "h"];
 export const ranks: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
 
 // export const chessConverter = (string: string) => {};
 
-export const pawnTest = /^[a-h][1-8]/;
+export const pawnTest = /^[a-h]\d$/;
+export const pieceTest = /^[RNQBK][a-h]\d$/;
+export const fileReg = /[a-h]/;
+export const rankRej = /[1-8]/;
 
 export const switchFunc = (thing: string, object: object) => {
   const entries = Object.entries(object);

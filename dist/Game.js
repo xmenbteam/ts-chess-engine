@@ -82,6 +82,8 @@ class Game {
         }, []);
     }
     isPieceInTheWay(piece, newPosition) {
+        if (piece.constructor.name === "Knight")
+            return false;
         const { file: newFile, rank: newRank } = newPosition.getPosition();
         const { file: pieceFile, rank: pieceRank } = piece.position.getPosition();
         const allPieces = this.getAllPositions();
@@ -109,26 +111,26 @@ class Game {
     makeMove(move) {
         const moveArray = move.split(" ");
         const pieceObj = this.getPieces();
+        let flag = "";
         moveArray.forEach((move, i) => {
-            console.log({ move });
-            if (utils_1.pawnTest.test(move)) {
-                const pos = new PiecesAndPosition_1.Position(move[0], Number(move[1]));
-                for (let piece in pieceObj) {
-                    if (pieceObj[piece].canMoveTo(pos) &&
-                        pieceObj[piece].getColour() === Types_1.Colour[i] &&
-                        !this.isPieceInTheWay(pieceObj[piece], pos)) {
-                        console.log(pieceObj[piece]);
-                        if (!pieceObj[piece].getHasMoved())
-                            pieceObj[piece].setHasMoved();
-                        pieceObj[piece].position.setPosition(move[0], Number(move[1]));
-                        pieceObj[`${move[0]}${move[1]}`] = pieceObj[piece];
-                        delete pieceObj[piece];
-                    }
+            const f = move.match(utils_1.fileReg)[0];
+            const r = move.match(utils_1.rankRej)[0];
+            const pos = new PiecesAndPosition_1.Position(f, Number(r));
+            for (let piece in pieceObj) {
+                if (pieceObj[piece].canMoveTo(pos) &&
+                    pieceObj[piece].getColour() === Types_1.Colour[i] &&
+                    !this.isPieceInTheWay(pieceObj[piece], pos) &&
+                    piece[0] === move[0]) {
+                    if (utils_1.pieceTest.test(piece))
+                        flag = piece[0];
+                    if (!pieceObj[piece].getHasMoved())
+                        pieceObj[piece].setHasMoved();
+                    pieceObj[piece].position.setPosition(f, Number(r));
+                    pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
+                    delete pieceObj[piece];
                 }
-                // Check if it can move there
             }
         });
-        // console.log({ pieceObj });
     }
 }
 exports.Game = Game;

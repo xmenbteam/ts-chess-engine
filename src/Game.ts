@@ -5,8 +5,15 @@ import { Pawn } from "./Pieces/Pawn";
 import { Piece, Position } from "./Pieces/PiecesAndPosition";
 import { Queen } from "./Pieces/Queen";
 import { Rook } from "./Pieces/Rook";
-import { Colour } from "./Types";
-import { files, letterRef, pawnTest } from "./utils/utils";
+import { Colour, RankFile } from "./Types";
+import {
+  fileReg,
+  files,
+  letterRef,
+  pawnTest,
+  pieceTest,
+  rankRej,
+} from "./utils/utils";
 
 export class Game {
   private turnCount: number;
@@ -49,7 +56,7 @@ export class Game {
     };
     return pieces;
   }
-  getPieces() {
+  getPieces(): { [key: string]: Piece } {
     return this.pieces;
   }
 
@@ -92,9 +99,11 @@ export class Game {
   }
 
   isPieceInTheWay(piece: Piece, newPosition: Position): boolean {
-    const { file: newFile, rank: newRank }: { file: string; rank: number } =
+    if (piece.constructor.name === "Knight") return false;
+
+    const { file: newFile, rank: newRank }: RankFile =
       newPosition.getPosition();
-    const { file: pieceFile, rank: pieceRank }: { file: string; rank: number } =
+    const { file: pieceFile, rank: pieceRank }: RankFile =
       piece.position.getPosition();
 
     const allPieces: string[] = this.getAllPositions();
@@ -126,30 +135,29 @@ export class Game {
     return false;
   }
 
-  makeMove(move: string) {
-    const moveArray = move.split(" ");
-    const pieceObj = this.getPieces();
+  makeMove(move: string): void {
+    const moveArray: string[] = move.split(" ");
+    const pieceObj: { [key: string]: Piece } = this.getPieces();
+    let flag: string = "";
     moveArray.forEach((move, i) => {
-      console.log({ move });
-      if (pawnTest.test(move)) {
-        const pos = new Position(move[0], Number(move[1]));
-        for (let piece in pieceObj) {
-          if (
-            pieceObj[piece].canMoveTo(pos) &&
-            pieceObj[piece].getColour() === Colour[i] &&
-            !this.isPieceInTheWay(pieceObj[piece], pos)
-          ) {
-            console.log(pieceObj[piece]);
-            if (!pieceObj[piece].getHasMoved()) pieceObj[piece].setHasMoved();
-            pieceObj[piece].position.setPosition(move[0], Number(move[1]));
-            pieceObj[`${move[0]}${move[1]}`] = pieceObj[piece];
-            delete pieceObj[piece];
-          }
+      const f: string = move.match(fileReg)![0];
+      const r: string = move.match(rankRej)![0];
+      const pos: Position = new Position(f, Number(r));
+      for (let piece in pieceObj) {
+        if (
+          pieceObj[piece].canMoveTo(pos) &&
+          pieceObj[piece].getColour() === Colour[i] &&
+          !this.isPieceInTheWay(pieceObj[piece], pos) &&
+          piece[0] === move[0]
+        ) {
+          if (pieceTest.test(piece)) flag = piece[0];
+          if (!pieceObj[piece].getHasMoved()) pieceObj[piece].setHasMoved();
+          pieceObj[piece].position.setPosition(f, Number(r));
+          pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
+          delete pieceObj[piece];
         }
-        // Check if it can move there
       }
     });
-    // console.log({ pieceObj });
   }
 
   constructor() {
