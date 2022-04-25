@@ -440,10 +440,33 @@ describe("Game", () => {
       const move = "Nc3";
       const pieces = game.getPieces();
       expect("Nb1" in pieces).toBe(true);
-      game.makeMove(move, 0);
+      const moveTime = game.makeMove(move, 0);
+      expect(moveTime.msg).toBe("Success!");
       expect("Nb1" in pieces).toBe(false);
       expect("Nc3" in pieces).toBe(true);
       expect(pieces.Nc3.getHasMoved()).toBe(true);
+    });
+    test("Fail - piece in way - Ra1 - c1", () => {
+      const game = new Game();
+      const move = "Rc1";
+      const pieces = game.getPieces();
+      expect("Ra1" in pieces).toBe(true);
+      const moveTime = game.makeMove(move, 0);
+      expect(moveTime.msg).toBe("Fail!");
+      expect("Rc1" in pieces).toBe(false);
+      expect("Ra1" in pieces).toBe(true);
+      expect(pieces.Ra1.getHasMoved()).toBe(false);
+    });
+    test("Fail - piece can't move - Ra1 - Rd6", () => {
+      const game = new Game();
+      const move = "Rd6";
+      const pieces = game.getPieces();
+      expect("Ra1" in pieces).toBe(true);
+      const moveTime = game.makeMove(move, 0);
+      expect(moveTime.msg).toBe("Fail!");
+      expect("Rd6" in pieces).toBe(false);
+      expect("Ra1" in pieces).toBe(true);
+      expect(pieces.Ra1.getHasMoved()).toBe(false);
     });
   });
 });

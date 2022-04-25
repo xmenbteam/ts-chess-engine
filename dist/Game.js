@@ -112,22 +112,33 @@ class Game {
         if (utils_1.pawnTest.test(move))
             move = `P${move}`;
         const pieceObj = this.getPieces();
+        const pieceArray = Object.entries(pieceObj);
         let flag = "";
         const f = move.match(utils_1.fileReg)[0];
         const r = move.match(utils_1.rankReg)[0];
         const pos = new PiecesAndPosition_1.Position(f, Number(r));
-        for (let piece in pieceObj) {
-            if (pieceObj[piece].canMoveTo(pos) &&
-                pieceObj[piece].getColour() === Types_1.Colour[colour] &&
-                !this.isPieceInTheWay(pieceObj[piece], pos) &&
-                piece[0] === move[0]) {
-                flag = piece[0];
-                if (!pieceObj[piece].getHasMoved())
-                    pieceObj[piece].setHasMoved();
-                pieceObj[piece].position.setPosition(f, Number(r));
-                pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
-                delete pieceObj[piece];
+        const piecesThatCanMove = pieceArray.reduce((array, piece) => {
+            const [piecePos, p] = piece;
+            if (p.canMoveTo(pos) &&
+                p.getColour() === Types_1.Colour[colour] &&
+                !this.isPieceInTheWay(p, pos) &&
+                piecePos[0] === move[0]) {
+                array.push(piecePos);
             }
+            return array;
+        }, []);
+        try {
+            const piece = piecesThatCanMove[0];
+            flag = piece[0];
+            if (!pieceObj[piece].getHasMoved())
+                pieceObj[piece].setHasMoved();
+            pieceObj[piece].position.setPosition(f, Number(r));
+            pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
+            delete pieceObj[piece];
+            return { msg: "Success!" };
+        }
+        catch (err) {
+            return { msg: "Fail!" };
         }
     }
 }

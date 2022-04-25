@@ -135,29 +135,43 @@ export class Game {
     return false;
   }
 
-  makeMove(move: string, colour: number): void {
+  makeMove(move: string, colour: number): { [msg: string]: string } {
     if (pawnTest.test(move)) move = `P${move}`;
 
     const pieceObj: { [key: string]: Piece } = this.getPieces();
+    const pieceArray = Object.entries(pieceObj);
     let flag: string = "";
 
     const f: string = move.match(fileReg)![0];
     const r: string = move.match(rankReg)![0];
     const pos: Position = new Position(f, Number(r));
 
-    for (let piece in pieceObj) {
-      if (
-        pieceObj[piece].canMoveTo(pos) &&
-        pieceObj[piece].getColour() === Colour[colour] &&
-        !this.isPieceInTheWay(pieceObj[piece], pos) &&
-        piece[0] === move[0]
-      ) {
-        flag = piece[0];
-        if (!pieceObj[piece].getHasMoved()) pieceObj[piece].setHasMoved();
-        pieceObj[piece].position.setPosition(f, Number(r));
-        pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
-        delete pieceObj[piece];
-      }
+    const piecesThatCanMove: string[] = pieceArray.reduce(
+      (array: string[], piece: [string, Piece]) => {
+        const [piecePos, p] = piece;
+        if (
+          p.canMoveTo(pos) &&
+          p.getColour() === Colour[colour] &&
+          !this.isPieceInTheWay(p, pos) &&
+          piecePos[0] === move[0]
+        ) {
+          array.push(piecePos);
+        }
+        return array;
+      },
+      []
+    );
+
+    try {
+      const piece = piecesThatCanMove[0];
+      flag = piece[0];
+      if (!pieceObj[piece].getHasMoved()) pieceObj[piece].setHasMoved();
+      pieceObj[piece].position.setPosition(f, Number(r));
+      pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
+      delete pieceObj[piece];
+      return { msg: "Success!" };
+    } catch (err) {
+      return { msg: "Fail!" };
     }
   }
 
