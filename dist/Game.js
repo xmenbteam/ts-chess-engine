@@ -138,7 +138,7 @@ class Game {
             return { msg: "Success!" };
         }
         catch (err) {
-            return { msg: "Fail!" };
+            return { msg: "Fail!", err };
         }
     }
 }

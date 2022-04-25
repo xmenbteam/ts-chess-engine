@@ -170,8 +170,8 @@ export class Game {
       pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
       delete pieceObj[piece];
       return { msg: "Success!" };
-    } catch (err) {
-      return { msg: "Fail!" };
+    } catch (err: any) {
+      return { msg: "Fail!", err };
     }
   }
 
