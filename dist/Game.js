@@ -84,49 +84,72 @@ class Game {
     isPieceInTheWay(piece, newPosition) {
         if (piece.constructor.name === "Knight")
             return false;
-        const { file: newFile, rank: newRank } = newPosition.getPosition();
-        const { file: pieceFile, rank: pieceRank } = piece.position.getPosition();
-        const allPieces = this.getAllPositions();
-        const piecePosition = `${pieceFile}${pieceRank}`;
-        const minRank = Math.min(pieceRank, newRank);
-        const maxRank = Math.max(pieceRank, newRank);
-        const minFile = Math.min(utils_1.letterRef[pieceFile], utils_1.letterRef[newFile]);
-        const maxFile = Math.max(utils_1.letterRef[pieceFile], utils_1.letterRef[newFile]);
-        const positions = [];
-        for (let i = minFile; i <= maxFile; i++) {
-            const fileRank = `${utils_1.files[i]}${minRank}`;
-            positions.push(fileRank);
-        }
-        for (let i = minRank - 1; i < maxRank; i++) {
-            if (!positions[i])
-                positions[i] = positions[0][0];
-            positions[i] = `${positions[i][0]}${(i + 1).toString()}`;
-        }
-        const notStartingSquare = positions.filter((position) => position !== piecePosition);
-        for (let i = 0; i < notStartingSquare.length; i++)
-            if (allPieces.includes(notStartingSquare[i]))
+        const pieces = this.getPieces();
+        Object.values(pieces).forEach((otherPiece) => {
+            const canMove = piece.canMoveTo(otherPiece.position);
+            const otherPos = otherPiece.position;
+            const { file: fileDiff, rank: rankDiff } = otherPiece.position.distanceFrom(newPosition);
+            const { file: otherFile, rank: otherRank } = piece.position.distanceFrom(otherPos);
+            if (canMove)
+                console.log({ fileDiff, otherFile });
+            if (canMove)
                 return true;
+        });
         return false;
     }
+    castle(colour) {
+        const pieceObj = this.getPieces();
+        const oldKingPos = colour === 0 ? "Ke1" : "Ke8";
+        const oldRookPos = colour === 0 ? "Rh1" : "Rh8";
+        const newKingFile = "g";
+        const newRookFile = "f";
+        const rank = colour === 0 ? 1 : 8;
+        const newKingPos = new PiecesAndPosition_1.Position(newKingFile, rank);
+        const newRookPos = new PiecesAndPosition_1.Position(newRookFile, rank);
+        const hasNotMoved = !pieceObj[oldKingPos].getHasMoved() &&
+            !pieceObj[oldRookPos].getHasMoved();
+        const nothingInTheWay = !this.isPieceInTheWay(pieceObj[oldKingPos], newKingPos) &&
+            !this.isPieceInTheWay(pieceObj[oldRookPos], newRookPos);
+        try {
+            if (hasNotMoved && nothingInTheWay) {
+                pieceObj[oldKingPos].setHasMoved();
+                pieceObj[oldKingPos].position.setPosition(newKingFile, rank);
+                pieceObj[`K${newKingFile}${rank}`] = pieceObj[oldKingPos];
+                delete pieceObj[oldKingPos];
+                pieceObj[oldRookPos].setHasMoved();
+                pieceObj[oldRookPos].position.setPosition(newRookFile, rank);
+                pieceObj[`R${newRookFile}${rank}`] = pieceObj[oldRookPos];
+                delete pieceObj[oldRookPos];
+            }
+            return { msg: `${Types_1.Colour[colour]} castled Kingside!` };
+        }
+        catch (err) {
+            return { msg: "Failed to castle kingside!" };
+        }
+    }
     makeMove(move, colour) {
-        if (utils_1.pawnTest.test(move))
-            move = `P${move}`;
         const pieceObj = this.getPieces();
         const pieceArray = Object.entries(pieceObj);
         let flag = "";
+        if (utils_1.pawnTest.test(move))
+            move = `P${move}`;
+        if (move === "0-0")
+            return this.castle(colour);
         const f = move.match(utils_1.fileReg)[0];
         const r = move.match(utils_1.rankReg)[0];
         const pos = new PiecesAndPosition_1.Position(f, Number(r));
         const piecesThatCanMove = pieceArray.reduce((array, piece) => {
             const [piecePos, p] = piece;
-            if (p.canMoveTo(pos) &&
-                p.getColour() === Types_1.Colour[colour] &&
-                !this.isPieceInTheWay(p, pos) &&
-                piecePos[0] === move[0]) {
+            const m = p.canMoveTo(pos);
+            const c = p.getColour() === Types_1.Colour[colour];
+            const w = this.isPieceInTheWay(p, pos);
+            const n = piecePos[0] === move[0];
+            // if (piecePos === "Bc1") console.log({ move, piecePos, m, c, w, n });
+            if (m && c && w && n)
                 array.push(piecePos);
-            }
             return array;
         }, []);
+        // console.log({ move, piecesThatCanMove });
         try {
             const piece = piecesThatCanMove[0];
             flag = piece[0];
@@ -138,6 +161,7 @@ class Game {
             return { msg: "Success!" };
         }
         catch (err) {
+            console.log({ err, move });
             return { msg: "Fail!", err };
         }
     }

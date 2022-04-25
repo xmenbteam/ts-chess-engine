@@ -371,7 +371,7 @@ describe("Game", () => {
 
     expect(isSame).toBe(false);
   });
-  test("isPieceInTheWay - bishop", () => {
+  test.only("isPieceInTheWay - bishop", () => {
     const game = new Game();
     const pieces = game.getPieces();
     const bishop = pieces.Bc1;
@@ -379,6 +379,16 @@ describe("Game", () => {
 
     const isPieceInTheWay = game.isPieceInTheWay(bishop, newPosition);
     expect(isPieceInTheWay).toBe(true);
+  });
+  test("!isPieceInTheWay - bishop", () => {
+    const game = new Game();
+    const pieces = game.getPieces();
+    game.makeMove("b3", 0);
+    const bishop = pieces.Bc1;
+    const newPosition = new Position("a", 3);
+
+    const isPieceInTheWay = game.isPieceInTheWay(bishop, newPosition);
+    expect(isPieceInTheWay).toBe(false);
   });
   test("isPieceInTheWay - rook - rank", () => {
     const game = new Game();
@@ -446,6 +456,20 @@ describe("Game", () => {
       expect("Nc3" in pieces).toBe(true);
       expect(pieces.Nc3.getHasMoved()).toBe(true);
     });
+    test("Move two pieces - a3, Bb2", () => {
+      const game = new Game();
+      const moves = ["b3", "Bb2"];
+      const pieces = game.getPieces();
+
+      game.makeMove(moves[0], 0);
+
+      game.makeMove(moves[1], 0);
+
+      expect("Pb2" in pieces).toBe(false);
+      expect("Pb3" in pieces).toBe(true);
+      expect("Bc1" in pieces).toBe(false);
+      expect("Bb2" in pieces).toBe(true);
+    });
     test("Fail - piece in way - Ra1 - c1", () => {
       const game = new Game();
       const move = "Rc1";
@@ -467,6 +491,39 @@ describe("Game", () => {
       expect("Rd6" in pieces).toBe(false);
       expect("Ra1" in pieces).toBe(true);
       expect(pieces.Ra1.getHasMoved()).toBe(false);
+    });
+    describe("castling", () => {
+      test("White castles kingside", () => {
+        const game = new Game();
+        const pieces = game.getPieces();
+        const moves = ["g3", "Bg2", "Nf3"];
+        moves.forEach((move) => {
+          game.makeMove(move, 0);
+        });
+
+        const castleKing = "0-0";
+        game.makeMove(castleKing, 0);
+        expect("Kg1" in pieces).toBe(true);
+        expect("Rf1" in pieces).toBe(true);
+        expect(pieces.Kg1.getHasMoved()).toBe(true);
+        expect(pieces.Rf1.getHasMoved()).toBe(true);
+      });
+      test("Black castles kingside", () => {
+        const game = new Game();
+        const pieces = game.getPieces();
+        const moves = ["e6", "Be7", "Nf6"];
+        moves.forEach((move) => {
+          game.makeMove(move, 1);
+        });
+
+        const castleKing = "0-0";
+        game.makeMove(castleKing, 1);
+
+        expect("Kg8" in pieces).toBe(true);
+        expect("Rf8" in pieces).toBe(true);
+        expect(pieces.Kg8.getHasMoved()).toBe(true);
+        expect(pieces.Rf8.getHasMoved()).toBe(true);
+      });
     });
   });
 });
