@@ -17,14 +17,14 @@ class Game {
     }
     static makePieces() {
         const pieces = {
-            a2: new Pawn_1.Pawn(Types_1.Colour[0], "a", 2),
-            b2: new Pawn_1.Pawn(Types_1.Colour[0], "b", 2),
-            c2: new Pawn_1.Pawn(Types_1.Colour[0], "c", 2),
-            d2: new Pawn_1.Pawn(Types_1.Colour[0], "d", 2),
-            e2: new Pawn_1.Pawn(Types_1.Colour[0], "e", 2),
-            f2: new Pawn_1.Pawn(Types_1.Colour[0], "f", 2),
-            g2: new Pawn_1.Pawn(Types_1.Colour[0], "g", 2),
-            h2: new Pawn_1.Pawn(Types_1.Colour[0], "h", 2),
+            Pa2: new Pawn_1.Pawn(Types_1.Colour[0], "a", 2),
+            Pb2: new Pawn_1.Pawn(Types_1.Colour[0], "b", 2),
+            Pc2: new Pawn_1.Pawn(Types_1.Colour[0], "c", 2),
+            Pd2: new Pawn_1.Pawn(Types_1.Colour[0], "d", 2),
+            Pe2: new Pawn_1.Pawn(Types_1.Colour[0], "e", 2),
+            Pf2: new Pawn_1.Pawn(Types_1.Colour[0], "f", 2),
+            Pg2: new Pawn_1.Pawn(Types_1.Colour[0], "g", 2),
+            Ph2: new Pawn_1.Pawn(Types_1.Colour[0], "h", 2),
             Ra1: new Rook_1.Rook(Types_1.Colour[0], "a", 1),
             Nb1: new Knight_1.Knight(Types_1.Colour[0], "b", 1),
             Bc1: new Bishop_1.Bishop(Types_1.Colour[0], "c", 1),
@@ -33,14 +33,14 @@ class Game {
             Bf1: new Bishop_1.Bishop(Types_1.Colour[0], "f", 1),
             Ng1: new Knight_1.Knight(Types_1.Colour[0], "g", 1),
             Rh1: new Rook_1.Rook(Types_1.Colour[0], "h", 1),
-            a7: new Pawn_1.Pawn(Types_1.Colour[1], "a", 7),
-            b7: new Pawn_1.Pawn(Types_1.Colour[1], "b", 7),
-            c7: new Pawn_1.Pawn(Types_1.Colour[1], "c", 7),
-            d7: new Pawn_1.Pawn(Types_1.Colour[1], "d", 7),
-            e7: new Pawn_1.Pawn(Types_1.Colour[1], "e", 7),
-            f7: new Pawn_1.Pawn(Types_1.Colour[1], "f", 7),
-            g7: new Pawn_1.Pawn(Types_1.Colour[1], "g", 7),
-            h7: new Pawn_1.Pawn(Types_1.Colour[1], "h", 7),
+            Pa7: new Pawn_1.Pawn(Types_1.Colour[1], "a", 7),
+            Pb7: new Pawn_1.Pawn(Types_1.Colour[1], "b", 7),
+            Pc7: new Pawn_1.Pawn(Types_1.Colour[1], "c", 7),
+            Pd7: new Pawn_1.Pawn(Types_1.Colour[1], "d", 7),
+            Pe7: new Pawn_1.Pawn(Types_1.Colour[1], "e", 7),
+            Pf7: new Pawn_1.Pawn(Types_1.Colour[1], "f", 7),
+            Pg7: new Pawn_1.Pawn(Types_1.Colour[1], "g", 7),
+            Ph7: new Pawn_1.Pawn(Types_1.Colour[1], "h", 7),
             Ra8: new Rook_1.Rook(Types_1.Colour[1], "a", 8),
             Nb8: new Knight_1.Knight(Types_1.Colour[1], "b", 8),
             Bc8: new Bishop_1.Bishop(Types_1.Colour[1], "c", 8),
@@ -108,29 +108,27 @@ class Game {
                 return true;
         return false;
     }
-    makeMove(move) {
-        const moveArray = move.split(" ");
+    makeMove(move, colour) {
+        if (utils_1.pawnTest.test(move))
+            move = `P${move}`;
         const pieceObj = this.getPieces();
         let flag = "";
-        moveArray.forEach((move, i) => {
-            const f = move.match(utils_1.fileReg)[0];
-            const r = move.match(utils_1.rankReg)[0];
-            const pos = new PiecesAndPosition_1.Position(f, Number(r));
-            for (let piece in pieceObj) {
-                if (pieceObj[piece].canMoveTo(pos) &&
-                    pieceObj[piece].getColour() === Types_1.Colour[i] &&
-                    !this.isPieceInTheWay(pieceObj[piece], pos) &&
-                    piece[0] === move[0]) {
-                    if (utils_1.pieceTest.test(piece))
-                        flag = piece[0];
-                    if (!pieceObj[piece].getHasMoved())
-                        pieceObj[piece].setHasMoved();
-                    pieceObj[piece].position.setPosition(f, Number(r));
-                    pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
-                    delete pieceObj[piece];
-                }
+        const f = move.match(utils_1.fileReg)[0];
+        const r = move.match(utils_1.rankReg)[0];
+        const pos = new PiecesAndPosition_1.Position(f, Number(r));
+        for (let piece in pieceObj) {
+            if (pieceObj[piece].canMoveTo(pos) &&
+                pieceObj[piece].getColour() === Types_1.Colour[colour] &&
+                !this.isPieceInTheWay(pieceObj[piece], pos) &&
+                piece[0] === move[0]) {
+                flag = piece[0];
+                if (!pieceObj[piece].getHasMoved())
+                    pieceObj[piece].setHasMoved();
+                pieceObj[piece].position.setPosition(f, Number(r));
+                pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
+                delete pieceObj[piece];
             }
-        });
+        }
     }
 }
 exports.Game = Game;

@@ -405,7 +405,7 @@ describe("Game", () => {
   test("!isPieceInTheWay - pawn", () => {
     const game = new Game();
     const pieces = game.getPieces();
-    const pawn = pieces.a2;
+    const pawn = pieces.Pa2;
 
     const newPosition = new Position("a", 3);
 
@@ -418,47 +418,32 @@ describe("Game", () => {
       const game = new Game();
       const move = "e4";
       const pieces = game.getPieces();
-      expect(pieces.e2.getHasMoved()).toBe(false);
-      game.makeMove(move);
-      expect(pieces.e4.getHasMoved()).toBe(true);
-      expect("e4" in pieces).toBe(true);
-      expect("e2" in pieces).toBe(false);
+      expect(pieces.Pe2.getHasMoved()).toBe(false);
+      game.makeMove(move, 0);
+      expect(pieces.Pe4.getHasMoved()).toBe(true);
+      expect("Pe4" in pieces).toBe(true);
+      expect("Pe2" in pieces).toBe(false);
     });
-    test("Move piece - e2 e7 - e4 e6", () => {
+    test("Move piece - e2 - e4", () => {
       const game = new Game();
-      const move = "e4 e6";
+      const move = "e4";
       const pieces = game.getPieces();
-      expect(pieces.e2.getHasMoved()).toBe(false);
-      expect(pieces.e7.getHasMoved()).toBe(false);
-      game.makeMove(move);
+      expect(pieces.Pe2.getHasMoved()).toBe(false);
+      game.makeMove(move, 0);
 
-      expect(pieces.e4.getHasMoved()).toBe(true);
-      expect(pieces.e6.getHasMoved()).toBe(true);
-      expect("e4" in pieces).toBe(true);
-      expect("e2" in pieces).toBe(false);
-      expect("e6" in pieces).toBe(true);
-      expect("e7" in pieces).toBe(false);
+      expect(pieces.Pe4.getHasMoved()).toBe(true);
+      expect("Pe4" in pieces).toBe(true);
+      expect("Pe2" in pieces).toBe(false);
     });
     test("Move named piece - Nb1 - Nc3", () => {
       const game = new Game();
       const move = "Nc3";
       const pieces = game.getPieces();
       expect("Nb1" in pieces).toBe(true);
-      game.makeMove(move);
+      game.makeMove(move, 0);
       expect("Nb1" in pieces).toBe(false);
       expect("Nc3" in pieces).toBe(true);
       expect(pieces.Nc3.getHasMoved()).toBe(true);
-    });
-    test("Move pawn then move bishop", () => {
-      const game = new Game();
-      const moveOne = "d3";
-      const moveTwo = "Be3";
-      const pieces = game.getPieces();
-      expect("d2" in pieces).toBe(true);
-      expect("Bc1" in pieces).toBe(true);
-      game.makeMove(moveOne);
-      game.makeMove(moveTwo);
-      expect("Be3" in pieces).toBe(true);
     });
   });
 });
