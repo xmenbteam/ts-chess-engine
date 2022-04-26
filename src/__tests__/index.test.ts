@@ -285,50 +285,204 @@ describe("Piece subclasses", () => {
       expect(r1.getHasMoved()).toBe(true);
     });
   });
-  describe("Bishop", () => {
-    test("canMoveTo - d4", () => {
+  describe.only("Bishop", () => {
+    test("!canMoveTo - a1", () => {
       const positions = ["a1", "b2"];
 
-      const r1 = new Rook(Colour[0], "a", 1);
+      const r1 = new Bishop(Colour[0], "a", 1);
 
-      const newPositionOne = new Position("a", 2);
+      const newPositionOne = new Position("c", 3);
 
       const canMoveOne = r1.canMoveTo(newPositionOne, positions);
 
       expect(canMoveOne).toBe(false);
     });
-    test("!canMoveTo - d4", () => {
-      const file = "d";
-      const rank = 4;
-      const r1 = new Bishop(Colour[1], file, rank);
+    test("!canMoveTo - e5", () => {
+      const positions = ["a1", "d4"];
 
-      const newPosition = new Position("h", 6);
+      const r1 = new Bishop(Colour[0], "a", 1);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const newPositionOne = new Position("e", 5);
 
-      expect(canMove).toBe(false);
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(false);
+    });
+    test("Other !canMoveTo - NE", () => {
+      const positions = ["c4", "e6"];
+
+      const r1 = new Bishop(Colour[0], "c", 4);
+
+      const newPositionOne = new Position("g", 8);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(false);
+    });
+    test("Second Other !canMoveTo - NE", () => {
+      const positions = ["d4", "f6"];
+
+      const r1 = new Bishop(Colour[0], "d", 4);
+
+      const newPositionOne = new Position("h", 8);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(false);
+    });
+    test("canMoveTo - c3", () => {
+      const positions = ["a1", "d4"];
+
+      const r1 = new Bishop(Colour[0], "a", 1);
+
+      const newPositionOne = new Position("c", 3);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(true);
+    });
+    test("!canMoveTo - northeast", () => {
+      const positions = ["d4", "f6"];
+
+      const r1 = new Bishop(Colour[0], "d", 4);
+
+      const newPositionOne = new Position("g", 7);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(false);
+    });
+    test("canMoveTo - northeast", () => {
+      const positions = ["d4"];
+
+      const r1 = new Bishop(Colour[0], "d", 4);
+
+      const newPositionOne = new Position("g", 7);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(true);
+    });
+    test("canMoveTo - southeast", () => {
+      const positions = ["d4"];
+
+      const r1 = new Bishop(Colour[0], "d", 4);
+
+      const newPositionOne = new Position("g", 1);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(true);
+    });
+    test("!canMoveTo - southeast", () => {
+      const positions = ["d4", "f2"];
+
+      const r1 = new Bishop(Colour[0], "d", 4);
+
+      const newPositionOne = new Position("g", 1);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(false);
+    });
+    test("canMoveTo - southwest", () => {
+      const positions = ["d4"];
+
+      const r1 = new Bishop(Colour[0], "d", 4);
+
+      const newPositionOne = new Position("b", 2);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(true);
+    });
+    test("!canMoveTo - southwest", () => {
+      const positions = ["d4", "b2"];
+
+      const r1 = new Bishop(Colour[0], "d", 4);
+
+      const newPositionOne = new Position("b", 2);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(false);
+    });
+    test("canMoveTo - northwest", () => {
+      const positions = ["d4"];
+
+      const r1 = new Bishop(Colour[0], "d", 4);
+
+      const newPositionOne = new Position("a", 7);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(true);
+    });
+    test("!canMoveTo - northwest", () => {
+      const positions = ["d4", "b6"];
+
+      const r1 = new Bishop(Colour[0], "d", 4);
+
+      const newPositionOne = new Position("a", 7);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(false);
+    });
+    test("Other !canMoveTo - SW", () => {
+      const positions = ["f6", "d4"];
+
+      const r1 = new Bishop(Colour[0], "f", 6);
+
+      const newPositionOne = new Position("a", 1);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(false);
+    });
+    test("Other !canMoveTo - NW", () => {
+      const positions = ["e3", "c5"];
+
+      const r1 = new Bishop(Colour[0], "e", 3);
+
+      const newPositionOne = new Position("a", 7);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(false);
+    });
+    test("Other !canMoveTo - SE", () => {
+      const positions = ["c6", "f3"];
+
+      const r1 = new Bishop(Colour[0], "c", 6);
+
+      const newPositionOne = new Position("h", 1);
+
+      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+
+      expect(canMoveOne).toBe(true);
     });
   });
   describe("Knight", () => {
     test("canMoveTo", () => {
-      const file = "d";
-      const rank = 4;
-      const r1 = new Knight(Colour[1], file, rank);
+      const positions = ["a1", "b2"];
+
+      const r1 = new Bishop(Colour[0], "a", 1);
 
       const newPosition = new Position("f", 3);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const canMove = r1.canMoveTo(newPosition, positions);
 
       expect(canMove).toBe(true);
     });
     test("!canMoveTo", () => {
-      const file = "d";
-      const rank = 4;
-      const r1 = new Knight(Colour[1], file, rank);
+      const positions = ["a1", "b2"];
+
+      const r1 = new Bishop(Colour[0], "a", 1);
 
       const newPosition = new Position("f", 4);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const canMove = r1.canMoveTo(newPosition, positions);
 
       expect(canMove).toBe(false);
     });
