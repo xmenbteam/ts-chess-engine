@@ -1,4 +1,5 @@
-import { files, letterRef } from "../utils/utils";
+import { FuncProps } from "../Types";
+import { IsPieceInTheWay } from "../utils/movement-classes";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class King extends Piece {
@@ -15,26 +16,15 @@ export class King extends Piece {
       (Math.abs(fileDist) === 1 && !Math.abs(rankDist)) ||
       (!Math.abs(fileDist) && Math.abs(rankDist) === 1);
 
-    const pieceCoords = `${pieceFile}${pieceRank}`;
-
-    const ignoreYourself = positions.filter((p) => p !== pieceCoords);
-
-    let isInWay: boolean = false;
-
-    const wrongSquares = [
-      `${files[letterRef[pieceFile] - 1]}${pieceRank}`,
-      `${files[letterRef[pieceFile] - 1]}${pieceRank + 1}`,
-      `${files[letterRef[pieceFile]]}${pieceRank + 1}`,
-      `${files[letterRef[pieceFile] + 1]}${pieceRank + 1}`,
-      `${files[letterRef[pieceFile] + 1]}${pieceRank}`,
-      `${files[letterRef[pieceFile] + 1]}${pieceRank - 1}`,
-      `${files[letterRef[pieceFile]]}${pieceRank - 1}`,
-      `${files[letterRef[pieceFile] - 1]}${pieceRank - 1}`,
+    const props: FuncProps = [
+      pieceFile,
+      pieceRank,
+      newFile,
+      newRank,
+      positions,
     ];
 
-    wrongSquares.forEach((squ) => {
-      if (ignoreYourself.includes(squ)) isInWay = true;
-    });
+    const isInWay = new IsPieceInTheWay(...props).checkKingMove();
 
     if (canMove && !isInWay) return true;
 

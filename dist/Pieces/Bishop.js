@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bishop = void 0;
-const movement_funcs_1 = require("../utils/movement-funcs");
+const movement_classes_1 = require("../utils/movement-classes");
 const PiecesAndPosition_1 = require("./PiecesAndPosition");
 class Bishop extends PiecesAndPosition_1.Piece {
     canMoveTo(newPosition, positions) {
@@ -16,7 +16,7 @@ class Bishop extends PiecesAndPosition_1.Piece {
             newRank,
             positions,
         ];
-        const isInWay = (0, movement_funcs_1.diagonalInTheWay)(...props);
+        const isInWay = new movement_classes_1.IsPieceInTheWay(...props).checkDiagonal();
         if (canMove && !isInWay)
             return true;
         return false;

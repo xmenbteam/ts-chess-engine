@@ -1,6 +1,5 @@
 import { FuncProps } from "../Types";
-import { rankAndFileInTheWay } from "../utils/movement-funcs";
-import { files, letterRef } from "../utils/utils";
+import { IsPieceInTheWay } from "../utils/movement-classes";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Rook extends Piece {
@@ -21,7 +20,7 @@ export class Rook extends Piece {
       positions,
     ];
 
-    const isInWay = rankAndFileInTheWay(...props);
+    const isInWay = new IsPieceInTheWay(...props).checkRankAndFile();
 
     if (canMove && !isInWay) return true;
 

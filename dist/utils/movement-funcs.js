@@ -1,22 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.diagonalInTheWay = exports.rankAndFileInTheWay = void 0;
+exports.diagonalInTheWay = exports.RankAndFileInTheWay = void 0;
 const utils_1 = require("./utils");
-const rankAndFileInTheWay = (pieceFile, pieceRank, newFile, newRank, positions) => {
-    let isInWay = false;
-    const pieceCoords = `${pieceFile}${pieceRank}`;
-    const ignoreYourself = positions.filter((p) => p !== pieceCoords);
-    for (let i = pieceRank; i <= newRank; i++) {
-        if (ignoreYourself.includes(`${pieceFile}${i}`))
-            isInWay = true;
+class RankAndFileInTheWay {
+    constructor(pieceFile, pieceRank, newFile, newRank, positions) {
+        this.isInWay = false;
+        this.pieceFile = pieceFile;
+        this.pieceRank = pieceRank;
+        this.newFile = newFile;
+        this.newRank = newRank;
+        this.positions = positions;
     }
-    for (let i = utils_1.letterRef[pieceFile]; i <= utils_1.letterRef[newFile]; i++) {
-        if (ignoreYourself.includes(`${utils_1.files[i]}${pieceRank}`))
-            isInWay = true;
+    checkRankAndFile() {
+        const pieceCoords = `${this.pieceFile}${this.pieceRank}`;
+        const ignoreYourself = this.positions.filter((p) => p !== pieceCoords);
+        for (let i = this.pieceRank; i <= this.newRank; i++) {
+            if (ignoreYourself.includes(`${this.pieceFile}${i}`))
+                this.isInWay = true;
+        }
+        for (let i = utils_1.letterRef[this.pieceFile]; i <= utils_1.letterRef[this.newFile]; i++) {
+            if (ignoreYourself.includes(`${utils_1.files[i]}${this.pieceRank}`))
+                this.isInWay = true;
+        }
+        return this.isInWay;
     }
-    return isInWay;
-};
-exports.rankAndFileInTheWay = rankAndFileInTheWay;
+}
+exports.RankAndFileInTheWay = RankAndFileInTheWay;
 const diagonalInTheWay = (pieceFile, pieceRank, newFile, newRank, positions) => {
     const pieceCoords = `${pieceFile}${pieceRank}`;
     const ignoreYourself = positions.filter((p) => p !== pieceCoords);

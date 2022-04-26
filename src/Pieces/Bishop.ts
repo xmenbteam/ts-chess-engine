@@ -1,6 +1,5 @@
 import { FuncProps } from "../Types";
-import { diagonalInTheWay } from "../utils/movement-funcs";
-import { files, letterRef } from "../utils/utils";
+import { IsPieceInTheWay } from "../utils/movement-classes";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Bishop extends Piece {
@@ -21,7 +20,7 @@ export class Bishop extends Piece {
       positions,
     ];
 
-    const isInWay = diagonalInTheWay(...props);
+    const isInWay = new IsPieceInTheWay(...props).checkDiagonal();
 
     if (canMove && !isInWay) return true;
 
