@@ -1,5 +1,3 @@
-import { Piece } from "../Pieces/PiecesAndPosition";
-
 export const letterRef: { [file: string]: number } = {
   a: 0,
   b: 1,

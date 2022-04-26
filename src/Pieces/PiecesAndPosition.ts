@@ -56,7 +56,7 @@ export abstract class Piece {
     this.hasMoved = true;
   }
 
-  abstract canMoveTo(newPosition: Position): boolean;
+  abstract canMoveTo(newPosition: Position, positions: string[]): boolean;
 
   constructor(pieceColour: string, file: string, rank: number) {
     this.position = new Position(file, rank);

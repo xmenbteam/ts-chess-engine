@@ -98,60 +98,58 @@ export class Game {
     );
   }
 
-  isPieceInTheWay(piece: Piece, newPosition: Position): boolean {
-    if (piece.constructor.name === "Knight") return false;
+  // isPieceInTheWay(piece: Piece, newPosition: Position): boolean {
+  //   if (piece.constructor.name === "Knight") return false;
 
-    const pieces = this.getPieces();
+  //   const pieces = this.getPieces();
 
-    Object.values(pieces).forEach((otherPiece) => {
-      const canMove = piece.canMoveTo(otherPiece.position);
-      const otherPos = otherPiece.position;
-      const { file: fileDiff, rank: rankDiff } =
-        otherPiece.position.distanceFrom(newPosition);
-      const { file: otherFile, rank: otherRank } =
-        piece.position.distanceFrom(otherPos);
+  //   const allPositions = this.getAllPositions();
 
-      if (canMove) console.log({ fileDiff, otherFile });
-      if (canMove) return true;
-    });
+  //   Object.values(pieces).forEach((otherPiece) => {
+  //     const canMove = piece.canMoveTo(otherPiece.position);
 
-    return false;
-  }
+  //     const { file, rank } = otherPiece.position.getPosition();
 
-  castle(colour: number) {
-    const pieceObj: { [key: string]: Piece } = this.getPieces();
-    const oldKingPos = colour === 0 ? "Ke1" : "Ke8";
-    const oldRookPos = colour === 0 ? "Rh1" : "Rh8";
-    const newKingFile = "g";
-    const newRookFile = "f";
-    const rank = colour === 0 ? 1 : 8;
-    const newKingPos = new Position(newKingFile, rank);
-    const newRookPos = new Position(newRookFile, rank);
+  //     if (canMove) return true;
+  //   });
 
-    const hasNotMoved =
-      !pieceObj[oldKingPos].getHasMoved() &&
-      !pieceObj[oldRookPos].getHasMoved();
+  //   return false;
+  // }
 
-    const nothingInTheWay =
-      !this.isPieceInTheWay(pieceObj[oldKingPos], newKingPos) &&
-      !this.isPieceInTheWay(pieceObj[oldRookPos], newRookPos);
-    try {
-      if (hasNotMoved && nothingInTheWay) {
-        pieceObj[oldKingPos].setHasMoved();
-        pieceObj[oldKingPos].position.setPosition(newKingFile, rank);
-        pieceObj[`K${newKingFile}${rank}`] = pieceObj[oldKingPos];
-        delete pieceObj[oldKingPos];
+  // castle(colour: number) {
+  //   const pieceObj: { [key: string]: Piece } = this.getPieces();
+  //   const oldKingPos = colour === 0 ? "Ke1" : "Ke8";
+  //   const oldRookPos = colour === 0 ? "Rh1" : "Rh8";
+  //   const newKingFile = "g";
+  //   const newRookFile = "f";
+  //   const rank = colour === 0 ? 1 : 8;
+  //   const newKingPos = new Position(newKingFile, rank);
+  //   const newRookPos = new Position(newRookFile, rank);
 
-        pieceObj[oldRookPos].setHasMoved();
-        pieceObj[oldRookPos].position.setPosition(newRookFile, rank);
-        pieceObj[`R${newRookFile}${rank}`] = pieceObj[oldRookPos];
-        delete pieceObj[oldRookPos];
-      }
-      return { msg: `${Colour[colour]} castled Kingside!` };
-    } catch (err) {
-      return { msg: "Failed to castle kingside!" };
-    }
-  }
+  //   const hasNotMoved =
+  //     !pieceObj[oldKingPos].getHasMoved() &&
+  //     !pieceObj[oldRookPos].getHasMoved();
+
+  //   const nothingInTheWay =
+  //     !this.isPieceInTheWay(pieceObj[oldKingPos], newKingPos) &&
+  //     !this.isPieceInTheWay(pieceObj[oldRookPos], newRookPos);
+  //   try {
+  //     if (hasNotMoved && nothingInTheWay) {
+  //       pieceObj[oldKingPos].setHasMoved();
+  //       pieceObj[oldKingPos].position.setPosition(newKingFile, rank);
+  //       pieceObj[`K${newKingFile}${rank}`] = pieceObj[oldKingPos];
+  //       delete pieceObj[oldKingPos];
+
+  //       pieceObj[oldRookPos].setHasMoved();
+  //       pieceObj[oldRookPos].position.setPosition(newRookFile, rank);
+  //       pieceObj[`R${newRookFile}${rank}`] = pieceObj[oldRookPos];
+  //       delete pieceObj[oldRookPos];
+  //     }
+  //     return { msg: `${Colour[colour]} castled Kingside!` };
+  //   } catch (err) {
+  //     return { msg: "Failed to castle kingside!" };
+  //   }
+  // }
 
   makeMove(move: string, colour: number): { [msg: string]: string } {
     const pieceObj: { [key: string]: Piece } = this.getPieces();
@@ -160,7 +158,7 @@ export class Game {
 
     if (pawnTest.test(move)) move = `P${move}`;
 
-    if (move === "0-0") return this.castle(colour);
+    // if (move === "0-0") return this.castle(colour);
 
     const f: string = move.match(fileReg)![0];
     const r: string = move.match(rankReg)![0];
@@ -169,14 +167,14 @@ export class Game {
     const piecesThatCanMove: string[] = pieceArray.reduce(
       (array: string[], piece: [string, Piece]) => {
         const [piecePos, p] = piece;
-        const m = p.canMoveTo(pos);
+        const m = p.canMoveTo(pos, this.getAllPositions());
         const c = p.getColour() === Colour[colour];
-        const w = this.isPieceInTheWay(p, pos);
+
         const n = piecePos[0] === move[0];
 
         // if (piecePos === "Bc1") console.log({ move, piecePos, m, c, w, n });
 
-        if (m && c && w && n) array.push(piecePos);
+        if (m && c && n) array.push(piecePos);
         return array;
       },
       []
