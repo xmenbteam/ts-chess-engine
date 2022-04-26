@@ -98,24 +98,6 @@ export class Game {
     );
   }
 
-  // isPieceInTheWay(piece: Piece, newPosition: Position): boolean {
-  //   if (piece.constructor.name === "Knight") return false;
-
-  //   const pieces = this.getPieces();
-
-  //   const allPositions = this.getAllPositions();
-
-  //   Object.values(pieces).forEach((otherPiece) => {
-  //     const canMove = piece.canMoveTo(otherPiece.position);
-
-  //     const { file, rank } = otherPiece.position.getPosition();
-
-  //     if (canMove) return true;
-  //   });
-
-  //   return false;
-  // }
-
   // castle(colour: number) {
   //   const pieceObj: { [key: string]: Piece } = this.getPieces();
   //   const oldKingPos = colour === 0 ? "Ke1" : "Ke8";

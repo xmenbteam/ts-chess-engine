@@ -22,3 +22,4 @@ export enum FileEnum {
 export type FuncProps = [RankFile, RankFile, string[]];
 
 export type RankFile = { file: string; rank: number };
+export type RankFileDist = { file: number; rank: number };

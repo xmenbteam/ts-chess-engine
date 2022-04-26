@@ -1,15 +1,10 @@
 import { Piece, Position } from "./PiecesAndPosition";
 import { FuncProps } from "../Types";
-import { IsPieceInTheWay } from "../utils/movement-classes";
+import { CanMoveToSquare, IsPieceInTheWay } from "../utils/movementClasses";
 
 export class Queen extends Piece {
   canMoveTo(newPosition: Position, positions: string[]): boolean {
-    const { file: fileDist, rank: rankDist } = newPosition.distanceFrom(
-      this.position
-    );
-
-    const canMove =
-      !fileDist || !rankDist || Math.abs(fileDist) === Math.abs(rankDist);
+    const distance = newPosition.distanceFrom(this.position);
 
     const props: FuncProps = [
       this.position.getPosition(),
@@ -17,6 +12,7 @@ export class Queen extends Piece {
       positions,
     ];
 
+    const canMove = new CanMoveToSquare(distance).queen();
     const isInWay = new IsPieceInTheWay(...props).checkBoth();
 
     if (canMove && !isInWay) return true;
