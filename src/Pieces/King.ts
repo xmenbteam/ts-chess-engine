@@ -8,19 +8,14 @@ export class King extends Piece {
       this.position
     );
 
-    const { file: pieceFile, rank: pieceRank } = this.position.getPosition();
-    const { file: newFile, rank: newRank } = newPosition.getPosition();
-
     const canMove =
       (Math.abs(fileDist) === 1 && Math.abs(rankDist) === 1) ||
       (Math.abs(fileDist) === 1 && !Math.abs(rankDist)) ||
       (!Math.abs(fileDist) && Math.abs(rankDist) === 1);
 
     const props: FuncProps = [
-      pieceFile,
-      pieceRank,
-      newFile,
-      newRank,
+      this.position.getPosition(),
+      newPosition.getPosition(),
       positions,
     ];
 

@@ -6,14 +6,10 @@ const movement_classes_1 = require("../utils/movement-classes");
 class Queen extends PiecesAndPosition_1.Piece {
     canMoveTo(newPosition, positions) {
         const { file: fileDist, rank: rankDist } = newPosition.distanceFrom(this.position);
-        const { file: pieceFile, rank: pieceRank } = this.position.getPosition();
-        const { file: newFile, rank: newRank } = newPosition.getPosition();
         const canMove = !fileDist || !rankDist || Math.abs(fileDist) === Math.abs(rankDist);
         const props = [
-            pieceFile,
-            pieceRank,
-            newFile,
-            newRank,
+            this.position.getPosition(),
+            newPosition.getPosition(),
             positions,
         ];
         const isInWay = new movement_classes_1.IsPieceInTheWay(...props).checkBoth();

@@ -3,54 +3,56 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IsPieceInTheWay = void 0;
 const utils_1 = require("./utils");
 class IsPieceInTheWay {
-    constructor(pieceFile, pieceRank, newFile, newRank, positions) {
+    constructor(piecePos, newPos, positions) {
         this.isInWay = false;
-        this.pieceFile = pieceFile;
-        this.pieceRank = pieceRank;
-        this.newFile = newFile;
-        this.newRank = newRank;
+        this.piecePos = piecePos;
+        this.newPos = newPos;
         this.positions = positions;
         this.pieceCoords = "";
         this.ignoreYourself = [];
         this.wrongSquares = [];
     }
     checkRankAndFile() {
-        this.pieceCoords = `${this.pieceFile}${this.pieceRank}`;
+        const { file, rank } = this.piecePos;
+        const { file: newFile, rank: newRank } = this.newPos;
+        this.pieceCoords = `${file}${rank}`;
         this.ignoreYourself = this.positions.filter((p) => p !== this.pieceCoords);
-        for (let i = this.pieceRank; i <= this.newRank; i++) {
-            if (this.ignoreYourself.includes(`${this.pieceFile}${i}`))
+        for (let i = rank; i <= newRank; i++) {
+            if (this.ignoreYourself.includes(`${file}${i}`))
                 this.isInWay = true;
         }
-        for (let i = utils_1.letterRef[this.pieceFile]; i <= utils_1.letterRef[this.newFile]; i++) {
-            if (this.ignoreYourself.includes(`${utils_1.files[i]}${this.pieceRank}`))
+        for (let i = utils_1.letterRef[file]; i <= utils_1.letterRef[newFile]; i++) {
+            if (this.ignoreYourself.includes(`${utils_1.files[i]}${rank}`))
                 this.isInWay = true;
         }
         return this.isInWay;
     }
     checkDiagonal() {
-        this.pieceCoords = `${this.pieceFile}${this.pieceRank}`;
+        const { file, rank } = this.piecePos;
+        const { file: newFile, rank: newRank } = this.newPos;
+        this.pieceCoords = `${file}${rank}`;
         this.ignoreYourself = this.positions.filter((p) => p !== this.pieceCoords);
         // Checks if piece is moving SOUTHEAST
-        for (let i = this.newRank; i < this.pieceRank; i++) {
-            const square = `${utils_1.files[this.pieceRank + i - 1]}${this.pieceRank - i}`;
+        for (let i = newRank; i < rank; i++) {
+            const square = `${utils_1.files[rank + i - 1]}${rank - i}`;
             if (this.ignoreYourself.includes(square))
                 this.isInWay = true;
         }
         // Checks if piece is moving NORTHEAST
-        for (let i = utils_1.letterRef[this.pieceFile], j = this.pieceRank; i < utils_1.letterRef[this.newFile]; i++, j++) {
+        for (let i = utils_1.letterRef[file], j = rank; i < utils_1.letterRef[newFile]; i++, j++) {
             const square = `${utils_1.files[i]}${j}`;
             if (this.ignoreYourself.includes(square))
                 this.isInWay = true;
         }
         // Checks if piece is moving SOUTHWEST
-        for (let i = this.pieceRank; i >= this.newRank; i--) {
-            const square = `${utils_1.files[this.pieceRank - i]}${this.pieceRank - i + 1}`;
+        for (let i = rank; i >= newRank; i--) {
+            const square = `${utils_1.files[rank - i]}${rank - i + 1}`;
             if (this.ignoreYourself.includes(square))
                 this.isInWay = true;
         }
         // Checks if piece is moving NORTHWEST
-        for (let i = this.pieceRank; i < this.newRank; i++) {
-            const square = `${utils_1.files[i - this.pieceRank]}${this.newRank - i + this.pieceRank}`;
+        for (let i = rank; i < newRank; i++) {
+            const square = `${utils_1.files[i - rank]}${newRank - i + rank}`;
             if (this.ignoreYourself.includes(square))
                 this.isInWay = true;
         }
@@ -60,20 +62,28 @@ class IsPieceInTheWay {
         return this.checkDiagonal() && this.checkRankAndFile();
     }
     checkKingMove() {
+        const { file, rank } = this.piecePos;
+        this.ignoreYourself = this.positions.filter((p) => p !== this.pieceCoords);
         this.wrongSquares = [
-            `${utils_1.files[utils_1.letterRef[this.pieceFile] - 1]}${this.pieceRank}`,
-            `${utils_1.files[utils_1.letterRef[this.pieceFile] - 1]}${this.pieceRank + 1}`,
-            `${utils_1.files[utils_1.letterRef[this.pieceFile]]}${this.pieceRank + 1}`,
-            `${utils_1.files[utils_1.letterRef[this.pieceFile] + 1]}${this.pieceRank + 1}`,
-            `${utils_1.files[utils_1.letterRef[this.pieceFile] + 1]}${this.pieceRank}`,
-            `${utils_1.files[utils_1.letterRef[this.pieceFile] + 1]}${this.pieceRank - 1}`,
-            `${utils_1.files[utils_1.letterRef[this.pieceFile]]}${this.pieceRank - 1}`,
-            `${utils_1.files[utils_1.letterRef[this.pieceFile] - 1]}${this.pieceRank - 1}`,
+            `${utils_1.files[utils_1.letterRef[file] - 1]}${rank}`,
+            `${utils_1.files[utils_1.letterRef[file] - 1]}${rank + 1}`,
+            `${utils_1.files[utils_1.letterRef[file]]}${rank + 1}`,
+            `${utils_1.files[utils_1.letterRef[file] + 1]}${rank + 1}`,
+            `${utils_1.files[utils_1.letterRef[file] + 1]}${rank}`,
+            `${utils_1.files[utils_1.letterRef[file] + 1]}${rank - 1}`,
+            `${utils_1.files[utils_1.letterRef[file]]}${rank - 1}`,
+            `${utils_1.files[utils_1.letterRef[file] - 1]}${rank - 1}`,
         ];
         this.wrongSquares.forEach((squ) => {
             if (this.ignoreYourself.includes(squ))
                 this.isInWay = true;
         });
+        return this.isInWay;
+    }
+    checkPawnMove() {
+        const { file: newFile, rank: newRank } = this.newPos;
+        this.ignoreYourself = this.positions.filter((p) => p !== this.pieceCoords);
+        this.isInWay = this.ignoreYourself.includes(`${newFile}${newRank}`);
         return this.isInWay;
     }
 }

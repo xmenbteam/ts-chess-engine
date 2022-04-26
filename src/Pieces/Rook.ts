@@ -7,16 +7,12 @@ export class Rook extends Piece {
     const { file: fileDist, rank: rankDist } = newPosition.distanceFrom(
       this.position
     );
-    const { file: pieceFile, rank: pieceRank } = this.position.getPosition();
-    const { file: newFile, rank: newRank } = newPosition.getPosition();
 
     const canMove = !fileDist || !rankDist;
 
     const props: FuncProps = [
-      pieceFile,
-      pieceRank,
-      newFile,
-      newRank,
+      this.position.getPosition(),
+      newPosition.getPosition(),
       positions,
     ];
 

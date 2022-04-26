@@ -42,7 +42,7 @@ describe("Position Class", () => {
   });
 });
 
-describe("Piece subclasses", () => {
+describe.only("Piece subclasses", () => {
   describe("Pawn", () => {
     test("Properties", () => {
       const file = "a";
@@ -285,7 +285,7 @@ describe("Piece subclasses", () => {
       expect(r1.getHasMoved()).toBe(true);
     });
   });
-  describe.only("Bishop", () => {
+  describe("Bishop", () => {
     test("!canMoveTo - a1", () => {
       const positions = ["a1", "b2"];
 

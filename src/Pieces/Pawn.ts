@@ -1,3 +1,5 @@
+import { FuncProps } from "../Types";
+import { IsPieceInTheWay } from "../utils/movement-classes";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Pawn extends Piece {
@@ -5,20 +7,20 @@ export class Pawn extends Piece {
     const { file: fileDist, rank: rankDist } = newPosition.distanceFrom(
       this.position
     );
-    const { file: pieceFile, rank: pieceRank } = this.position.getPosition();
-    const { file: newFile, rank: newRank } = newPosition.getPosition();
-
-    const ignoreYourself = positions.filter(
-      (p) => p !== `${pieceFile}${pieceRank}`
-    );
-
-    const pieceInTheWay = ignoreYourself.includes(`${newFile}${newRank}`);
 
     const canMove =
       (!fileDist && Math.abs(rankDist) === 1) ||
       (!fileDist && Math.abs(rankDist) === 2 && !this.getHasMoved());
 
-    if (canMove && !pieceInTheWay) return true;
+    const props: FuncProps = [
+      this.position.getPosition(),
+      newPosition.getPosition(),
+      positions,
+    ];
+
+    const isInWay = new IsPieceInTheWay(...props).checkPawnMove();
+
+    if (canMove && !isInWay) return true;
 
     return false;
   }
