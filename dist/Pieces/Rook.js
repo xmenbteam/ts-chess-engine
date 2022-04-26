@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rook = void 0;
-const movementClasses_1 = require("../utils/movementClasses");
+const MovClasses_1 = require("../utils/MovClasses");
 const PiecesAndPosition_1 = require("./PiecesAndPosition");
 class Rook extends PiecesAndPosition_1.Piece {
     canMoveTo(newPosition, positions) {
@@ -11,8 +11,8 @@ class Rook extends PiecesAndPosition_1.Piece {
             newPosition.getPosition(),
             positions,
         ];
-        const canMove = new movementClasses_1.CanMoveToSquare(distance).rook();
-        const isInWay = new movementClasses_1.IsPieceInTheWay(...props).checkRankAndFile();
+        const canMove = new MovClasses_1.CanMoveToSquare(distance).rook();
+        const isInWay = new MovClasses_1.IsPieceInTheWay(...props).checkRankAndFile();
         if (canMove && !isInWay)
             return true;
         return false;
