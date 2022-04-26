@@ -1,3 +1,5 @@
+import { FuncProps } from "../Types";
+import { rankAndFileInTheWay } from "../utils/movement-funcs";
 import { files, letterRef } from "../utils/utils";
 import { Piece, Position } from "./PiecesAndPosition";
 
@@ -11,19 +13,15 @@ export class Rook extends Piece {
 
     const canMove = !fileDist || !rankDist;
 
-    const ignoreYourself = positions.filter(
-      (p) => p !== `${pieceFile}${pieceRank}`
-    );
+    const props: FuncProps = [
+      pieceFile,
+      pieceRank,
+      newFile,
+      newRank,
+      positions,
+    ];
 
-    let isInWay: boolean = false;
-
-    for (let i = pieceRank; i <= newRank; i++) {
-      if (ignoreYourself.includes(`${pieceFile}${i}`)) isInWay = true;
-    }
-
-    for (let i = letterRef[pieceFile]; i <= letterRef[newFile]; i++) {
-      if (ignoreYourself.includes(`${files[i]}${pieceRank}`)) isInWay = true;
-    }
+    const isInWay = rankAndFileInTheWay(...props);
 
     if (canMove && !isInWay) return true;
 

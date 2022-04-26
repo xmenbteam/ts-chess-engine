@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Knight = void 0;
 const PiecesAndPosition_1 = require("./PiecesAndPosition");
 class Knight extends PiecesAndPosition_1.Piece {
-    canMoveTo(newPosition) {
+    canMoveTo(newPosition, positions) {
         const { file, rank } = newPosition.distanceFrom(this.position);
         if (Math.abs(file) === 2 && Math.abs(rank) === 1)
             return true;

@@ -1,3 +1,5 @@
+import { FuncProps } from "../Types";
+import { diagonalInTheWay } from "../utils/movement-funcs";
 import { files, letterRef } from "../utils/utils";
 import { Piece, Position } from "./PiecesAndPosition";
 
@@ -10,38 +12,16 @@ export class Bishop extends Piece {
     const { file: newFile, rank: newRank } = newPosition.getPosition();
 
     const canMove = Math.abs(fileDist) === Math.abs(rankDist);
-    const pieceCoords = `${pieceFile}${pieceRank}`;
 
-    const ignoreYourself = positions.filter((p) => p !== pieceCoords);
+    const props: FuncProps = [
+      pieceFile,
+      pieceRank,
+      newFile,
+      newRank,
+      positions,
+    ];
 
-    let isInWay: boolean = false;
-    // console.log({ ignoreYourself });
-
-    // Checks if piece is moving SOUTHEAST
-    for (let i = newRank; i < pieceRank; i++) {
-      const square = `${files[pieceRank + i - 1]}${pieceRank - i}`;
-      if (ignoreYourself.includes(square)) isInWay = true;
-    }
-    // Checks if piece is moving NORTHEAST
-    for (
-      let i = letterRef[pieceFile], j = pieceRank;
-      i < letterRef[newFile];
-      i++, j++
-    ) {
-      const square = `${files[i]}${j}`;
-      console.log({ square, pieceCoords });
-      if (ignoreYourself.includes(square)) isInWay = true;
-    }
-    // Checks if piece is moving SOUTHWEST
-    for (let i = pieceRank; i >= newRank; i--) {
-      const square = `${files[pieceRank - i]}${pieceRank - i + 1}`;
-      if (ignoreYourself.includes(square)) isInWay = true;
-    }
-    // Checks if piece is moving NORTHWEST
-    for (let i = pieceRank; i < newRank; i++) {
-      const square = `${files[i - pieceRank]}${newRank - i + pieceRank}`;
-      if (ignoreYourself.includes(square)) isInWay = true;
-    }
+    const isInWay = diagonalInTheWay(...props);
 
     if (canMove && !isInWay) return true;
 

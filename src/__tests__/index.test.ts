@@ -1,4 +1,4 @@
-import { Piece, Position } from "../Pieces/PiecesAndPosition";
+import { Position } from "../Pieces/PiecesAndPosition";
 import { Pawn } from "../Pieces/Pawn";
 import { Rook } from "../Pieces/Rook";
 import { Bishop } from "../Pieces/Bishop";
@@ -464,27 +464,27 @@ describe("Piece subclasses", () => {
     });
   });
   describe("Knight", () => {
-    test("canMoveTo", () => {
+    test("!canMoveTo", () => {
       const positions = ["a1", "b2"];
 
-      const r1 = new Bishop(Colour[0], "a", 1);
+      const r1 = new Knight(Colour[0], "a", 1);
 
       const newPosition = new Position("f", 3);
 
       const canMove = r1.canMoveTo(newPosition, positions);
 
-      expect(canMove).toBe(true);
+      expect(canMove).toBe(false);
     });
-    test("!canMoveTo", () => {
+    test("canMoveTo - standard", () => {
       const positions = ["a1", "b2"];
 
-      const r1 = new Bishop(Colour[0], "a", 1);
+      const r1 = new Knight(Colour[0], "b", 1);
 
-      const newPosition = new Position("f", 4);
+      const newPosition = new Position("c", 3);
 
       const canMove = r1.canMoveTo(newPosition, positions);
 
-      expect(canMove).toBe(false);
+      expect(canMove).toBe(true);
     });
   });
   describe("King", () => {
@@ -495,7 +495,7 @@ describe("Piece subclasses", () => {
 
       const newPosition = new Position("e", 3);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const canMove = r1.canMoveTo(newPosition, []);
 
       expect(canMove).toBe(true);
     });
@@ -506,7 +506,7 @@ describe("Piece subclasses", () => {
 
       const newPosition = new Position("e", 4);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const canMove = r1.canMoveTo(newPosition, []);
 
       expect(canMove).toBe(true);
     });
@@ -517,18 +517,126 @@ describe("Piece subclasses", () => {
 
       const newPosition = new Position("d", 5);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const canMove = r1.canMoveTo(newPosition, []);
 
       expect(canMove).toBe(true);
     });
-    test("!canMoveTo", () => {
+    test("!canMoveTo - out of scope", () => {
       const file = "d";
       const rank = 4;
       const r1 = new King(Colour[1], file, rank);
 
       const newPosition = new Position("e", 7);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const canMove = r1.canMoveTo(newPosition, []);
+
+      expect(canMove).toBe(false);
+    });
+    test("!canMoveTo - piece to west", () => {
+      const positions = ["e7", "d7"];
+      const file = "d";
+      const rank = 4;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("e", 7);
+
+      const canMove = r1.canMoveTo(newPosition, positions);
+
+      expect(canMove).toBe(false);
+    });
+    test("!canMoveTo - piece to west", () => {
+      const positions = ["e7", "d7"];
+      const file = "e";
+      const rank = 7;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("d", 7);
+
+      const canMove = r1.canMoveTo(newPosition, positions);
+
+      expect(canMove).toBe(false);
+    });
+    test("!canMoveTo - piece to northwest", () => {
+      const positions = ["e7", "d8"];
+      const file = "e";
+      const rank = 7;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("d", 8);
+
+      const canMove = r1.canMoveTo(newPosition, positions);
+
+      expect(canMove).toBe(false);
+    });
+    test("!canMoveTo - piece to north", () => {
+      const positions = ["e7", "e8"];
+      const file = "e";
+      const rank = 7;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("e", 8);
+
+      const canMove = r1.canMoveTo(newPosition, positions);
+
+      expect(canMove).toBe(false);
+    });
+    test("!canMoveTo - piece to northeast", () => {
+      const positions = ["e7", "f8"];
+      const file = "e";
+      const rank = 7;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("f", 8);
+
+      const canMove = r1.canMoveTo(newPosition, positions);
+
+      expect(canMove).toBe(false);
+    });
+    test("!canMoveTo - piece to east", () => {
+      const positions = ["e7", "f7"];
+      const file = "e";
+      const rank = 7;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("f", 7);
+
+      const canMove = r1.canMoveTo(newPosition, positions);
+
+      expect(canMove).toBe(false);
+    });
+    test("!canMoveTo - piece to southeast", () => {
+      const positions = ["e7", "f6"];
+      const file = "e";
+      const rank = 7;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("f", 6);
+
+      const canMove = r1.canMoveTo(newPosition, positions);
+
+      expect(canMove).toBe(false);
+    });
+    test("!canMoveTo - piece to south", () => {
+      const positions = ["e7", "e6"];
+      const file = "e";
+      const rank = 7;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("e", 6);
+
+      const canMove = r1.canMoveTo(newPosition, positions);
+
+      expect(canMove).toBe(false);
+    });
+    test("!canMoveTo - piece to southwest", () => {
+      const positions = ["e7", "d6"];
+      const file = "e";
+      const rank = 7;
+      const r1 = new King(Colour[1], file, rank);
+
+      const newPosition = new Position("d", 6);
+
+      const canMove = r1.canMoveTo(newPosition, positions);
 
       expect(canMove).toBe(false);
     });
@@ -552,7 +660,7 @@ describe("Piece subclasses", () => {
 
       const newPosition = new Position("h", 8);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const canMove = r1.canMoveTo(newPosition, []);
 
       expect(canMove).toBe(true);
     });
@@ -563,7 +671,7 @@ describe("Piece subclasses", () => {
 
       const newPosition = new Position("h", 6);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const canMove = r1.canMoveTo(newPosition, []);
 
       expect(canMove).toBe(false);
     });
@@ -574,7 +682,7 @@ describe("Piece subclasses", () => {
 
       const newPosition = new Position("h", 2);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const canMove = r1.canMoveTo(newPosition, []);
 
       expect(canMove).toBe(true);
     });
@@ -585,7 +693,7 @@ describe("Piece subclasses", () => {
 
       const newPosition = new Position("h", 3);
 
-      const canMove = r1.canMoveTo(newPosition);
+      const canMove = r1.canMoveTo(newPosition, []);
 
       expect(canMove).toBe(false);
     });

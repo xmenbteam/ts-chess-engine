@@ -1,3 +1,5 @@
+import { StringMappingType } from "typescript";
+
 export type PositionDiff = {
   file: number;
   rank: number;
@@ -17,5 +19,7 @@ export enum FileEnum {
   "f",
   "g",
 }
+
+export type FuncProps = [string, number, string, number, string[]];
 
 export type RankFile = { file: string; rank: number };
