@@ -1,5 +1,5 @@
-import { RankFile } from "../Types";
-import { letterRef, files } from "./utils";
+import { RankFile } from "../../Types";
+import { letterRef, files } from "../../utils/utils";
 
 export class IsPieceInTheWay {
   private isInWay: boolean = false;

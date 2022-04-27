@@ -1,12 +1,12 @@
-import { Bishop } from "./Pieces/Bishop";
-import { King } from "./Pieces/King";
-import { Knight } from "./Pieces/Knight";
-import { Pawn } from "./Pieces/Pawn";
-import { Piece, Position } from "./Pieces/PiecesAndPosition";
-import { Queen } from "./Pieces/Queen";
-import { Rook } from "./Pieces/Rook";
+import { Bishop } from "./Classes/Pieces/Bishop";
+import { King } from "./Classes/Pieces/King";
+import { Knight } from "./Classes/Pieces/Knight";
+import { Pawn } from "./Classes/Pieces/Pawn";
+import { Piece, Position } from "./Classes/Pieces/PiecesAndPosition";
+import { Queen } from "./Classes/Pieces/Queen";
+import { Rook } from "./Classes/Pieces/Rook";
 import { Colour, PieceObject } from "./Types";
-import { SpecialMoves } from "./utils/SpecialMoves";
+import { SpecialMoves } from "./Classes/MovementClasses/SpecialMoves";
 import { fileReg, pawnTest, rankReg } from "./utils/utils";
 
 export class Game {

@@ -1,4 +1,4 @@
-import { RankFileDist } from "../Types";
+import { RankFileDist } from "../../Types";
 
 export class CanMoveToSquare {
   private canMove: boolean;

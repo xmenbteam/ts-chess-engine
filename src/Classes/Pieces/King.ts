@@ -1,9 +1,9 @@
+import { FuncProps } from "../../Types";
+import { CanMoveToSquare } from "../MovementClasses/CanMoveToSquare";
+import { IsPieceInTheWay } from "../MovementClasses/IsPieceInTheWay";
 import { Piece, Position } from "./PiecesAndPosition";
-import { FuncProps } from "../Types";
-import { IsPieceInTheWay } from "../utils/IsPieceInTheWay";
-import { CanMoveToSquare } from "../utils/CanMoveToSquare";
 
-export class Queen extends Piece {
+export class King extends Piece {
   canMoveTo(newPosition: Position, positions: string[]): boolean {
     const distance = newPosition.distanceFrom(this.position);
 
@@ -13,8 +13,8 @@ export class Queen extends Piece {
       positions,
     ];
 
-    const canMove = new CanMoveToSquare(distance).queen();
-    const isInWay = new IsPieceInTheWay(...props).checkBoth();
+    const canMove = new CanMoveToSquare(distance).king();
+    const isInWay = new IsPieceInTheWay(...props).checkKingMove();
 
     if (canMove && !isInWay) return true;
 

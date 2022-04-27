@@ -1,5 +1,5 @@
-import { PositionDiff } from "../Types";
-import { letterRef } from "../utils/utils";
+import { PositionDiff } from "../../Types";
+import { letterRef } from "../../utils/utils";
 
 export class Position {
   private file: string;

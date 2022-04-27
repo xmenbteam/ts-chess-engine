@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = void 0;
-const Bishop_1 = require("./Pieces/Bishop");
-const King_1 = require("./Pieces/King");
-const Knight_1 = require("./Pieces/Knight");
-const Pawn_1 = require("./Pieces/Pawn");
-const PiecesAndPosition_1 = require("./Pieces/PiecesAndPosition");
-const Queen_1 = require("./Pieces/Queen");
-const Rook_1 = require("./Pieces/Rook");
+const Bishop_1 = require("./Classes/Pieces/Bishop");
+const King_1 = require("./Classes/Pieces/King");
+const Knight_1 = require("./Classes/Pieces/Knight");
+const Pawn_1 = require("./Classes/Pieces/Pawn");
+const PiecesAndPosition_1 = require("./Classes/Pieces/PiecesAndPosition");
+const Queen_1 = require("./Classes/Pieces/Queen");
+const Rook_1 = require("./Classes/Pieces/Rook");
 const Types_1 = require("./Types");
-const SpecialMoves_1 = require("./utils/SpecialMoves");
+const SpecialMoves_1 = require("./Classes/MovementClasses/SpecialMoves");
 const utils_1 = require("./utils/utils");
 class Game {
     constructor() {

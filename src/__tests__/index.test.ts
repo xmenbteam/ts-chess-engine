@@ -1,10 +1,11 @@
-import { Position } from "../Pieces/PiecesAndPosition";
-import { Pawn } from "../Pieces/Pawn";
-import { Rook } from "../Pieces/Rook";
-import { Bishop } from "../Pieces/Bishop";
-import { Knight } from "../Pieces/Knight";
-import { King } from "../Pieces/King";
-import { Queen } from "../Pieces/Queen";
+import { Bishop } from "../Classes/Pieces/Bishop";
+import { King } from "../Classes/Pieces/King";
+import { Knight } from "../Classes/Pieces/Knight";
+import { Pawn } from "../Classes/Pieces/Pawn";
+import { Position } from "../Classes/Pieces/PiecesAndPosition";
+import { Queen } from "../Classes/Pieces/Queen";
+import { Rook } from "../Classes/Pieces/Rook";
+
 import { Game } from "../Game";
 import { Colour } from "../Types";
 

@@ -1,6 +1,6 @@
-import { FuncProps } from "../Types";
-import { CanMoveToSquare } from "../utils/CanMoveToSquare";
-import { IsPieceInTheWay } from "../utils/IsPieceInTheWay";
+import { FuncProps } from "../../Types";
+import { CanMoveToSquare } from "../MovementClasses/CanMoveToSquare";
+import { IsPieceInTheWay } from "../MovementClasses/IsPieceInTheWay";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Pawn extends Piece {
