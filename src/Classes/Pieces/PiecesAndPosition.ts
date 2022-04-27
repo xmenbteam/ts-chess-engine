@@ -1,11 +1,13 @@
 import { PositionDiff } from "../../Types";
-import { letterRef } from "../../utils/utils";
+import { utils } from "../../utils/utils";
 
 export class Position {
   private file: string;
   private rank: number;
 
   distanceFrom(otherPosition: Position): PositionDiff {
+    const { letterRef } = new utils().getLetterRefs();
+
     const fileDiff = letterRef[this.file] - letterRef[otherPosition.file];
     const rankDiff = this.rank - otherPosition.rank;
     return { file: fileDiff, rank: rankDiff };

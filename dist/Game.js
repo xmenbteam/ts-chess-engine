@@ -101,10 +101,11 @@ class Game {
         }, []);
     }
     makeMove(move, colour) {
+        const { pawnTest, fileReg, rankReg } = new utils_1.utils().getRegex();
         const pieceObj = this.getPieces();
         const positions = this.getAllPositions();
         let flag = "";
-        if (utils_1.pawnTest.test(move))
+        if (pawnTest.test(move))
             move = `P${move}`;
         if (move === "0-0" || move === "0-0-0") {
             let side = 0;
@@ -112,8 +113,8 @@ class Game {
                 side = 1;
             return new SpecialMoves_1.SpecialMoves(pieceObj).castle(side, colour, positions);
         }
-        const f = move.match(utils_1.fileReg)[0];
-        const r = move.match(utils_1.rankReg)[0];
+        const f = move.match(fileReg)[0];
+        const r = move.match(rankReg)[0];
         const pos = new PiecesAndPosition_1.Position(f, Number(r));
         const piecesThatCanMove = this.getPiecesThatCanMove(pos, move, colour);
         try {

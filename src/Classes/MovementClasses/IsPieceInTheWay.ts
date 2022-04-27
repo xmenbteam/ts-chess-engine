@@ -1,5 +1,5 @@
 import { RankFile } from "../../Types";
-import { letterRef, files } from "../../utils/utils";
+import { utils } from "../../utils/utils";
 
 export class IsPieceInTheWay {
   private isInWay: boolean = false;
@@ -11,6 +11,8 @@ export class IsPieceInTheWay {
   private wrongSquares: string[];
 
   checkRankAndFile() {
+    const { letterRef, files } = new utils().getLetterRefs();
+
     const { file, rank } = this.piecePos;
     const { file: newFile, rank: newRank } = this.newPos;
 
@@ -39,6 +41,7 @@ export class IsPieceInTheWay {
   checkDiagonal() {
     const { file, rank } = this.piecePos;
     const { file: newFile, rank: newRank } = this.newPos;
+    const { letterRef, files } = new utils().getLetterRefs();
     this.pieceCoords = `${file}${rank}`;
     this.ignoreYourself = this.positions.filter((p) => p !== this.pieceCoords);
 
@@ -110,6 +113,7 @@ export class IsPieceInTheWay {
   checkKingMove() {
     const { file, rank } = this.piecePos;
     this.ignoreYourself = this.positions.filter((p) => p !== this.pieceCoords);
+    const { letterRef, files } = new utils().getLetterRefs();
 
     this.wrongSquares = [
       `${files[letterRef[file] - 1]}${rank}`,

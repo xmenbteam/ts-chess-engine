@@ -1,12 +1,14 @@
 import { Position } from "../Pieces/PiecesAndPosition";
 import { Colour, PieceObject } from "../../Types";
 import { IsPieceInTheWay } from "./IsPieceInTheWay";
-import { castleRefObj } from "../../utils/utils";
+import { utils } from "../../utils/utils";
 
 export class SpecialMoves {
   private pieces: PieceObject;
 
   castle(side: number, colour: number, positions: string[]) {
+    const castleRefObj = new utils().getCastleRef();
+
     const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } =
       castleRefObj;
 

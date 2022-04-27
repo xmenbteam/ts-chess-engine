@@ -7,7 +7,7 @@ import { Queen } from "./Classes/Pieces/Queen";
 import { Rook } from "./Classes/Pieces/Rook";
 import { Colour, PieceObject } from "./Types";
 import { SpecialMoves } from "./Classes/MovementClasses/SpecialMoves";
-import { fileReg, pawnTest, rankReg } from "./utils/utils";
+import { utils } from "./utils/utils";
 
 export class Game {
   private turnCount: number;
@@ -113,6 +113,7 @@ export class Game {
   }
 
   makeMove(move: string, colour: number): { [msg: string]: string } {
+    const { pawnTest, fileReg, rankReg } = new utils().getRegex();
     const pieceObj: PieceObject = this.getPieces();
     const positions: string[] = this.getAllPositions();
     let flag: string = "";

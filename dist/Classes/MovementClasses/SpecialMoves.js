@@ -10,7 +10,8 @@ class SpecialMoves {
         this.pieces = pieces;
     }
     castle(side, colour, positions) {
-        const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } = utils_1.castleRefObj;
+        const castleRefObj = new utils_1.utils().getCastleRef();
+        const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } = castleRefObj;
         const newKingPos = new PiecesAndPosition_1.Position(newKingFile[side], rank[colour]).getPosition();
         const newRookPos = new PiecesAndPosition_1.Position(newRookFile[side], rank[colour]).getPosition();
         const oldKingPos = this.pieces[oldKingCoord[colour]].position.getPosition();
