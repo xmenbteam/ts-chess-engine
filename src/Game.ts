@@ -5,7 +5,7 @@ import { Pawn } from "./Classes/PieceClasses/Pawn";
 import { Piece, Position } from "./Classes/PieceClasses/PiecesAndPosition";
 import { Queen } from "./Classes/PieceClasses/Queen";
 import { Rook } from "./Classes/PieceClasses/Rook";
-import { Colour, PieceObject } from "./Types";
+import { Colour, CustomPieceArray, PieceObject } from "./Types";
 import { SpecialMoves } from "./Classes/MovementClasses/SpecialMoves";
 import { utils } from "./utils/utils";
 
@@ -50,6 +50,46 @@ export class Game {
     };
     return pieces;
   }
+  private static makeCustomPieces(pieces: CustomPieceArray): {
+    [key: string]: Piece;
+  } {
+    const { pawnTest, fileReg, rankReg, nameTest } = new utils().getRegex();
+
+    const customPieces: PieceObject = {};
+
+    pieces.forEach(({ piece, colour }) => {
+      const f: string = piece.match(fileReg)![0];
+      const r: string = piece.match(rankReg)![0];
+
+      if (pawnTest.test(piece)) {
+        const pawn = <string>`P${piece}`;
+        customPieces[pawn] = new Pawn(Colour[colour], f, Number(r));
+      } else {
+        const n: string = piece.match(nameTest)![0];
+        customPieces[piece] = this.makeCustomPiece(n, colour, f, Number(r));
+      }
+    });
+
+    return customPieces;
+  }
+
+  private static makeCustomPiece(
+    name: string,
+    colour: number,
+    f: string,
+    r: number
+  ): Piece {
+    const ref: { [key: string]: Piece } = {
+      R: new Rook(Colour[colour], f, r),
+      N: new Knight(Colour[colour], f, r),
+      Q: new Queen(Colour[colour], f, r),
+      K: new King(Colour[colour], f, r),
+      B: new Bishop(Colour[colour], f, r),
+    };
+
+    return ref[name];
+  }
+
   getPieces(): { [key: string]: Piece } {
     return this.pieces;
   }
@@ -156,8 +196,9 @@ export class Game {
     return [this.makeMove(white, 0), this.makeMove(black, 1)];
   }
 
-  constructor() {
+  constructor(pieces?: CustomPieceArray) {
     this.turnCount = 0;
-    this.pieces = Game.makePieces();
+    if (!pieces) this.pieces = Game.makePieces();
+    else this.pieces = Game.makeCustomPieces(pieces);
   }
 }

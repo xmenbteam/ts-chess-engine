@@ -12,9 +12,12 @@ const Types_1 = require("./Types");
 const SpecialMoves_1 = require("./Classes/MovementClasses/SpecialMoves");
 const utils_1 = require("./utils/utils");
 class Game {
-    constructor() {
+    constructor(pieces) {
         this.turnCount = 0;
-        this.pieces = Game.makePieces();
+        if (!pieces)
+            this.pieces = Game.makePieces();
+        else
+            this.pieces = Game.makeCustomPieces(pieces);
     }
     static makePieces() {
         const pieces = {
@@ -52,6 +55,33 @@ class Game {
             Rh8: new Rook_1.Rook(Types_1.Colour[1], "h", 8),
         };
         return pieces;
+    }
+    static makeCustomPieces(pieces) {
+        const { pawnTest, fileReg, rankReg, nameTest } = new utils_1.utils().getRegex();
+        const customPieces = {};
+        pieces.forEach(({ piece, colour }) => {
+            const f = piece.match(fileReg)[0];
+            const r = piece.match(rankReg)[0];
+            if (pawnTest.test(piece)) {
+                const pawn = `P${piece}`;
+                customPieces[pawn] = new Pawn_1.Pawn(Types_1.Colour[colour], f, Number(r));
+            }
+            else {
+                const n = piece.match(nameTest)[0];
+                customPieces[piece] = this.makeCustomPiece(n, colour, f, Number(r));
+            }
+        });
+        return customPieces;
+    }
+    static makeCustomPiece(name, colour, f, r) {
+        const ref = {
+            R: new Rook_1.Rook(Types_1.Colour[colour], f, r),
+            N: new Knight_1.Knight(Types_1.Colour[colour], f, r),
+            Q: new Queen_1.Queen(Types_1.Colour[colour], f, r),
+            K: new King_1.King(Types_1.Colour[colour], f, r),
+            B: new Bishop_1.Bishop(Types_1.Colour[colour], f, r),
+        };
+        return ref[name];
     }
     getPieces() {
         return this.pieces;

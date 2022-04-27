@@ -21,6 +21,8 @@ export class King extends Piece {
     return false;
   }
 
+  isInCheck() {}
+
   constructor(pieceColour: string, file: string, rank: number) {
     super(pieceColour, file, rank);
   }

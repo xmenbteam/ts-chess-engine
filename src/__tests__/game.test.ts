@@ -1,8 +1,9 @@
 import { Position } from "../Classes/PieceClasses/PiecesAndPosition";
 
 import { Game } from "../Game";
+import { Colour, CustomPieceArray } from "../Types";
 
-describe("Game", () => {
+describe("Standard Game", () => {
   test("Has a turnCount/white goes first", () => {
     const game = new Game();
 
@@ -88,7 +89,7 @@ describe("Game", () => {
       const pieces = game.getPieces();
       expect("Nb1" in pieces).toBe(true);
       const moveTime = game.makeMove(move, 0);
-      expect(moveTime.msg).toBe("Nb1 moved to Nc3!");
+      expect(moveTime.msg).toBe("Nb1 moved to c3!");
       expect("Nb1" in pieces).toBe(false);
       expect("Nc3" in pieces).toBe(true);
       expect(pieces.Nc3.getHasMoved()).toBe(true);
@@ -240,5 +241,62 @@ describe("Game", () => {
       expect(pieces.includes("a6")).toBe(true);
       expect(turns).toEqual(expected);
     });
+  });
+});
+
+describe("Custom Game", () => {
+  test("spawns a pawn", () => {
+    const piecesArray: CustomPieceArray = [{ piece: "d3", colour: 0 }];
+    const game = new Game(piecesArray);
+
+    const positions = game.getAllPositions();
+    const pieces = game.getPieces();
+    expect(pieces.Pd3.constructor.name).toBe("Pawn");
+    expect(positions).toEqual(["d3"]);
+  });
+  test("spawns a rook", () => {
+    const piecesArray: CustomPieceArray = [{ piece: "Rd3", colour: 0 }];
+    const game = new Game(piecesArray);
+
+    const positions = game.getAllPositions();
+    const pieces = game.getPieces();
+    expect(pieces.Rd3.constructor.name).toBe("Rook");
+    expect(positions).toEqual(["d3"]);
+  });
+  test("spawns a Bishop", () => {
+    const piecesArray: CustomPieceArray = [{ piece: "Bd3", colour: 0 }];
+    const game = new Game(piecesArray);
+
+    const positions = game.getAllPositions();
+    const pieces = game.getPieces();
+    expect(pieces.Bd3.constructor.name).toBe("Bishop");
+    expect(positions).toEqual(["d3"]);
+  });
+  test("spawns a Knight", () => {
+    const piecesArray: CustomPieceArray = [{ piece: "Nd3", colour: 0 }];
+    const game = new Game(piecesArray);
+
+    const positions = game.getAllPositions();
+    const pieces = game.getPieces();
+    expect(pieces.Nd3.constructor.name).toBe("Knight");
+    expect(positions).toEqual(["d3"]);
+  });
+  test("spawns a Queen", () => {
+    const piecesArray: CustomPieceArray = [{ piece: "Qd3", colour: 0 }];
+    const game = new Game(piecesArray);
+
+    const positions = game.getAllPositions();
+    const pieces = game.getPieces();
+    expect(pieces.Qd3.constructor.name).toBe("Queen");
+    expect(positions).toEqual(["d3"]);
+  });
+  test("spawns a King", () => {
+    const piecesArray: CustomPieceArray = [{ piece: "Kd3", colour: 0 }];
+    const game = new Game(piecesArray);
+
+    const positions = game.getAllPositions();
+    const pieces = game.getPieces();
+    expect(pieces.Kd3.constructor.name).toBe("King");
+    expect(positions).toEqual(["d3"]);
   });
 });

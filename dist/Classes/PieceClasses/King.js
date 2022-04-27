@@ -18,6 +18,7 @@ class King extends PiecesAndPosition_1.Piece {
             return true;
         return false;
     }
+    isInCheck() { }
     constructor(pieceColour, file, rank) {
         super(pieceColour, file, rank);
     }

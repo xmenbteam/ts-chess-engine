@@ -1,3 +1,5 @@
+import { Queen } from "../Classes/PieceClasses/Queen";
+
 export class utils {
   private letterRef: { [file: string]: number } = {
     a: 0,
@@ -9,11 +11,13 @@ export class utils {
     g: 6,
     h: 7,
   };
+
   private files: string[] = ["a", "b", "c", "d", "e", "f", "g", "h"];
   private ranks: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
 
   private pawnTest = /^[a-h]\d$/;
   private pieceTest = /^[RNQBK][a-h]\d$/;
+  private nameTest = /[RNBQK]/;
   private fileReg = /[a-h]/;
   private rankReg = /[1-8]/;
 
@@ -29,7 +33,11 @@ export class utils {
   };
 
   getLetterRefs() {
-    return { letterRef: this.letterRef, files: this.files, ranks: this.ranks };
+    return {
+      letterRef: this.letterRef,
+      files: this.files,
+      ranks: this.ranks,
+    };
   }
 
   getRegex() {
@@ -38,6 +46,7 @@ export class utils {
       pieceTest: this.pieceTest,
       fileReg: this.fileReg,
       rankReg: this.rankReg,
+      nameTest: this.nameTest,
     };
   }
 

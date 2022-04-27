@@ -17,6 +17,7 @@ class utils {
         this.ranks = [1, 2, 3, 4, 5, 6, 7, 8];
         this.pawnTest = /^[a-h]\d$/;
         this.pieceTest = /^[RNQBK][a-h]\d$/;
+        this.nameTest = /[RNBQK]/;
         this.fileReg = /[a-h]/;
         this.rankReg = /[1-8]/;
         this.castleRefObj = {
@@ -31,7 +32,11 @@ class utils {
         };
     }
     getLetterRefs() {
-        return { letterRef: this.letterRef, files: this.files, ranks: this.ranks };
+        return {
+            letterRef: this.letterRef,
+            files: this.files,
+            ranks: this.ranks,
+        };
     }
     getRegex() {
         return {
@@ -39,6 +44,7 @@ class utils {
             pieceTest: this.pieceTest,
             fileReg: this.fileReg,
             rankReg: this.rankReg,
+            nameTest: this.nameTest,
         };
     }
     getCastleRef() {
