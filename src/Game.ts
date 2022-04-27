@@ -127,7 +127,8 @@ export class Game {
     if (pawnTest.test(move)) move = `P${move}`;
 
     if (move === "0-0" || move === "0-0-0") {
-      const side: number = "0-0" ? 0 : 1;
+      let side: number = 0;
+      if (move === "0-0-0") side = 1;
       return new SpecialMoves(pieceObj).castle(side, colour, positions);
     }
 

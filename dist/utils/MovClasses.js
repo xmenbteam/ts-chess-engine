@@ -82,8 +82,12 @@ class IsPieceInTheWay {
         return this.isInWay;
     }
     checkBoth() {
-        this.checkRankAndFile();
-        this.checkDiagonal();
+        const { file, rank } = this.piecePos;
+        const { file: newFile, rank: newRank } = this.newPos;
+        if (file === newFile || rank === newRank)
+            this.checkRankAndFile();
+        else
+            this.checkDiagonal();
         return this.isInWay;
     }
     checkKingMove() {
@@ -165,12 +169,13 @@ class SpecialMoves {
         this.pieces = pieces;
     }
     // KING IS 0, QUEEN IS 1
+    // [colour][side]
     castle(side, colour, positions) {
         const castleRefObj = {
             oldKingCoord: ["Ke1", "Ke8"],
             oldRookCoord: [
-                ["Rh1", "Rh8"],
-                ["Ra1", "Ra8"],
+                ["Rh1", "Ra1"],
+                ["Rh8", "Ra8"],
             ],
             newKingFile: ["g", "c"],
             newRookFile: ["f", "d"],
@@ -180,36 +185,35 @@ class SpecialMoves {
         const newKingPos = new PiecesAndPosition_1.Position(newKingFile[side], rank[colour]).getPosition();
         const newRookPos = new PiecesAndPosition_1.Position(newRookFile[side], rank[colour]).getPosition();
         const oldKingPos = this.pieces[oldKingCoord[colour]].position.getPosition();
-        const oldRookPos = this.pieces[oldRookCoord[side][colour]].position.getPosition();
+        const oldRookPos = this.pieces[oldRookCoord[colour][side]].position.getPosition();
         const isPieceInWayKing = new IsPieceInTheWay(oldKingPos, newKingPos, positions).checkRankAndFile();
         const isPieceInWayRook = new IsPieceInTheWay(oldRookPos, newRookPos, positions).checkRankAndFile();
         const hasNotMoved = !this.pieces[oldKingCoord[colour]].getHasMoved() &&
-            !this.pieces[oldRookCoord[side][colour]].getHasMoved();
+            !this.pieces[oldRookCoord[colour][side]].getHasMoved();
         const king = this.pieces[oldKingCoord[colour]];
-        const rook = this.pieces[oldRookCoord[side][colour]];
-        try {
-            if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
-                king.setHasMoved();
-                king.position.setPosition(newKingFile[side], rank[colour]);
-                this.pieces[`K${newKingFile[side]}${rank[colour]}`] = king;
-                delete this.pieces[oldKingCoord[colour]];
-                rook.setHasMoved();
-                rook.position.setPosition(newRookFile[side], rank[colour]);
-                this.pieces[`R${newRookFile[side]}${rank[colour]}`] = rook;
-                delete this.pieces[oldRookCoord[side][colour]];
-                return {
-                    msg: `${Types_1.Colour[colour]} castled ${side ? "Queen" : "King"}side!`,
-                };
-            }
-            else
-                return {
-                    msg: `${Types_1.Colour[colour]} Failed to castle ${side ? "Queen" : "King"}side!`,
-                };
+        const rook = this.pieces[oldRookCoord[colour][side]];
+        // try {
+        if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
+            king.setHasMoved();
+            king.position.setPosition(newKingFile[side], rank[colour]);
+            this.pieces[`K${newKingFile[side]}${rank[colour]}`] = king;
+            delete this.pieces[oldKingCoord[colour]];
+            rook.setHasMoved();
+            rook.position.setPosition(newRookFile[side], rank[colour]);
+            this.pieces[`R${newRookFile[side]}${rank[colour]}`] = rook;
+            delete this.pieces[oldRookCoord[colour][side]];
+            return {
+                msg: `${Types_1.Colour[colour]} castled ${side ? "Queen" : "King"}side!`,
+            };
         }
-        catch (err) {
-            console.log("CASTLING", err);
-            return { msg: "ERROR" };
-        }
+        else
+            return {
+                msg: `${Types_1.Colour[colour]} Failed to castle ${side ? "Queen" : "King"}side!`,
+            };
+        // } catch (err) {
+        //   console.log("CASTLING", err);
+        //   return { msg: "ERROR" };
+        // }
     }
 }
 exports.SpecialMoves = SpecialMoves;

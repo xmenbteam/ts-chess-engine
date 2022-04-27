@@ -107,7 +107,9 @@ class Game {
         if (utils_1.pawnTest.test(move))
             move = `P${move}`;
         if (move === "0-0" || move === "0-0-0") {
-            const side = "0-0" ? 0 : 1;
+            let side = 0;
+            if (move === "0-0-0")
+                side = 1;
             return new MovClasses_1.SpecialMoves(pieceObj).castle(side, colour, positions);
         }
         const f = move.match(utils_1.fileReg)[0];

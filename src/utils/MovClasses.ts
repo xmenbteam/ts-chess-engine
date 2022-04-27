@@ -100,8 +100,11 @@ export class IsPieceInTheWay {
   }
 
   checkBoth() {
-    this.checkRankAndFile();
-    this.checkDiagonal();
+    const { file, rank } = this.piecePos;
+    const { file: newFile, rank: newRank } = this.newPos;
+
+    if (file === newFile || rank === newRank) this.checkRankAndFile();
+    else this.checkDiagonal();
     return this.isInWay;
   }
 
@@ -215,13 +218,14 @@ export class SpecialMoves {
   private pieces: PieceObject;
 
   // KING IS 0, QUEEN IS 1
+  // [colour][side]
 
   castle(side: number, colour: number, positions: string[]) {
     const castleRefObj = {
       oldKingCoord: ["Ke1", "Ke8"],
       oldRookCoord: [
-        ["Rh1", "Rh8"],
-        ["Ra1", "Ra8"],
+        ["Rh1", "Ra1"],
+        ["Rh8", "Ra8"],
       ],
       newKingFile: ["g", "c"],
       newRookFile: ["f", "d"],
@@ -241,7 +245,7 @@ export class SpecialMoves {
     ).getPosition();
     const oldKingPos = this.pieces[oldKingCoord[colour]].position.getPosition();
     const oldRookPos =
-      this.pieces[oldRookCoord[side][colour]].position.getPosition();
+      this.pieces[oldRookCoord[colour][side]].position.getPosition();
 
     const isPieceInWayKing = new IsPieceInTheWay(
       oldKingPos,
@@ -257,35 +261,35 @@ export class SpecialMoves {
 
     const hasNotMoved =
       !this.pieces[oldKingCoord[colour]].getHasMoved() &&
-      !this.pieces[oldRookCoord[side][colour]].getHasMoved();
+      !this.pieces[oldRookCoord[colour][side]].getHasMoved();
 
     const king = this.pieces[oldKingCoord[colour]];
-    const rook = this.pieces[oldRookCoord[side][colour]];
+    const rook = this.pieces[oldRookCoord[colour][side]];
 
-    try {
-      if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
-        king.setHasMoved();
-        king.position.setPosition(newKingFile[side], rank[colour]);
-        this.pieces[`K${newKingFile[side]}${rank[colour]}`] = king;
-        delete this.pieces[oldKingCoord[colour]];
+    // try {
+    if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
+      king.setHasMoved();
+      king.position.setPosition(newKingFile[side], rank[colour]);
+      this.pieces[`K${newKingFile[side]}${rank[colour]}`] = king;
+      delete this.pieces[oldKingCoord[colour]];
 
-        rook.setHasMoved();
-        rook.position.setPosition(newRookFile[side], rank[colour]);
-        this.pieces[`R${newRookFile[side]}${rank[colour]}`] = rook;
-        delete this.pieces[oldRookCoord[side][colour]];
-        return {
-          msg: `${Colour[colour]} castled ${side ? "Queen" : "King"}side!`,
-        };
-      } else
-        return {
-          msg: `${Colour[colour]} Failed to castle ${
-            side ? "Queen" : "King"
-          }side!`,
-        };
-    } catch (err) {
-      console.log("CASTLING", err);
-      return { msg: "ERROR" };
-    }
+      rook.setHasMoved();
+      rook.position.setPosition(newRookFile[side], rank[colour]);
+      this.pieces[`R${newRookFile[side]}${rank[colour]}`] = rook;
+      delete this.pieces[oldRookCoord[colour][side]];
+      return {
+        msg: `${Colour[colour]} castled ${side ? "Queen" : "King"}side!`,
+      };
+    } else
+      return {
+        msg: `${Colour[colour]} Failed to castle ${
+          side ? "Queen" : "King"
+        }side!`,
+      };
+    // } catch (err) {
+    //   console.log("CASTLING", err);
+    //   return { msg: "ERROR" };
+    // }
   }
 
   constructor(pieces: PieceObject) {
