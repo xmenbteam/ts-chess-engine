@@ -1,10 +1,10 @@
-import { Bishop } from "./Classes/Pieces/Bishop";
-import { King } from "./Classes/Pieces/King";
-import { Knight } from "./Classes/Pieces/Knight";
-import { Pawn } from "./Classes/Pieces/Pawn";
-import { Piece, Position } from "./Classes/Pieces/PiecesAndPosition";
-import { Queen } from "./Classes/Pieces/Queen";
-import { Rook } from "./Classes/Pieces/Rook";
+import { Bishop } from "./Classes/PieceClasses/Bishop";
+import { King } from "./Classes/PieceClasses/King";
+import { Knight } from "./Classes/PieceClasses/Knight";
+import { Pawn } from "./Classes/PieceClasses/Pawn";
+import { Piece, Position } from "./Classes/PieceClasses/PiecesAndPosition";
+import { Queen } from "./Classes/PieceClasses/Queen";
+import { Rook } from "./Classes/PieceClasses/Rook";
 import { Colour, PieceObject } from "./Types";
 import { SpecialMoves } from "./Classes/MovementClasses/SpecialMoves";
 import { utils } from "./utils/utils";

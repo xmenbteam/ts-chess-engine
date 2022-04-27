@@ -1,4 +1,4 @@
-import { Position } from "../Pieces/PiecesAndPosition";
+import { Position } from "../PieceClasses/PiecesAndPosition";
 import { Colour, PieceObject } from "../../Types";
 import { IsPieceInTheWay } from "./IsPieceInTheWay";
 import { utils } from "../../utils/utils";

@@ -1,4 +1,4 @@
-import { Position } from "../Classes/Pieces/PiecesAndPosition";
+import { Position } from "../Classes/PieceClasses/PiecesAndPosition";
 
 import { Game } from "../Game";
 

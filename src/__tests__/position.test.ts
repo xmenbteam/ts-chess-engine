@@ -1,4 +1,4 @@
-import { Position } from "../Classes/Pieces/PiecesAndPosition";
+import { Position } from "../Classes/PieceClasses/PiecesAndPosition";
 
 describe("Position Class", () => {
   test("Position has rank/file", () => {

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpecialMoves = void 0;
-const PiecesAndPosition_1 = require("../Pieces/PiecesAndPosition");
+const PiecesAndPosition_1 = require("../PieceClasses/PiecesAndPosition");
 const Types_1 = require("../../Types");
 const IsPieceInTheWay_1 = require("./IsPieceInTheWay");
 const utils_1 = require("../../utils/utils");

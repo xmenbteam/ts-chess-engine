@@ -1,4 +1,4 @@
-import { Piece } from "./Classes/Pieces/PiecesAndPosition";
+import { Piece } from "./Classes/PieceClasses/PiecesAndPosition";
 
 export type PositionDiff = {
   file: number;
