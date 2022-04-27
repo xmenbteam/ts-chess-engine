@@ -1,4 +1,5 @@
-import { RankFile, RankFileDist } from "../Types";
+import { Piece, Position } from "../Pieces/PiecesAndPosition";
+import { Colour, PieceObject, RankFile, RankFileDist } from "../Types";
 import { letterRef, files } from "./utils";
 
 export class IsPieceInTheWay {
@@ -17,13 +18,20 @@ export class IsPieceInTheWay {
     this.pieceCoords = `${file}${rank}`;
     this.ignoreYourself = this.positions.filter((p) => p !== this.pieceCoords);
 
-    for (let i = rank; i <= newRank; i++) {
-      if (this.ignoreYourself.includes(`${file}${i}`)) this.isInWay = true;
+    const minFile = Math.min(letterRef[file], letterRef[newFile]);
+    const maxFile = Math.max(letterRef[file], letterRef[newFile]);
+
+    const minRank = Math.min(rank, newRank);
+    const maxRank = Math.max(rank, newRank);
+
+    for (let i = minRank; i <= maxRank; i++) {
+      const square = `${file}${i}`;
+      if (this.ignoreYourself.includes(square)) this.isInWay = true;
     }
 
-    for (let i = letterRef[file]; i <= letterRef[newFile]; i++) {
-      if (this.ignoreYourself.includes(`${files[i]}${rank}`))
-        this.isInWay = true;
+    for (let i = minFile; i <= maxFile; i++) {
+      const square = `${files[i]}${rank}`;
+      if (this.ignoreYourself.includes(square)) this.isInWay = true;
     }
 
     return this.isInWay;
@@ -35,32 +43,66 @@ export class IsPieceInTheWay {
     this.pieceCoords = `${file}${rank}`;
     this.ignoreYourself = this.positions.filter((p) => p !== this.pieceCoords);
 
-    // Checks if piece is moving SOUTHEAST
-    for (let i = newRank; i < rank; i++) {
-      const square = `${files[rank + i - 1]}${rank - i}`;
-      if (this.ignoreYourself.includes(square)) this.isInWay = true;
-    }
-    // Checks if piece is moving NORTHEAST
-    for (let i = letterRef[file], j = rank; i < letterRef[newFile]; i++, j++) {
-      const square = `${files[i]}${j}`;
-      if (this.ignoreYourself.includes(square)) this.isInWay = true;
-    }
-    // Checks if piece is moving SOUTHWEST
-    for (let i = rank; i >= newRank; i--) {
-      const square = `${files[rank - i]}${rank - i + 1}`;
-      if (this.ignoreYourself.includes(square)) this.isInWay = true;
-    }
-    // Checks if piece is moving NORTHWEST
-    for (let i = rank; i < newRank; i++) {
-      const square = `${files[i - rank]}${newRank - i + rank}`;
-      if (this.ignoreYourself.includes(square)) this.isInWay = true;
+    let direction: string = "";
+
+    const directionRef = {
+      NE: newRank > rank && letterRef[newFile] > letterRef[file],
+      SE: newRank < rank && letterRef[newFile] > letterRef[file],
+      NW: newRank > rank && letterRef[newFile] < letterRef[file],
+      SW: newRank < rank && letterRef[newFile] < letterRef[file],
+    };
+
+    for (const [dir, cond] of Object.entries(directionRef)) {
+      if (cond) direction = dir;
     }
 
+    if (direction === "SE") {
+      for (
+        let i = letterRef[file], j = rank;
+        i <= letterRef[newFile] && j > 0;
+        i++, j--
+      ) {
+        const square = `${files[i]}${j}`;
+        if (this.ignoreYourself.includes(square)) this.isInWay = true;
+      }
+    }
+    if (direction === "NE") {
+      for (
+        let i = letterRef[file], j = rank;
+        i <= letterRef[newFile] && j <= 8;
+        i++, j++
+      ) {
+        const square = `${files[i]}${j}`;
+        if (this.ignoreYourself.includes(square)) this.isInWay = true;
+      }
+    }
+    if (direction === "SW") {
+      for (
+        let i = letterRef[file], j = rank;
+        i >= letterRef[newFile] && j > 0;
+        i--, j--
+      ) {
+        const square = `${files[i]}${j}`;
+        if (this.ignoreYourself.includes(square)) this.isInWay = true;
+      }
+    }
+    if (direction === "NW") {
+      for (
+        let i = letterRef[file], j = rank;
+        i >= letterRef[newFile] && j <= 8;
+        i--, j++
+      ) {
+        const square = `${files[i]}${j}`;
+        if (this.ignoreYourself.includes(square)) this.isInWay = true;
+      }
+    }
     return this.isInWay;
   }
 
   checkBoth() {
-    return this.checkDiagonal() && this.checkRankAndFile();
+    this.checkRankAndFile();
+    this.checkDiagonal();
+    return this.isInWay;
   }
 
   checkKingMove() {
@@ -166,5 +208,87 @@ export class CanMoveToSquare {
   constructor(distance: RankFileDist) {
     this.canMove = false;
     this.distance = distance;
+  }
+}
+
+export class SpecialMoves {
+  private pieces: PieceObject;
+
+  // KING IS 0, QUEEN IS 1
+
+  castle(side: number, colour: number, positions: string[]) {
+    const castleRefObj = {
+      oldKingCoord: ["Ke1", "Ke8"],
+      oldRookCoord: [
+        ["Rh1", "Rh8"],
+        ["Ra1", "Ra8"],
+      ],
+      newKingFile: ["g", "c"],
+      newRookFile: ["f", "d"],
+      rank: [1, 8],
+    };
+
+    const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } =
+      castleRefObj;
+
+    const newKingPos = new Position(
+      newKingFile[side],
+      rank[colour]
+    ).getPosition();
+    const newRookPos = new Position(
+      newRookFile[side],
+      rank[colour]
+    ).getPosition();
+    const oldKingPos = this.pieces[oldKingCoord[colour]].position.getPosition();
+    const oldRookPos =
+      this.pieces[oldRookCoord[side][colour]].position.getPosition();
+
+    const isPieceInWayKing = new IsPieceInTheWay(
+      oldKingPos,
+      newKingPos,
+      positions
+    ).checkRankAndFile();
+
+    const isPieceInWayRook = new IsPieceInTheWay(
+      oldRookPos,
+      newRookPos,
+      positions
+    ).checkRankAndFile();
+
+    const hasNotMoved =
+      !this.pieces[oldKingCoord[colour]].getHasMoved() &&
+      !this.pieces[oldRookCoord[side][colour]].getHasMoved();
+
+    const king = this.pieces[oldKingCoord[colour]];
+    const rook = this.pieces[oldRookCoord[side][colour]];
+
+    try {
+      if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
+        king.setHasMoved();
+        king.position.setPosition(newKingFile[side], rank[colour]);
+        this.pieces[`K${newKingFile[side]}${rank[colour]}`] = king;
+        delete this.pieces[oldKingCoord[colour]];
+
+        rook.setHasMoved();
+        rook.position.setPosition(newRookFile[side], rank[colour]);
+        this.pieces[`R${newRookFile[side]}${rank[colour]}`] = rook;
+        delete this.pieces[oldRookCoord[side][colour]];
+        return {
+          msg: `${Colour[colour]} castled ${side ? "Queen" : "King"}side!`,
+        };
+      } else
+        return {
+          msg: `${Colour[colour]} Failed to castle ${
+            side ? "Queen" : "King"
+          }side!`,
+        };
+    } catch (err) {
+      console.log("CASTLING", err);
+      return { msg: "ERROR" };
+    }
+  }
+
+  constructor(pieces: PieceObject) {
+    this.pieces = pieces;
   }
 }

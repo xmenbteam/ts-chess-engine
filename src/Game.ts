@@ -5,7 +5,8 @@ import { Pawn } from "./Pieces/Pawn";
 import { Piece, Position } from "./Pieces/PiecesAndPosition";
 import { Queen } from "./Pieces/Queen";
 import { Rook } from "./Pieces/Rook";
-import { Colour, RankFile } from "./Types";
+import { Colour, PieceObject, RankFile } from "./Types";
+import { IsPieceInTheWay, SpecialMoves } from "./utils/MovClasses";
 import {
   fileReg,
   files,
@@ -98,71 +99,47 @@ export class Game {
     );
   }
 
-  // castle(colour: number) {
-  //   const pieceObj: { [key: string]: Piece } = this.getPieces();
-  //   const oldKingPos = colour === 0 ? "Ke1" : "Ke8";
-  //   const oldRookPos = colour === 0 ? "Rh1" : "Rh8";
-  //   const newKingFile = "g";
-  //   const newRookFile = "f";
-  //   const rank = colour === 0 ? 1 : 8;
-  //   const newKingPos = new Position(newKingFile, rank);
-  //   const newRookPos = new Position(newRookFile, rank);
-
-  //   const hasNotMoved =
-  //     !pieceObj[oldKingPos].getHasMoved() &&
-  //     !pieceObj[oldRookPos].getHasMoved();
-
-  //   const nothingInTheWay =
-  //     !this.isPieceInTheWay(pieceObj[oldKingPos], newKingPos) &&
-  //     !this.isPieceInTheWay(pieceObj[oldRookPos], newRookPos);
-  //   try {
-  //     if (hasNotMoved && nothingInTheWay) {
-  //       pieceObj[oldKingPos].setHasMoved();
-  //       pieceObj[oldKingPos].position.setPosition(newKingFile, rank);
-  //       pieceObj[`K${newKingFile}${rank}`] = pieceObj[oldKingPos];
-  //       delete pieceObj[oldKingPos];
-
-  //       pieceObj[oldRookPos].setHasMoved();
-  //       pieceObj[oldRookPos].position.setPosition(newRookFile, rank);
-  //       pieceObj[`R${newRookFile}${rank}`] = pieceObj[oldRookPos];
-  //       delete pieceObj[oldRookPos];
-  //     }
-  //     return { msg: `${Colour[colour]} castled Kingside!` };
-  //   } catch (err) {
-  //     return { msg: "Failed to castle kingside!" };
-  //   }
-  // }
-
-  makeMove(move: string, colour: number): { [msg: string]: string } {
+  getPiecesThatCanMove(pos: Position, move: string, colour: number): string[] {
     const pieceObj: { [key: string]: Piece } = this.getPieces();
     const pieceArray = Object.entries(pieceObj);
+    const positions = this.getAllPositions();
+
+    return pieceArray
+      .filter(([piecePos, p]) => {
+        const result = piecePos[0] === move[0];
+        return result;
+      })
+      .reduce((array: string[], piece: [string, Piece]) => {
+        const [piecePos, p] = piece;
+        const m = p.canMoveTo(pos, positions);
+        const c = p.getColour() === Colour[colour];
+
+        if (m && c) array.push(piecePos);
+        return array;
+      }, []);
+  }
+
+  makeMove(move: string, colour: number): { [msg: string]: string } {
+    const pieceObj: PieceObject = this.getPieces();
+    const positions: string[] = this.getAllPositions();
     let flag: string = "";
 
     if (pawnTest.test(move)) move = `P${move}`;
 
-    // if (move === "0-0") return this.castle(colour);
+    if (move === "0-0" || move === "0-0-0") {
+      const side: number = "0-0" ? 0 : 1;
+      return new SpecialMoves(pieceObj).castle(side, colour, positions);
+    }
 
     const f: string = move.match(fileReg)![0];
     const r: string = move.match(rankReg)![0];
     const pos: Position = new Position(f, Number(r));
 
-    const piecesThatCanMove: string[] = pieceArray.reduce(
-      (array: string[], piece: [string, Piece]) => {
-        const [piecePos, p] = piece;
-        const m = p.canMoveTo(pos, this.getAllPositions());
-        const c = p.getColour() === Colour[colour];
-
-        const n = piecePos[0] === move[0];
-
-        // if (piecePos === "Bc1") console.log({ move, piecePos, m, c, w, n });
-
-        if (m && c && n) array.push(piecePos);
-        return array;
-      },
-      []
+    const piecesThatCanMove: string[] = this.getPiecesThatCanMove(
+      pos,
+      move,
+      colour
     );
-
-    // console.log({ move, piecesThatCanMove });
 
     try {
       const piece = piecesThatCanMove[0];

@@ -1,4 +1,4 @@
-import { StringMappingType } from "typescript";
+import { Piece } from "./Pieces/PiecesAndPosition";
 
 export type PositionDiff = {
   file: number;
@@ -23,3 +23,4 @@ export type FuncProps = [RankFile, RankFile, string[]];
 
 export type RankFile = { file: string; rank: number };
 export type RankFileDist = { file: number; rank: number };
+export type PieceObject = { [key: string]: Piece };

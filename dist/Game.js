@@ -9,6 +9,7 @@ const PiecesAndPosition_1 = require("./Pieces/PiecesAndPosition");
 const Queen_1 = require("./Pieces/Queen");
 const Rook_1 = require("./Pieces/Rook");
 const Types_1 = require("./Types");
+const MovClasses_1 = require("./utils/MovClasses");
 const utils_1 = require("./utils/utils");
 class Game {
     constructor() {
@@ -81,58 +82,38 @@ class Game {
             return array;
         }, []);
     }
-    // castle(colour: number) {
-    //   const pieceObj: { [key: string]: Piece } = this.getPieces();
-    //   const oldKingPos = colour === 0 ? "Ke1" : "Ke8";
-    //   const oldRookPos = colour === 0 ? "Rh1" : "Rh8";
-    //   const newKingFile = "g";
-    //   const newRookFile = "f";
-    //   const rank = colour === 0 ? 1 : 8;
-    //   const newKingPos = new Position(newKingFile, rank);
-    //   const newRookPos = new Position(newRookFile, rank);
-    //   const hasNotMoved =
-    //     !pieceObj[oldKingPos].getHasMoved() &&
-    //     !pieceObj[oldRookPos].getHasMoved();
-    //   const nothingInTheWay =
-    //     !this.isPieceInTheWay(pieceObj[oldKingPos], newKingPos) &&
-    //     !this.isPieceInTheWay(pieceObj[oldRookPos], newRookPos);
-    //   try {
-    //     if (hasNotMoved && nothingInTheWay) {
-    //       pieceObj[oldKingPos].setHasMoved();
-    //       pieceObj[oldKingPos].position.setPosition(newKingFile, rank);
-    //       pieceObj[`K${newKingFile}${rank}`] = pieceObj[oldKingPos];
-    //       delete pieceObj[oldKingPos];
-    //       pieceObj[oldRookPos].setHasMoved();
-    //       pieceObj[oldRookPos].position.setPosition(newRookFile, rank);
-    //       pieceObj[`R${newRookFile}${rank}`] = pieceObj[oldRookPos];
-    //       delete pieceObj[oldRookPos];
-    //     }
-    //     return { msg: `${Colour[colour]} castled Kingside!` };
-    //   } catch (err) {
-    //     return { msg: "Failed to castle kingside!" };
-    //   }
-    // }
-    makeMove(move, colour) {
+    getPiecesThatCanMove(pos, move, colour) {
         const pieceObj = this.getPieces();
         const pieceArray = Object.entries(pieceObj);
-        let flag = "";
-        if (utils_1.pawnTest.test(move))
-            move = `P${move}`;
-        // if (move === "0-0") return this.castle(colour);
-        const f = move.match(utils_1.fileReg)[0];
-        const r = move.match(utils_1.rankReg)[0];
-        const pos = new PiecesAndPosition_1.Position(f, Number(r));
-        const piecesThatCanMove = pieceArray.reduce((array, piece) => {
+        const positions = this.getAllPositions();
+        return pieceArray
+            .filter(([piecePos, p]) => {
+            const result = piecePos[0] === move[0];
+            return result;
+        })
+            .reduce((array, piece) => {
             const [piecePos, p] = piece;
-            const m = p.canMoveTo(pos, this.getAllPositions());
+            const m = p.canMoveTo(pos, positions);
             const c = p.getColour() === Types_1.Colour[colour];
-            const n = piecePos[0] === move[0];
-            // if (piecePos === "Bc1") console.log({ move, piecePos, m, c, w, n });
-            if (m && c && n)
+            if (m && c)
                 array.push(piecePos);
             return array;
         }, []);
-        // console.log({ move, piecesThatCanMove });
+    }
+    makeMove(move, colour) {
+        const pieceObj = this.getPieces();
+        const positions = this.getAllPositions();
+        let flag = "";
+        if (utils_1.pawnTest.test(move))
+            move = `P${move}`;
+        if (move === "0-0" || move === "0-0-0") {
+            const side = "0-0" ? 0 : 1;
+            return new MovClasses_1.SpecialMoves(pieceObj).castle(side, colour, positions);
+        }
+        const f = move.match(utils_1.fileReg)[0];
+        const r = move.match(utils_1.rankReg)[0];
+        const pos = new PiecesAndPosition_1.Position(f, Number(r));
+        const piecesThatCanMove = this.getPiecesThatCanMove(pos, move, colour);
         try {
             const piece = piecesThatCanMove[0];
             flag = piece[0];

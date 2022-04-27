@@ -53,7 +53,7 @@ export abstract class Piece {
   }
 
   setHasMoved() {
-    this.hasMoved = true;
+    this.hasMoved = !this.hasMoved;
   }
 
   abstract canMoveTo(newPosition: Position, positions: string[]): boolean;

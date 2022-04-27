@@ -44,7 +44,7 @@ class Piece {
         return this.hasMoved;
     }
     setHasMoved() {
-        this.hasMoved = true;
+        this.hasMoved = !this.hasMoved;
     }
 }
 exports.Piece = Piece;
