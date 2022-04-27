@@ -8,6 +8,7 @@ import { Rook } from "./Classes/PieceClasses/Rook";
 import { Colour, CustomPieceArray, PieceObject } from "./Types";
 import { SpecialMoves } from "./Classes/MovementClasses/SpecialMoves";
 import { utils } from "./utils/utils";
+import { Error } from "./Classes/PieceClasses/Error";
 
 export class Game {
   private turnCount: number;
@@ -57,17 +58,17 @@ export class Game {
 
     const customPieces: PieceObject = {};
 
-    pieces.forEach(({ piece, colour }) => {
+    pieces.forEach(({ piece, colour }, i) => {
       const f: string = piece.match(fileReg)![0];
       const r: string = piece.match(rankReg)![0];
 
-      if (pawnTest.test(piece)) {
-        const pawn = <string>`P${piece}`;
-        customPieces[pawn] = new Pawn(Colour[colour], f, Number(r));
-      } else {
-        const n: string = piece.match(nameTest)![0];
+      if (pawnTest.test(piece)) piece = <string>`P${piece}`;
+
+      const n: string = piece.match(nameTest)![0];
+
+      if (!customPieces.hasOwnProperty(piece))
         customPieces[piece] = this.makeCustomPiece(n, colour, f, Number(r));
-      }
+      else customPieces[`error${i}`] = new Error(Colour[colour], "z", 99 + i);
     });
 
     return customPieces;
@@ -80,6 +81,7 @@ export class Game {
     r: number
   ): Piece {
     const ref: { [key: string]: Piece } = {
+      P: new Pawn(Colour[colour], f, r),
       R: new Rook(Colour[colour], f, r),
       N: new Knight(Colour[colour], f, r),
       Q: new Queen(Colour[colour], f, r),

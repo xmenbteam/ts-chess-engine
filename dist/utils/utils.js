@@ -17,7 +17,7 @@ class utils {
         this.ranks = [1, 2, 3, 4, 5, 6, 7, 8];
         this.pawnTest = /^[a-h]\d$/;
         this.pieceTest = /^[RNQBK][a-h]\d$/;
-        this.nameTest = /[RNBQK]/;
+        this.nameTest = /[RNBQKP]/;
         this.fileReg = /[a-h]/;
         this.rankReg = /[1-8]/;
         this.castleRefObj = {

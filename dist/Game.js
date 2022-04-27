@@ -11,6 +11,7 @@ const Rook_1 = require("./Classes/PieceClasses/Rook");
 const Types_1 = require("./Types");
 const SpecialMoves_1 = require("./Classes/MovementClasses/SpecialMoves");
 const utils_1 = require("./utils/utils");
+const Error_1 = require("./Classes/PieceClasses/Error");
 class Game {
     constructor(pieces) {
         this.turnCount = 0;
@@ -59,22 +60,22 @@ class Game {
     static makeCustomPieces(pieces) {
         const { pawnTest, fileReg, rankReg, nameTest } = new utils_1.utils().getRegex();
         const customPieces = {};
-        pieces.forEach(({ piece, colour }) => {
+        pieces.forEach(({ piece, colour }, i) => {
             const f = piece.match(fileReg)[0];
             const r = piece.match(rankReg)[0];
-            if (pawnTest.test(piece)) {
-                const pawn = `P${piece}`;
-                customPieces[pawn] = new Pawn_1.Pawn(Types_1.Colour[colour], f, Number(r));
-            }
-            else {
-                const n = piece.match(nameTest)[0];
+            if (pawnTest.test(piece))
+                piece = `P${piece}`;
+            const n = piece.match(nameTest)[0];
+            if (!customPieces.hasOwnProperty(piece))
                 customPieces[piece] = this.makeCustomPiece(n, colour, f, Number(r));
-            }
+            else
+                customPieces[`error${i}`] = new Error_1.Error(Types_1.Colour[colour], "z", 99 + i);
         });
         return customPieces;
     }
     static makeCustomPiece(name, colour, f, r) {
         const ref = {
+            P: new Pawn_1.Pawn(Types_1.Colour[colour], f, r),
             R: new Rook_1.Rook(Types_1.Colour[colour], f, r),
             N: new Knight_1.Knight(Types_1.Colour[colour], f, r),
             Q: new Queen_1.Queen(Types_1.Colour[colour], f, r),

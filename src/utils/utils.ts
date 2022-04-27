@@ -1,5 +1,3 @@
-import { Queen } from "../Classes/PieceClasses/Queen";
-
 export class utils {
   private letterRef: { [file: string]: number } = {
     a: 0,
@@ -17,7 +15,7 @@ export class utils {
 
   private pawnTest = /^[a-h]\d$/;
   private pieceTest = /^[RNQBK][a-h]\d$/;
-  private nameTest = /[RNBQK]/;
+  private nameTest = /[RNBQKP]/;
   private fileReg = /[a-h]/;
   private rankReg = /[1-8]/;
 
