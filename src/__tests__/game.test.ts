@@ -88,7 +88,7 @@ describe("Game", () => {
       const pieces = game.getPieces();
       expect("Nb1" in pieces).toBe(true);
       const moveTime = game.makeMove(move, 0);
-      expect(moveTime.msg).toBe("Success!");
+      expect(moveTime.msg).toBe("Nb1 moved to Nc3!");
       expect("Nb1" in pieces).toBe(false);
       expect("Nc3" in pieces).toBe(true);
       expect(pieces.Nc3.getHasMoved()).toBe(true);

@@ -124,7 +124,7 @@ class Game {
             pieceObj[piece].position.setPosition(f, Number(r));
             pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
             delete pieceObj[piece];
-            return { msg: "Success!" };
+            return { msg: `${piece} moved to ${move}!` };
         }
         catch (err) {
             return { msg: "Fail!", err };
