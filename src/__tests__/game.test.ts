@@ -221,4 +221,24 @@ describe("Game", () => {
       });
     });
   });
+
+  describe("turn", () => {
+    test("Takes a standard chess notation", () => {
+      const game = new Game();
+
+      const move = "Nf3 a6";
+      const turns = game.makeTurn(move);
+
+      const pieces = game.getAllPositions();
+
+      const expected = [
+        { msg: "Ng1 moved to f3!" },
+        { msg: "Pa7 moved to a6!" },
+      ];
+
+      expect(pieces.includes("f3")).toBe(true);
+      expect(pieces.includes("a6")).toBe(true);
+      expect(turns).toEqual(expected);
+    });
+  });
 });

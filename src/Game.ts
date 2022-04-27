@@ -144,10 +144,16 @@ export class Game {
       pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
       delete pieceObj[piece];
 
-      return { msg: `${piece} moved to ${move}!` };
+      return { msg: `${piece} moved to ${f}${r}!` };
     } catch (err: any) {
       return { msg: "Fail!", err };
     }
+  }
+
+  makeTurn(move: string) {
+    const [white, black] = move.split(" ");
+
+    return [this.makeMove(white, 0), this.makeMove(black, 1)];
   }
 
   constructor() {
