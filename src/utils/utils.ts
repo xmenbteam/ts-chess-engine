@@ -16,3 +16,14 @@ export const pawnTest = /^[a-h]\d$/;
 export const pieceTest = /^[RNQBK][a-h]\d$/;
 export const fileReg = /[a-h]/;
 export const rankReg = /[1-8]/;
+
+export const castleRefObj = {
+  oldKingCoord: ["Ke1", "Ke8"],
+  oldRookCoord: [
+    ["Rh1", "Ra1"],
+    ["Rh8", "Ra8"],
+  ],
+  newKingFile: ["g", "c"],
+  newRookFile: ["f", "d"],
+  rank: [1, 8],
+};

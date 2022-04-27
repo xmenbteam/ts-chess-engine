@@ -5,16 +5,9 @@ import { Pawn } from "./Pieces/Pawn";
 import { Piece, Position } from "./Pieces/PiecesAndPosition";
 import { Queen } from "./Pieces/Queen";
 import { Rook } from "./Pieces/Rook";
-import { Colour, PieceObject, RankFile } from "./Types";
-import { IsPieceInTheWay, SpecialMoves } from "./utils/MovClasses";
-import {
-  fileReg,
-  files,
-  letterRef,
-  pawnTest,
-  pieceTest,
-  rankReg,
-} from "./utils/utils";
+import { Colour, PieceObject } from "./Types";
+import { SpecialMoves } from "./utils/SpecialMoves";
+import { fileReg, pawnTest, rankReg } from "./utils/utils";
 
 export class Game {
   private turnCount: number;

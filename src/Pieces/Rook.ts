@@ -1,5 +1,6 @@
 import { FuncProps } from "../Types";
-import { CanMoveToSquare, IsPieceInTheWay } from "../utils/MovClasses";
+import { CanMoveToSquare } from "../utils/CanMoveToSquare";
+import { IsPieceInTheWay } from "../utils/IsPieceInTheWay";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Rook extends Piece {

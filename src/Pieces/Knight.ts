@@ -1,4 +1,4 @@
-import { CanMoveToSquare } from "../utils/MovClasses";
+import { CanMoveToSquare } from "../utils/CanMoveToSquare";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Knight extends Piece {

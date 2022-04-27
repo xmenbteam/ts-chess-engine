@@ -1,6 +1,7 @@
 import { Piece, Position } from "./PiecesAndPosition";
 import { FuncProps } from "../Types";
-import { CanMoveToSquare, IsPieceInTheWay } from "../utils/MovClasses";
+import { IsPieceInTheWay } from "../utils/IsPieceInTheWay";
+import { CanMoveToSquare } from "../utils/CanMoveToSquare";
 
 export class Queen extends Piece {
   canMoveTo(newPosition: Position, positions: string[]): boolean {

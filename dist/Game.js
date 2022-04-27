@@ -9,7 +9,7 @@ const PiecesAndPosition_1 = require("./Pieces/PiecesAndPosition");
 const Queen_1 = require("./Pieces/Queen");
 const Rook_1 = require("./Pieces/Rook");
 const Types_1 = require("./Types");
-const MovClasses_1 = require("./utils/MovClasses");
+const SpecialMoves_1 = require("./utils/SpecialMoves");
 const utils_1 = require("./utils/utils");
 class Game {
     constructor() {
@@ -110,7 +110,7 @@ class Game {
             let side = 0;
             if (move === "0-0-0")
                 side = 1;
-            return new MovClasses_1.SpecialMoves(pieceObj).castle(side, colour, positions);
+            return new SpecialMoves_1.SpecialMoves(pieceObj).castle(side, colour, positions);
         }
         const f = move.match(utils_1.fileReg)[0];
         const r = move.match(utils_1.rankReg)[0];
