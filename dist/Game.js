@@ -127,7 +127,6 @@ class Game {
             return { msg: "Success!" };
         }
         catch (err) {
-            console.log({ err, move });
             return { msg: "Fail!", err };
         }
     }

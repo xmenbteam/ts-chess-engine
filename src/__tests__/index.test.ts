@@ -746,7 +746,7 @@ describe("Game", () => {
       const actual = game.getPiecesThatCanMove(pos, move, colour);
       const expected = ["Bf1"];
 
-      console.log({ actual, expected });
+      expect(actual).toEqual(expected);
     });
   });
 

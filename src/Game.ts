@@ -145,7 +145,6 @@ export class Game {
 
       return { msg: "Success!" };
     } catch (err: any) {
-      console.log({ err, move });
       return { msg: "Fail!", err };
     }
   }
