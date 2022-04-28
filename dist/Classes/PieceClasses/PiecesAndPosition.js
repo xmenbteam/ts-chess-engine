@@ -24,13 +24,15 @@ class Position {
 exports.Position = Position;
 class Piece {
     constructor(pieceColour, file, rank) {
-        this.hasMoved = false;
         this.position = new Position(file, rank);
         this.colour = pieceColour;
         this.captured = false;
+        this.hasMoved = false;
+        this.moveCount = 0;
     }
     moveTo(file, rank) {
         this.position.setPosition(file, rank);
+        this.incrementMoveCount();
     }
     setIsCaptured() {
         this.captured = !this.captured;
@@ -46,6 +48,12 @@ class Piece {
     }
     setHasMoved() {
         this.hasMoved = !this.hasMoved;
+    }
+    getMoveCount() {
+        return this.moveCount;
+    }
+    incrementMoveCount() {
+        this.moveCount++;
     }
 }
 exports.Piece = Piece;

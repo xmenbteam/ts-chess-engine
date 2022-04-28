@@ -9,6 +9,7 @@ import { Colour, CustomPieceArray, PieceObject } from "./Types";
 import { SpecialMoves } from "./Classes/MovementClasses/SpecialMoves";
 import { utils } from "./utils/utils";
 import { Error } from "./Classes/PieceClasses/Error";
+import { MovementUtils } from "./Classes/MovementClasses/MovementUtils";
 
 export class Game {
   private turnCount: number;
@@ -117,13 +118,6 @@ export class Game {
     return false;
   }
 
-  isPieceSameColour(pieceOne: Piece, pieceTwo: Piece): boolean {
-    const p1Colour = pieceOne.getColour();
-    const p2Colour = pieceTwo.getColour();
-
-    return p1Colour === p2Colour ? true : false;
-  }
-
   getAllPositions(): string[] {
     return Object.values(this.getPieces()).reduce(
       (array: string[], piece: Piece) => {
@@ -162,7 +156,6 @@ export class Game {
     const { pawnTest, fileReg, rankReg } = new utils().getRegex();
     const pieceObj: PieceObject = this.getPieces();
     const positions: string[] = this.getAllPositions();
-    let flag: string = "";
 
     if (pawnTest.test(move)) move = `P${move}`;
 
@@ -183,13 +176,12 @@ export class Game {
     );
 
     try {
-      const piece = piecesThatCanMove[0];
-      flag = piece[0];
-      if (!pieceObj[piece].getHasMoved()) pieceObj[piece].setHasMoved();
-      pieceObj[piece].position.setPosition(f, Number(r));
-      pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
-      delete pieceObj[piece];
-
+      const piece = new MovementUtils().completeMove(
+        pieceObj,
+        f,
+        r,
+        piecesThatCanMove
+      );
       return { msg: `${piece} moved to ${f}${r}!` };
     } catch (err: any) {
       return { msg: "Fail!", err };

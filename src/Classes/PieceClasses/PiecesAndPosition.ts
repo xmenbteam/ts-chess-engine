@@ -32,10 +32,12 @@ export abstract class Piece {
   position: Position;
   private colour: string;
   private captured: boolean;
-  private hasMoved: boolean = false;
+  private hasMoved: boolean;
+  private moveCount: number;
 
   moveTo(file: string, rank: number): void {
     this.position.setPosition(file, rank);
+    this.incrementMoveCount();
   }
 
   setIsCaptured() {
@@ -58,11 +60,21 @@ export abstract class Piece {
     this.hasMoved = !this.hasMoved;
   }
 
+  getMoveCount() {
+    return this.moveCount;
+  }
+
+  incrementMoveCount() {
+    this.moveCount++;
+  }
+
   abstract canMoveTo(newPosition: Position, positions: string[]): boolean;
 
   constructor(pieceColour: string, file: string, rank: number) {
     this.position = new Position(file, rank);
     this.colour = pieceColour;
     this.captured = false;
+    this.hasMoved = false;
+    this.moveCount = 0;
   }
 }

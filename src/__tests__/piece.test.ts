@@ -10,6 +10,19 @@ import { Game } from "../Game";
 import { Colour } from "../Types";
 
 describe("Piece subclasses", () => {
+  describe("MoveCount", () => {
+    test("getMoveCount", () => {
+      const p1 = new Pawn(Colour[1], "a", 2);
+      expect(p1.getMoveCount()).toBe(0);
+    });
+    test("moveCount increments", () => {
+      const p1 = new Pawn(Colour[1], "a", 2);
+      p1.moveTo("a", 2);
+      expect(p1.getMoveCount()).toBe(1);
+      p1.moveTo("a", 3);
+      expect(p1.getMoveCount()).toBe(2);
+    });
+  });
   describe("Pawn", () => {
     test("Properties", () => {
       const file = "a";

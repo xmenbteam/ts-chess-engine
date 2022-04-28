@@ -2,6 +2,7 @@ import { Position } from "../PieceClasses/PiecesAndPosition";
 import { Colour, PieceObject } from "../../Types";
 import { IsPieceInTheWay } from "./IsPieceInTheWay";
 import { utils } from "../../utils/utils";
+import { MovementUtils } from "./MovementUtils";
 
 export class SpecialMoves {
   private pieces: PieceObject;
@@ -45,15 +46,9 @@ export class SpecialMoves {
 
     try {
       if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
-        king.setHasMoved();
-        king.position.setPosition(newKingFile[side], rank[colour]);
-        this.pieces[`K${newKingFile[side]}${rank[colour]}`] = king;
-        delete this.pieces[oldKingCoord[colour]];
+        new MovementUtils().completeCastle(king, colour, side, this.pieces);
+        new MovementUtils().completeCastle(rook, colour, side, this.pieces);
 
-        rook.setHasMoved();
-        rook.position.setPosition(newRookFile[side], rank[colour]);
-        this.pieces[`R${newRookFile[side]}${rank[colour]}`] = rook;
-        delete this.pieces[oldRookCoord[colour][side]];
         return {
           msg: `${Colour[colour]} castled ${side ? "Queen" : "King"}side!`,
         };

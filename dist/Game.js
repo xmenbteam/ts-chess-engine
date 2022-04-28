@@ -12,6 +12,7 @@ const Types_1 = require("./Types");
 const SpecialMoves_1 = require("./Classes/MovementClasses/SpecialMoves");
 const utils_1 = require("./utils/utils");
 const Error_1 = require("./Classes/PieceClasses/Error");
+const MovementUtils_1 = require("./Classes/MovementClasses/MovementUtils");
 class Game {
     constructor(pieces) {
         this.turnCount = 0;
@@ -103,11 +104,6 @@ class Game {
         }
         return false;
     }
-    isPieceSameColour(pieceOne, pieceTwo) {
-        const p1Colour = pieceOne.getColour();
-        const p2Colour = pieceTwo.getColour();
-        return p1Colour === p2Colour ? true : false;
-    }
     getAllPositions() {
         return Object.values(this.getPieces()).reduce((array, piece) => {
             array.push(`${piece.position.getPosition().file}${piece.position.getPosition().rank}`);
@@ -136,7 +132,6 @@ class Game {
         const { pawnTest, fileReg, rankReg } = new utils_1.utils().getRegex();
         const pieceObj = this.getPieces();
         const positions = this.getAllPositions();
-        let flag = "";
         if (pawnTest.test(move))
             move = `P${move}`;
         if (move === "0-0" || move === "0-0-0") {
@@ -150,13 +145,7 @@ class Game {
         const pos = new PiecesAndPosition_1.Position(f, Number(r));
         const piecesThatCanMove = this.getPiecesThatCanMove(pos, move, colour);
         try {
-            const piece = piecesThatCanMove[0];
-            flag = piece[0];
-            if (!pieceObj[piece].getHasMoved())
-                pieceObj[piece].setHasMoved();
-            pieceObj[piece].position.setPosition(f, Number(r));
-            pieceObj[`${flag}${f}${r}`] = pieceObj[piece];
-            delete pieceObj[piece];
+            const piece = new MovementUtils_1.MovementUtils().completeMove(pieceObj, f, r, piecesThatCanMove);
             return { msg: `${piece} moved to ${f}${r}!` };
         }
         catch (err) {

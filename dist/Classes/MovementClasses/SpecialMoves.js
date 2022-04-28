@@ -5,6 +5,7 @@ const PiecesAndPosition_1 = require("../PieceClasses/PiecesAndPosition");
 const Types_1 = require("../../Types");
 const IsPieceInTheWay_1 = require("./IsPieceInTheWay");
 const utils_1 = require("../../utils/utils");
+const MovementUtils_1 = require("./MovementUtils");
 class SpecialMoves {
     constructor(pieces) {
         this.pieces = pieces;
@@ -24,14 +25,8 @@ class SpecialMoves {
         const rook = this.pieces[oldRookCoord[colour][side]];
         try {
             if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
-                king.setHasMoved();
-                king.position.setPosition(newKingFile[side], rank[colour]);
-                this.pieces[`K${newKingFile[side]}${rank[colour]}`] = king;
-                delete this.pieces[oldKingCoord[colour]];
-                rook.setHasMoved();
-                rook.position.setPosition(newRookFile[side], rank[colour]);
-                this.pieces[`R${newRookFile[side]}${rank[colour]}`] = rook;
-                delete this.pieces[oldRookCoord[colour][side]];
+                new MovementUtils_1.MovementUtils().completeCastle(king, colour, side, this.pieces);
+                new MovementUtils_1.MovementUtils().completeCastle(rook, colour, side, this.pieces);
                 return {
                     msg: `${Types_1.Colour[colour]} castled ${side ? "Queen" : "King"}side!`,
                 };
