@@ -23,6 +23,14 @@ describe("Piece subclasses", () => {
       expect(p1.getMoveCount()).toBe(2);
     });
   });
+  describe("Previous Squares", () => {
+    test("getPreviousSquares", () => {
+      const rook = new Rook(Colour[0], "d", 3);
+      expect(rook.getPreviousSquares()).toEqual(["d3"]);
+      rook.moveTo("e", 3);
+      expect(rook.getPreviousSquares()).toEqual(["d3", "e3"]);
+    });
+  });
   describe("Pawn", () => {
     test("Properties", () => {
       const file = "a";

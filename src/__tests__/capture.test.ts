@@ -69,24 +69,85 @@ describe("Capture", () => {
       expect(canCapture).toBe(false);
     });
   });
-  describe("pawnCapture", () => {
-    test("pawnCapture", () => {
-      const pawn = new Pawn(Colour[0], "c", 2);
-      const rook = new Rook(Colour[1], "d", 3);
-      const positions = ["c2", "d3"];
+  describe("pawnStuff", () => {
+    describe("canPawnCapture", () => {
+      test("pawnCapture", () => {
+        const pawn = new Pawn(Colour[0], "c", 2);
+        const rook = new Rook(Colour[1], "d", 3);
+        const positions = ["c2", "d3"];
 
-      const pawnCapture = new Capture(pawn, rook, positions).canPawnCapture();
+        const pawnCapture = new Capture(pawn, rook, positions).canPawnCapture();
 
-      expect(pawnCapture).toBe(true);
+        expect(pawnCapture).toBe(true);
+      });
+      test("!pawnCapture", () => {
+        const pawn = new Pawn(Colour[0], "c", 2);
+        const rook = new Rook(Colour[0], "d", 3);
+        const positions = ["c2", "d3"];
+
+        const pawnCapture = new Capture(pawn, rook, positions).canPawnCapture();
+
+        expect(pawnCapture).toBe(false);
+      });
     });
-    test("!pawnCapture", () => {
-      const pawn = new Pawn(Colour[0], "c", 2);
-      const rook = new Rook(Colour[0], "d", 3);
-      const positions = ["c2", "d3"];
+    describe("canEnPassant", () => {
+      test("enPassant", () => {
+        const blackPawn = new Pawn(Colour[1], "e", 7);
+        const whitePawn = new Pawn(Colour[0], "d", 2);
 
-      const pawnCapture = new Capture(pawn, rook, positions).canPawnCapture();
+        blackPawn.moveTo("e", 5);
+        whitePawn.moveTo("d", 3);
+        whitePawn.moveTo("d", 4);
+        whitePawn.moveTo("d", 5);
 
-      expect(pawnCapture).toBe(false);
+        const positions = ["e5", "d5"];
+
+        const enPass = new Capture(
+          whitePawn,
+          blackPawn,
+          positions
+        ).canEnPassant();
+
+        expect(enPass).toBe(true);
+      });
+      test("!enPassant - white moves two spaces", () => {
+        const blackPawn = new Pawn(Colour[1], "e", 7);
+        const whitePawn = new Pawn(Colour[0], "d", 2);
+
+        blackPawn.moveTo("e", 5);
+        whitePawn.moveTo("d", 4);
+        whitePawn.moveTo("d", 5);
+
+        const positions = ["e5", "d5"];
+
+        const enPass = new Capture(
+          whitePawn,
+          blackPawn,
+          positions
+        ).canEnPassant();
+
+        expect(enPass).toBe(false);
+      });
+      test("!enPassant - black moves one space twice", () => {
+        const blackPawn = new Pawn(Colour[1], "e", 7);
+        const whitePawn = new Pawn(Colour[0], "d", 2);
+
+        blackPawn.moveTo("e", 4);
+        blackPawn.moveTo("e", 5);
+        whitePawn.moveTo("d", 3);
+        whitePawn.moveTo("d", 4);
+        whitePawn.moveTo("d", 5);
+
+        const positions = ["e5", "d5"];
+
+        const enPass = new Capture(
+          whitePawn,
+          blackPawn,
+          positions
+        ).canEnPassant();
+
+        expect(enPass).toBe(false);
+      });
     });
   });
 });

@@ -29,10 +29,18 @@ class Piece {
         this.captured = false;
         this.hasMoved = false;
         this.moveCount = 0;
+        this.previousSquares = [`${file}${rank}`];
     }
     moveTo(file, rank) {
         this.position.setPosition(file, rank);
         this.incrementMoveCount();
+        this.addPreviousSquare(file, rank);
+    }
+    getPreviousSquares() {
+        return this.previousSquares;
+    }
+    addPreviousSquare(file, rank) {
+        this.previousSquares.push(`${file}${rank}`);
     }
     setIsCaptured() {
         this.captured = !this.captured;

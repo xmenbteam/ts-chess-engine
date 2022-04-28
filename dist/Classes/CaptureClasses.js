@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Capture = void 0;
+const utils_1 = require("../utils/utils");
 class Capture {
     constructor(capturingPiece, targetPiece, positions) {
         this.capturingPiece = capturingPiece;
@@ -23,11 +24,28 @@ class Capture {
     }
     canPawnCapture() {
         const { file, rank } = this.targetPiece.position.distanceFrom(this.capturingPiece.position);
+        const isPawn = this.capturingPiece.constructor.name === "Pawn";
         const canCapture = file === 1 && Math.abs(rank) === 1;
-        if (canCapture && !this.isPieceSameColour())
+        if (isPawn && canCapture && !this.isPieceSameColour())
             return true;
         return false;
     }
-    enPassant() { }
+    canEnPassant() {
+        const { letterRef } = new utils_1.utils().getLetterRefs();
+        const capSquares = this.capturingPiece.getPreviousSquares();
+        const targSquares = this.targetPiece.getPreviousSquares();
+        const { file: capFile, rank: capRank } = this.capturingPiece.position.getPosition();
+        const { file: targFile, rank: targRank } = this.targetPiece.position.getPosition();
+        const maxFile = Math.max(letterRef[capFile], letterRef[targFile]);
+        const minFile = Math.min(letterRef[capFile], letterRef[targFile]);
+        const isParallel = capRank === targRank;
+        const rightMoves = capSquares.length === 4 && targSquares.length === 2;
+        const areNextToEachOther = maxFile - minFile === 1;
+        const arePawns = this.capturingPiece.constructor.name === "Pawn" &&
+            this.targetPiece.constructor.name === "Pawn";
+        if (arePawns && isParallel && rightMoves && areNextToEachOther)
+            return true;
+        return false;
+    }
 }
 exports.Capture = Capture;

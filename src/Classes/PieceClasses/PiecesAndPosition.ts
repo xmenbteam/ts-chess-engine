@@ -34,10 +34,20 @@ export abstract class Piece {
   private captured: boolean;
   private hasMoved: boolean;
   private moveCount: number;
+  private previousSquares: string[];
 
   moveTo(file: string, rank: number): void {
     this.position.setPosition(file, rank);
     this.incrementMoveCount();
+    this.addPreviousSquare(file, rank);
+  }
+
+  getPreviousSquares() {
+    return this.previousSquares;
+  }
+
+  addPreviousSquare(file: string, rank: number) {
+    this.previousSquares.push(`${file}${rank}`);
   }
 
   setIsCaptured() {
@@ -76,5 +86,6 @@ export abstract class Piece {
     this.captured = false;
     this.hasMoved = false;
     this.moveCount = 0;
+    this.previousSquares = [`${file}${rank}`];
   }
 }
