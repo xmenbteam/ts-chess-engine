@@ -1,3 +1,6 @@
+import { Position } from "../Classes/PieceClasses/PiecesAndPosition";
+import { RankFile } from "../Types";
+
 export class utils {
   private letterRef: { [file: string]: number } = {
     a: 0,
@@ -38,6 +41,27 @@ export class utils {
     newRookFile: ["f", "d"],
     rank: [1, 8],
   };
+
+  getMoveDirection(oldPos: RankFile, newPos: RankFile) {
+    const { file, rank } = oldPos;
+    const { file: newFile, rank: newRank } = newPos;
+    const { letterRef } = new utils().getLetterRefs();
+
+    let direction: string = "";
+
+    const directionRef = {
+      NE: newRank > rank && letterRef[newFile] > letterRef[file],
+      SE: newRank < rank && letterRef[newFile] > letterRef[file],
+      NW: newRank > rank && letterRef[newFile] < letterRef[file],
+      SW: newRank < rank && letterRef[newFile] < letterRef[file],
+    };
+
+    for (const [dir, cond] of Object.entries(directionRef)) {
+      if (cond) direction = dir;
+    }
+
+    return direction;
+  }
 
   getLetterRefs() {
     return {

@@ -47,22 +47,11 @@ export class IsPieceInTheWay {
   checkDiagonal() {
     const { file, rank } = this.piecePos;
     const { file: newFile, rank: newRank } = this.newPos;
-    const { letterRef, files } = new utils().getLetterRefs();
+    const { letterRef } = new utils().getLetterRefs();
     this.pieceCoords = `${file}${rank}`;
     this.ignoreYourself = this.positions.filter((p) => p !== this.pieceCoords);
 
-    let direction: string = "";
-
-    const directionRef = {
-      NE: newRank > rank && letterRef[newFile] > letterRef[file],
-      SE: newRank < rank && letterRef[newFile] > letterRef[file],
-      NW: newRank > rank && letterRef[newFile] < letterRef[file],
-      SW: newRank < rank && letterRef[newFile] < letterRef[file],
-    };
-
-    for (const [dir, cond] of Object.entries(directionRef)) {
-      if (cond) direction = dir;
-    }
+    const direction = new utils().getMoveDirection(this.piecePos, this.newPos);
 
     if (direction === "SE") {
       for (
