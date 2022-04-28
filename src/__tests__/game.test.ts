@@ -328,4 +328,20 @@ describe("Custom Game", () => {
     expect(pieces.error2.constructor.name).toBe("Error");
     expect(positions).toEqual(["d3", "z100", "z101"]);
   });
+  test("Doesn't spawn on same square different pieces", () => {
+    const piecesArray: CustomPieceArray = [
+      { piece: "Kd3", colour: 0 },
+      { piece: "Bd3", colour: 0 },
+      { piece: "Nd3", colour: 0 },
+    ];
+    const game = new Game(piecesArray);
+
+    const positions = game.getAllPositions();
+    const pieces = game.getPieces();
+
+    expect(pieces.Kd3.constructor.name).toBe("King");
+    expect(pieces.error1.constructor.name).toBe("Error");
+    expect(pieces.error2.constructor.name).toBe("Error");
+    expect(positions).toEqual(["d3", "z100", "z101"]);
+  });
 });

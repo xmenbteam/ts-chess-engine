@@ -66,8 +66,10 @@ class Game {
             if (pawnTest.test(piece))
                 piece = `P${piece}`;
             const n = piece.match(nameTest)[0];
-            if (!customPieces.hasOwnProperty(piece))
-                customPieces[piece] = this.makeCustomPiece(n, colour, f, Number(r));
+            const piecePositions = Object.keys(customPieces).map((coord) => `${coord[1]}${coord[2]}`);
+            if (!customPieces.hasOwnProperty(piece) &&
+                !piecePositions.includes(`${f}${r}`))
+                customPieces[piece] = Game.makeCustomPiece(n, colour, f, Number(r));
             else
                 customPieces[`error${i}`] = new Error_1.Error(Types_1.Colour[colour], "z", 99 + i);
         });
