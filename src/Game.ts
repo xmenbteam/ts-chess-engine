@@ -66,14 +66,11 @@ export class Game {
 
       const n: string = piece.match(nameTest)![0];
 
-      const piecePositions = Object.keys(customPieces).map(
+      const posCheck = Object.keys(customPieces).map(
         (coord) => `${coord[1]}${coord[2]}`
       );
 
-      if (
-        !customPieces.hasOwnProperty(piece) &&
-        !piecePositions.includes(`${f}${r}`)
-      )
+      if (!customPieces.hasOwnProperty(piece) && !posCheck.includes(`${f}${r}`))
         customPieces[piece] = Game.makeCustomPiece(n, colour, f, Number(r));
       else customPieces[`error${i}`] = new Error(Colour[colour], "z", 99 + i);
     });

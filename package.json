@@ -8,6 +8,10 @@
   "private": true,
   "scripts": {
     "tscw": "tsc --watch",
+    "test-game": "jest ./src/__tests__/game.test.ts",
+    "test-piece": "jest ./src/__tests__/piece.test.ts",
+    "test-pos": "jest ./src/__tests__/position.test.ts",
+    "test-cap": "jest ./src/__tests__/capture.test.ts",
     "tsc": "tsc",
     "test": "jest ./src"
   },

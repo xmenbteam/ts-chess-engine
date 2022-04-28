@@ -34,6 +34,12 @@ class IsPieceInTheWay {
         }
         return this.isInWay;
     }
+    setIsInWay(i, j, ignoreYourself) {
+        const { files } = new utils_1.utils().getLetterRefs();
+        const square = `${files[i]}${j}`;
+        if (ignoreYourself.includes(square))
+            this.isInWay = true;
+    }
     checkDiagonal() {
         const { file, rank } = this.piecePos;
         const { file: newFile, rank: newRank } = this.newPos;
@@ -53,30 +59,22 @@ class IsPieceInTheWay {
         }
         if (direction === "SE") {
             for (let i = letterRef[file], j = rank; i <= letterRef[newFile] && j > 0; i++, j--) {
-                const square = `${files[i]}${j}`;
-                if (this.ignoreYourself.includes(square))
-                    this.isInWay = true;
+                this.setIsInWay(i, j, this.ignoreYourself);
             }
         }
         if (direction === "NE") {
             for (let i = letterRef[file], j = rank; i <= letterRef[newFile] && j <= 8; i++, j++) {
-                const square = `${files[i]}${j}`;
-                if (this.ignoreYourself.includes(square))
-                    this.isInWay = true;
+                this.setIsInWay(i, j, this.ignoreYourself);
             }
         }
         if (direction === "SW") {
             for (let i = letterRef[file], j = rank; i >= letterRef[newFile] && j > 0; i--, j--) {
-                const square = `${files[i]}${j}`;
-                if (this.ignoreYourself.includes(square))
-                    this.isInWay = true;
+                this.setIsInWay(i, j, this.ignoreYourself);
             }
         }
         if (direction === "NW") {
             for (let i = letterRef[file], j = rank; i >= letterRef[newFile] && j <= 8; i--, j++) {
-                const square = `${files[i]}${j}`;
-                if (this.ignoreYourself.includes(square))
-                    this.isInWay = true;
+                this.setIsInWay(i, j, this.ignoreYourself);
             }
         }
         return this.isInWay;

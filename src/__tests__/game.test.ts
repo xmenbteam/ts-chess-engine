@@ -1,7 +1,7 @@
 import { Position } from "../Classes/PieceClasses/PiecesAndPosition";
 
 import { Game } from "../Game";
-import { Colour, CustomPieceArray } from "../Types";
+import { CustomPieceArray } from "../Types";
 
 describe("Standard Game", () => {
   test("Has a turnCount/white goes first", () => {
