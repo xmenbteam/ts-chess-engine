@@ -43,6 +43,7 @@ export class Capture {
 
     return false;
   }
+
   canEnPassant(): boolean {
     const { letterRef } = new utils().getLetterRefs();
 

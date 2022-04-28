@@ -1,3 +1,4 @@
+import { Game } from "../../Game";
 import { PieceObject } from "../../Types";
 import { utils } from "../../utils/utils";
 import { Piece } from "../PieceClasses/PiecesAndPosition";

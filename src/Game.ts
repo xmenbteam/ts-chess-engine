@@ -5,11 +5,12 @@ import { Pawn } from "./Classes/PieceClasses/Pawn";
 import { Piece, Position } from "./Classes/PieceClasses/PiecesAndPosition";
 import { Queen } from "./Classes/PieceClasses/Queen";
 import { Rook } from "./Classes/PieceClasses/Rook";
-import { Colour, CustomPieceArray, PieceObject } from "./Types";
+import { Colour, colourRef, CustomPieceArray, PieceObject } from "./Types";
 import { SpecialMoves } from "./Classes/MovementClasses/SpecialMoves";
 import { utils } from "./utils/utils";
 import { Error } from "./Classes/PieceClasses/Error";
 import { MovementUtils } from "./Classes/MovementClasses/MovementUtils";
+import { Capture } from "./Classes/CaptureClasses";
 
 export class Game {
   private turnCount: number;
@@ -121,11 +122,12 @@ export class Game {
   getAllPositions(): string[] {
     return Object.values(this.getPieces()).reduce(
       (array: string[], piece: Piece) => {
-        array.push(
-          `${piece.position.getPosition().file}${
-            piece.position.getPosition().rank
-          }`
-        );
+        if (piece.getIsCaptured() === false)
+          array.push(
+            `${piece.position.getPosition().file}${
+              piece.position.getPosition().rank
+            }`
+          );
         return array;
       },
       []
@@ -150,6 +152,53 @@ export class Game {
         if (m && c) array.push(piecePos);
         return array;
       }, []);
+  }
+
+  capturePiece(
+    capturePiece: Piece,
+    targetPiece: Piece
+  ): { [msg: string]: string } {
+    const { flagRefObj } = new utils().getLetterRefs();
+    const positions = this.getAllPositions();
+
+    const { file: capFile, rank: capRank } =
+      capturePiece.position.getPosition();
+
+    const { file, rank } = targetPiece.position.getPosition();
+
+    const pieceObj = this.getPieces();
+
+    const name = capturePiece.constructor.name;
+    const flag = flagRefObj[name];
+
+    let canCapture: boolean;
+
+    if (capturePiece.constructor.name === "Pawn")
+      canCapture = new Capture(
+        capturePiece,
+        targetPiece,
+        positions
+      ).canPawnCapture();
+    else
+      canCapture = new Capture(
+        capturePiece,
+        targetPiece,
+        positions
+      ).canCapture();
+
+    if (canCapture) {
+      new MovementUtils().completeMove(pieceObj, file, rank.toString(), [
+        `${flag}${capFile}${capRank}`,
+      ]);
+      targetPiece.setIsCaptured();
+
+      return {
+        msg: `${targetPiece.getColour()} ${
+          targetPiece.constructor.name
+        } on ${file}${rank} Captured!`,
+      };
+    }
+    return { msg: "Could not capture!" };
   }
 
   makeMove(move: string, colour: number): { [msg: string]: string } {

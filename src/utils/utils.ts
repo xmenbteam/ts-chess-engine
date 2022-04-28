@@ -10,6 +10,15 @@ export class utils {
     h: 7,
   };
 
+  private flagRefObj: { [file: string]: string } = {
+    Knight: "N",
+    Bishop: "B",
+    Pawn: "P",
+    Queen: "Q",
+    King: "K",
+    Rook: "R",
+  };
+
   private files: string[] = ["a", "b", "c", "d", "e", "f", "g", "h"];
   private ranks: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -35,6 +44,7 @@ export class utils {
       letterRef: this.letterRef,
       files: this.files,
       ranks: this.ranks,
+      flagRefObj: this.flagRefObj,
     };
   }
 

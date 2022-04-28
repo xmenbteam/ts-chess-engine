@@ -31,7 +31,7 @@ export class Position {
 export abstract class Piece {
   position: Position;
   private colour: string;
-  private captured: boolean;
+  private isCaptured: boolean;
   private hasMoved: boolean;
   private moveCount: number;
   private previousSquares: string[];
@@ -51,11 +51,15 @@ export abstract class Piece {
   }
 
   setIsCaptured() {
-    this.captured = !this.captured;
+    this.isCaptured = true;
+  }
+
+  setIsFree() {
+    this.isCaptured = false;
   }
 
   getIsCaptured() {
-    return this.captured;
+    return this.isCaptured;
   }
 
   getColour() {
@@ -83,7 +87,7 @@ export abstract class Piece {
   constructor(pieceColour: string, file: string, rank: number) {
     this.position = new Position(file, rank);
     this.colour = pieceColour;
-    this.captured = false;
+    this.isCaptured = false;
     this.hasMoved = false;
     this.moveCount = 0;
     this.previousSquares = [`${file}${rank}`];

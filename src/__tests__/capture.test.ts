@@ -3,6 +3,8 @@ import { Colour } from "../Types";
 import { Capture } from "../Classes/CaptureClasses";
 import { Pawn } from "../Classes/PieceClasses/Pawn";
 import { Bishop } from "../Classes/PieceClasses/Bishop";
+import { Game } from "../Game";
+import { convertToObject } from "typescript";
 
 describe("Capture", () => {
   describe("IsPieceSameColour", () => {
@@ -148,6 +150,75 @@ describe("Capture", () => {
 
         expect(enPass).toBe(false);
       });
+    });
+  });
+  describe("Capturing pieces", () => {
+    test("Rook captures rook", () => {
+      const pieces = [
+        { piece: "Rd2", colour: 1 },
+        { piece: "Rd6", colour: 0 },
+      ];
+      const testGame = new Game(pieces);
+
+      const gamePieces = testGame.getPieces();
+      const whiteRook = gamePieces.Rd6;
+      const blackRook = gamePieces.Rd2;
+
+      expect(whiteRook.getIsCaptured()).toBe(false);
+      const capture = testGame.capturePiece(blackRook, whiteRook);
+      expect(capture.msg).toBe("White Rook on d6 Captured!");
+      expect(whiteRook.getIsCaptured()).toBe(true);
+    });
+    test("Bishop captures rook", () => {
+      const pieces = [
+        { piece: "Ba3", colour: 1 },
+        { piece: "Rd6", colour: 0 },
+      ];
+      const testGame = new Game(pieces);
+
+      const gamePieces = testGame.getPieces();
+      const whiteRook = gamePieces.Rd6;
+      const blackBishop = gamePieces.Ba3;
+
+      expect(whiteRook.getIsCaptured()).toBe(false);
+      const capture = testGame.capturePiece(blackBishop, whiteRook);
+      expect(capture.msg).toBe("White Rook on d6 Captured!");
+      expect(whiteRook.getIsCaptured()).toBe(true);
+    });
+    test("Knight captures rook", () => {
+      const pieces = [
+        { piece: "Nc4", colour: 1 },
+        { piece: "Rd6", colour: 0 },
+      ];
+      const testGame = new Game(pieces);
+
+      const gamePieces = testGame.getPieces();
+      const whiteRook = gamePieces.Rd6;
+      const blackKnight = gamePieces.Nc4;
+
+      expect(whiteRook.getIsCaptured()).toBe(false);
+      const capture = testGame.capturePiece(blackKnight, whiteRook);
+      expect(capture.msg).toBe("White Rook on d6 Captured!");
+      expect(whiteRook.getIsCaptured()).toBe(true);
+      expect(testGame.getAllPositions()).toEqual(["d6"]);
+    });
+    test("Pawn captures rook", () => {
+      const pieces = [
+        { piece: "e5", colour: 0 },
+        { piece: "Rf6", colour: 1 },
+      ];
+      const testGame = new Game(pieces);
+
+      const gamePieces = testGame.getPieces();
+      const whitePawn = gamePieces.Pe5;
+      const blackRook = gamePieces.Rf6;
+
+      expect(blackRook.getIsCaptured()).toBe(false);
+      const capture = testGame.capturePiece(whitePawn, blackRook);
+      expect(capture.msg).toBe("Black Rook on f6 Captured!");
+      expect(blackRook.getIsCaptured()).toBe(true);
+      const pos = testGame.getAllPositions();
+      expect(pos).toEqual(["f6"]);
     });
   });
 });

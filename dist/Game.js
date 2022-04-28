@@ -13,6 +13,7 @@ const SpecialMoves_1 = require("./Classes/MovementClasses/SpecialMoves");
 const utils_1 = require("./utils/utils");
 const Error_1 = require("./Classes/PieceClasses/Error");
 const MovementUtils_1 = require("./Classes/MovementClasses/MovementUtils");
+const CaptureClasses_1 = require("./Classes/CaptureClasses");
 class Game {
     constructor(pieces) {
         this.turnCount = 0;
@@ -127,6 +128,18 @@ class Game {
                 array.push(piecePos);
             return array;
         }, []);
+    }
+    capturePiece(capturePiece, targetPiece) {
+        const positions = this.getAllPositions();
+        const { file, rank } = targetPiece.position.getPosition();
+        const canCapture = new CaptureClasses_1.Capture(capturePiece, targetPiece, positions).canCapture();
+        if (canCapture) {
+            targetPiece.setIsCaptured();
+            return {
+                msg: `${targetPiece.getColour()} ${targetPiece.constructor.name} on ${file}${rank} Captured!`,
+            };
+        }
+        return { msg: "Could not capture!" };
     }
     makeMove(move, colour) {
         const { pawnTest, fileReg, rankReg } = new utils_1.utils().getRegex();

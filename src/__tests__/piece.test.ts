@@ -41,7 +41,7 @@ describe("Piece subclasses", () => {
       const colour = p1.getColour();
 
       expect(pos).toEqual({ file: "a", rank: 2 });
-      expect(colour).toBe("BLACK");
+      expect(colour).toBe("Black");
     });
     test("setIsCaptured", () => {
       const file = "a";
@@ -51,8 +51,6 @@ describe("Piece subclasses", () => {
       expect(p1.getIsCaptured()).toBe(false);
       p1.setIsCaptured();
       expect(p1.getIsCaptured()).toBe(true);
-      p1.setIsCaptured();
-      expect(p1.getIsCaptured()).toBe(false);
     });
     test("canMoveTo - !hasMoved", () => {
       const game = new Game();

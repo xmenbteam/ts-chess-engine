@@ -7,11 +7,11 @@ describe("Standard Game", () => {
   test("Has a turnCount/white goes first", () => {
     const game = new Game();
 
-    expect(game.getColourTurn()).toBe("WHITE");
+    expect(game.getColourTurn()).toBe("White");
     game.incTurnCount();
-    expect(game.getColourTurn()).toBe("BLACK");
+    expect(game.getColourTurn()).toBe("Black");
     game.incTurnCount();
-    expect(game.getColourTurn()).toBe("WHITE");
+    expect(game.getColourTurn()).toBe("White");
   });
   test("isPieceThere", () => {
     const game = new Game();
@@ -111,7 +111,7 @@ describe("Standard Game", () => {
         expect("Rf1" in pieces).toBe(true);
         expect(pieces.Kg1.getHasMoved()).toBe(true);
         expect(pieces.Rf1.getHasMoved()).toBe(true);
-        expect(castle.msg).toBe("WHITE castled Kingside!");
+        expect(castle.msg).toBe("White castled Kingside!");
       });
       test("!White castles kingside", () => {
         const game = new Game();
@@ -127,7 +127,7 @@ describe("Standard Game", () => {
         expect("Rf1" in pieces).toBe(false);
         expect(pieces.Ke1.getHasMoved()).toBe(false);
         expect(pieces.Rh1.getHasMoved()).toBe(false);
-        expect(castle.msg).toBe("WHITE Failed to castle Kingside!");
+        expect(castle.msg).toBe("White Failed to castle Kingside!");
       });
       test("Black castles kingside", () => {
         const game = new Game();
@@ -144,7 +144,7 @@ describe("Standard Game", () => {
         expect("Rf8" in pieces).toBe(true);
         expect(pieces.Kg8.getHasMoved()).toBe(true);
         expect(pieces.Rf8.getHasMoved()).toBe(true);
-        expect(castle.msg).toBe("BLACK castled Kingside!");
+        expect(castle.msg).toBe("Black castled Kingside!");
       });
     });
     describe("queenSide", () => {
@@ -161,7 +161,7 @@ describe("Standard Game", () => {
         expect("Rd1" in pieces).toBe(true);
         expect(pieces.Kc1.getHasMoved()).toBe(true);
         expect(pieces.Rd1.getHasMoved()).toBe(true);
-        expect(castle.msg).toBe("WHITE castled Queenside!");
+        expect(castle.msg).toBe("White castled Queenside!");
       });
       test("!White castles queenside", () => {
         const game = new Game();
@@ -177,7 +177,7 @@ describe("Standard Game", () => {
         expect("Rd1" in pieces).toBe(false);
         expect(pieces.Ke1.getHasMoved()).toBe(false);
         expect(pieces.Rh1.getHasMoved()).toBe(false);
-        expect(castle.msg).toBe("WHITE Failed to castle Queenside!");
+        expect(castle.msg).toBe("White Failed to castle Queenside!");
       });
       test("Black castles queenside", () => {
         const game = new Game();
@@ -194,8 +194,29 @@ describe("Standard Game", () => {
         expect("Rd8" in pieces).toBe(true);
         expect(pieces.Kc8.getHasMoved()).toBe(true);
         expect(pieces.Rd8.getHasMoved()).toBe(true);
-        expect(castle.msg).toBe("BLACK castled Queenside!");
+        expect(castle.msg).toBe("Black castled Queenside!");
       });
+    });
+  });
+  describe("getAllPositions", () => {
+    test("Get all pieces", () => {
+      const piecesArray: CustomPieceArray = [
+        { piece: "Kd3", colour: 0 },
+        { piece: "Ke3", colour: 0 },
+      ];
+      const game = new Game(piecesArray);
+      expect(game.getAllPositions()).toEqual(["d3", "e3"]);
+    });
+    test("Get all UNCAPTURED pieces", () => {
+      const piecesArray: CustomPieceArray = [
+        { piece: "Kd3", colour: 0 },
+        { piece: "Ke3", colour: 0 },
+      ];
+      const game = new Game(piecesArray);
+      const pieces = game.getPieces();
+
+      pieces.Kd3.setIsCaptured();
+      expect(game.getAllPositions()).toEqual(["e3"]);
     });
   });
 

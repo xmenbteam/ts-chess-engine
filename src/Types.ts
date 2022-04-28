@@ -6,9 +6,14 @@ export type PositionDiff = {
 };
 
 export enum Colour {
-  "WHITE",
-  "BLACK",
+  "White",
+  "Black",
 }
+
+export const colourRef: { [key: string]: number } = {
+  White: 0,
+  Black: 1,
+};
 
 export type FuncProps = [RankFile, RankFile, string[]];
 
