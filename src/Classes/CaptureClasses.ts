@@ -49,4 +49,6 @@ export class Capture {
     this.targetPiece = targetPiece;
     this.positions = positions;
   }
+
+  enPassant() {}
 }

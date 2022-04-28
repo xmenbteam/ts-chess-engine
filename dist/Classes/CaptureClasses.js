@@ -28,5 +28,6 @@ class Capture {
             return true;
         return false;
     }
+    enPassant() { }
 }
 exports.Capture = Capture;

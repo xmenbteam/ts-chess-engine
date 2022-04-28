@@ -10,15 +10,6 @@ export enum Colour {
   "BLACK",
 }
 
-export enum FileEnum {
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-}
 export type FuncProps = [RankFile, RankFile, string[]];
 
 export type RankFile = { file: string; rank: number };

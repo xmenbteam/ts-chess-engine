@@ -51,7 +51,7 @@ describe("Capture", () => {
     test("canCapture - bishop NW", () => {
       const capturingPiece = new Bishop(Colour[0], "h", 2);
       const targetPiece = new Rook(Colour[1], "e", 5);
-      const positions = ["h2", "e5"];
+      const positions = ["h2", "d6"];
       const canCapture = new Capture(
         capturingPiece,
         targetPiece,

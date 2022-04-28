@@ -17,10 +17,12 @@ export class SpecialMoves {
       newKingFile[side],
       rank[colour]
     ).getPosition();
+
     const newRookPos = new Position(
       newRookFile[side],
       rank[colour]
     ).getPosition();
+
     const oldKingPos = this.pieces[oldKingCoord[colour]].position.getPosition();
     const oldRookPos =
       this.pieces[oldRookCoord[colour][side]].position.getPosition();
