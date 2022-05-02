@@ -97,8 +97,6 @@ describe("Capture", () => {
         whitePawn.moveTo("d", 4);
         whitePawn.moveTo("d", 5);
 
-        const positions = ["e5", "d5"];
-
         const enPass = new Capture(whitePawn, blackPawn).canEnPassant();
 
         expect(enPass).toBe(true);
@@ -110,8 +108,6 @@ describe("Capture", () => {
         blackPawn.moveTo("e", 5);
         whitePawn.moveTo("d", 4);
         whitePawn.moveTo("d", 5);
-
-        const positions = ["e5", "d5"];
 
         const enPass = new Capture(whitePawn, blackPawn).canEnPassant();
 
@@ -126,8 +122,6 @@ describe("Capture", () => {
         whitePawn.moveTo("d", 3);
         whitePawn.moveTo("d", 4);
         whitePawn.moveTo("d", 5);
-
-        const positions = ["e5", "d5"];
 
         const enPass = new Capture(whitePawn, blackPawn).canEnPassant();
 

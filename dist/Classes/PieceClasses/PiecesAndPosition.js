@@ -28,6 +28,7 @@ class Piece {
         this._hasMoved = false;
         this._moveCount = 0;
     }
+    // OVERWRITE THIS FUNCTION IN CHILD CLASSES!!!!
     moveTo(file, rank) {
         this.position.position = { file, rank };
     }

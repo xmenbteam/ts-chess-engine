@@ -36,11 +36,13 @@ class Capture {
         const { file: targFile, rank: targRank } = this.targetPiece.position.position;
         const capCount = this.capturingPiece.moveCount;
         const targCount = this.targetPiece.moveCount;
+        console.log({ capCount, targCount });
         const maxFile = Math.max(letterRef[capFile], letterRef[targFile]);
         const minFile = Math.min(letterRef[capFile], letterRef[targFile]);
         const isParallel = capRank === targRank;
         const rightMoves = (capCount === 2 || capCount === 3) && targCount === 1;
         const areNextToEachOther = maxFile - minFile === 1;
+        console.log({ arePawns, isParallel, rightMoves, areNextToEachOther });
         if (arePawns && isParallel && rightMoves && areNextToEachOther)
             return true;
         return false;

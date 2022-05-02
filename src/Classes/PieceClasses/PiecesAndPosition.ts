@@ -33,6 +33,7 @@ export abstract class Piece {
   private _hasMoved: boolean;
   private _moveCount: number;
 
+  // OVERWRITE THIS FUNCTION IN CHILD CLASSES!!!!
   moveTo(file: string, rank: number): void {
     this.position.position = { file, rank };
   }
