@@ -172,7 +172,6 @@ export class Game {
     targetPiece: Piece
   ): { [msg: string]: string } {
     const { flagRefObj } = new utils().getLetterRefs();
-    const positions = this.getAllPositions();
 
     const { file: capFile, rank: capRank } = capturePiece.position.position;
 
@@ -186,17 +185,8 @@ export class Game {
     let canCapture: boolean;
 
     if (capturePiece.constructor.name === "Pawn")
-      canCapture = new Capture(
-        capturePiece,
-        targetPiece,
-        positions
-      ).canPawnCapture();
-    else
-      canCapture = new Capture(
-        capturePiece,
-        targetPiece,
-        positions
-      ).canCapture();
+      canCapture = new Capture(capturePiece, targetPiece).canPawnCapture();
+    else canCapture = new Capture(capturePiece, targetPiece).canCapture();
 
     if (canCapture) {
       new MovementUtils().completeMove(
@@ -216,14 +206,9 @@ export class Game {
   isKingInCheck(colour: number): boolean {
     const pieceArray = Object.values(this.getPieces());
     let isInCheck: boolean = false;
-    const positions = this.getAllPositions();
 
     pieceArray.forEach((piece) => {
-      const canCapture = new Capture(
-        piece,
-        this.findKing(colour),
-        positions
-      ).canCapture();
+      const canCapture = new Capture(piece, this.findKing(colour)).canCapture();
       if (canCapture) isInCheck = true;
     });
 

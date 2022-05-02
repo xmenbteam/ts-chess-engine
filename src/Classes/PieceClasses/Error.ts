@@ -1,7 +1,7 @@
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Error extends Piece {
-  canMoveTo(newPosition: Position, positions: string[]): boolean {
+  canMoveTo(newPosition: Position): boolean {
     return false;
   }
 

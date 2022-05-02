@@ -4,7 +4,6 @@ import { Piece } from "./PieceClasses/PiecesAndPosition";
 export class Capture {
   private capturingPiece: Piece;
   private targetPiece: Piece;
-  private positions: string[];
 
   isPieceSameColour(): boolean {
     const p1Colour = this.capturingPiece.colour;
@@ -16,10 +15,6 @@ export class Capture {
   canCapture(): boolean {
     const { file: targetFile, rank: targetRank } =
       this.targetPiece.position.position;
-
-    const notYou = this.positions.filter(
-      (pos) => pos !== `${targetFile}${targetRank}`
-    );
 
     const canMove = this.capturingPiece.canMoveTo(this.targetPiece.position);
 
@@ -67,9 +62,8 @@ export class Capture {
     return false;
   }
 
-  constructor(capturingPiece: Piece, targetPiece: Piece, positions: string[]) {
+  constructor(capturingPiece: Piece, targetPiece: Piece) {
     this.capturingPiece = capturingPiece;
     this.targetPiece = targetPiece;
-    this.positions = positions;
   }
 }

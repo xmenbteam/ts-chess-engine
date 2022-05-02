@@ -3,10 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Capture = void 0;
 const utils_1 = require("../utils/utils");
 class Capture {
-    constructor(capturingPiece, targetPiece, positions) {
+    constructor(capturingPiece, targetPiece) {
         this.capturingPiece = capturingPiece;
         this.targetPiece = targetPiece;
-        this.positions = positions;
     }
     isPieceSameColour() {
         const p1Colour = this.capturingPiece.colour;
@@ -15,7 +14,6 @@ class Capture {
     }
     canCapture() {
         const { file: targetFile, rank: targetRank } = this.targetPiece.position.position;
-        const notYou = this.positions.filter((pos) => pos !== `${targetFile}${targetRank}`);
         const canMove = this.capturingPiece.canMoveTo(this.targetPiece.position);
         const isSameColour = this.isPieceSameColour();
         if (canMove && !isSameColour)
