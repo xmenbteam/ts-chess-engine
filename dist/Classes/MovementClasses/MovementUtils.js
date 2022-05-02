@@ -3,19 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MovementUtils = void 0;
 const utils_1 = require("../../utils/utils");
 class MovementUtils {
-    completeMove(pieceObj, pieceThatCanMove, move) {
-        const HasMovedPieces = new utils_1.utils().piecesThatNeedMoved();
-        const pieceName = pieceThatCanMove.constructor.name;
-        const piece = pieceObj[pieceStr];
-        const flag = pieceStr[0];
-        const { file: f, rank: r } = pieceThatCanMove.position.position;
-        if (pieceName === "King" || pieceName === "Pawn" || pieceName === "Rook") {
-            if (HasMovedPieces.includes(pieceName))
-                piece.hasMoved = true;
-        }
-        pieceObj[pieceStr].position.position = { file: f, rank: Number(r) };
-        pieceObj[`${flag}${f}${r}`] = pieceObj[pieceStr];
-        delete pieceObj[pieceStr];
+    completeMove(pieceObj, piece, move) {
+        const flag = move[0];
+        const { file: f, rank: r } = piece.position.position;
+        piece.position.position = { file: f, rank: Number(r) };
+        pieceObj[`${flag}${f}${r}`] = piece;
+        delete pieceObj[`${flag}${f}${r}`];
         return piece;
     }
     completeCastle(piece, colour, side, pieces) {

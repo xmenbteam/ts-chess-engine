@@ -25,6 +25,8 @@ class Piece {
         this.position = new Position(file, rank);
         this._colour = pieceColour;
         this._isCaptured = false;
+        this._hasMoved = false;
+        this._moveCount = 0;
     }
     moveTo(file, rank) {
         this.position.position = { file, rank };
@@ -37,6 +39,18 @@ class Piece {
     }
     get colour() {
         return this._colour;
+    }
+    get hasMoved() {
+        return this._hasMoved;
+    }
+    set hasMoved(hasMoved) {
+        this._hasMoved = hasMoved;
+    }
+    get moveCount() {
+        return this._moveCount;
+    }
+    set moveCount(num) {
+        this._moveCount += num;
     }
 }
 exports.Piece = Piece;

@@ -1,15 +1,6 @@
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Knight extends Piece {
-  private _hasMoved: boolean;
-
-  public get hasMoved() {
-    return this._hasMoved;
-  }
-
-  public set hasMoved(hasMoved) {
-    this._hasMoved = hasMoved;
-  }
   canMoveTo(newPosition: Position): boolean {
     const { file, rank } = newPosition.distanceFrom(this.position);
     if (
@@ -23,6 +14,5 @@ export class Knight extends Piece {
 
   constructor(pieceColour: string, file: string, rank: number) {
     super(pieceColour, file, rank);
-    this._hasMoved = false;
   }
 }

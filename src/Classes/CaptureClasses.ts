@@ -43,6 +43,9 @@ export class Capture {
 
   canEnPassant(): boolean {
     const { letterRef } = new utils().getLetterRefs();
+    const arePawns =
+      this.capturingPiece.constructor.name === "Pawn" &&
+      this.targetPiece.constructor.name === "Pawn";
 
     const { file: capFile, rank: capRank } =
       this.capturingPiece.position.position;
@@ -58,9 +61,6 @@ export class Capture {
     const isParallel = capRank === targRank;
     const rightMoves = (capCount === 2 || capCount === 3) && targCount === 1;
     const areNextToEachOther = maxFile - minFile === 1;
-    const arePawns =
-      this.capturingPiece.constructor.name === "Pawn" &&
-      this.targetPiece.constructor.name === "Pawn";
 
     if (arePawns && isParallel && rightMoves && areNextToEachOther) return true;
 

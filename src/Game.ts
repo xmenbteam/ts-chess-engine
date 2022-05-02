@@ -199,7 +199,11 @@ export class Game {
       ).canCapture();
 
     if (canCapture) {
-      new MovementUtils().completeMove(pieceObj);
+      new MovementUtils().completeMove(
+        pieceObj,
+        capturePiece,
+        `${flag}${capFile}${Number(capRank)}`
+      );
       targetPiece.isCaptured = true;
 
       return {

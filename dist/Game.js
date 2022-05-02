@@ -153,7 +153,7 @@ class Game {
         else
             canCapture = new CaptureClasses_1.Capture(capturePiece, targetPiece, positions).canCapture();
         if (canCapture) {
-            new MovementUtils_1.MovementUtils().completeMove(pieceObj);
+            new MovementUtils_1.MovementUtils().completeMove(pieceObj, capturePiece, `${flag}${capFile}${Number(capRank)}`);
             targetPiece.isCaptured = true;
             return {
                 msg: `${targetPiece.colour} ${targetPiece.constructor.name} on ${file}${rank} Captured!`,

@@ -30,6 +30,8 @@ export abstract class Piece {
   position: Position;
   private _colour: string;
   private _isCaptured: boolean;
+  private _hasMoved: boolean;
+  private _moveCount: number;
 
   moveTo(file: string, rank: number): void {
     this.position.position = { file, rank };
@@ -47,11 +49,29 @@ export abstract class Piece {
     return this._colour;
   }
 
+  public get hasMoved() {
+    return this._hasMoved;
+  }
+
+  public set hasMoved(hasMoved: boolean) {
+    this._hasMoved = hasMoved;
+  }
+
+  public get moveCount() {
+    return this._moveCount;
+  }
+
+  public set moveCount(num: number) {
+    this._moveCount += num;
+  }
+
   abstract canMoveTo(newPosition: Position): boolean;
 
   constructor(pieceColour: string, file: string, rank: number) {
     this.position = new Position(file, rank);
     this._colour = pieceColour;
     this._isCaptured = false;
+    this._hasMoved = false;
+    this._moveCount = 0;
   }
 }
