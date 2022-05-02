@@ -7,24 +7,21 @@ export class Capture {
   private positions: string[];
 
   isPieceSameColour(): boolean {
-    const p1Colour = this.capturingPiece.getColour();
-    const p2Colour = this.targetPiece.getColour();
+    const p1Colour = this.capturingPiece.colour;
+    const p2Colour = this.targetPiece.colour;
 
     return p1Colour === p2Colour ? true : false;
   }
 
   canCapture(): boolean {
     const { file: targetFile, rank: targetRank } =
-      this.targetPiece.position.getPosition();
+      this.targetPiece.position.position;
 
     const notYou = this.positions.filter(
       (pos) => pos !== `${targetFile}${targetRank}`
     );
 
-    const canMove = this.capturingPiece.canMoveTo(
-      this.targetPiece.position,
-      notYou
-    );
+    const canMove = this.capturingPiece.canMoveTo(this.targetPiece.position);
 
     const isSameColour = this.isPieceSameColour();
 
@@ -47,19 +44,19 @@ export class Capture {
   canEnPassant(): boolean {
     const { letterRef } = new utils().getLetterRefs();
 
-    const capSquares = this.capturingPiece.getPreviousSquares();
-    const targSquares = this.targetPiece.getPreviousSquares();
-
     const { file: capFile, rank: capRank } =
-      this.capturingPiece.position.getPosition();
+      this.capturingPiece.position.position;
     const { file: targFile, rank: targRank } =
-      this.targetPiece.position.getPosition();
+      this.targetPiece.position.position;
+
+    const capCount = this.capturingPiece.moveCount;
+    const targCount = this.targetPiece.moveCount;
 
     const maxFile = Math.max(letterRef[capFile], letterRef[targFile]);
     const minFile = Math.min(letterRef[capFile], letterRef[targFile]);
 
     const isParallel = capRank === targRank;
-    const rightMoves = capSquares.length === 4 && targSquares.length === 2;
+    const rightMoves = (capCount === 2 || capCount === 3) && targCount === 1;
     const areNextToEachOther = maxFile - minFile === 1;
     const arePawns =
       this.capturingPiece.constructor.name === "Pawn" &&

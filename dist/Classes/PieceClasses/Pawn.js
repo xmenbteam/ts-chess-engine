@@ -1,25 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pawn = void 0;
-const CanMoveToSquare_1 = require("../MovementClasses/CanMoveToSquare");
-const IsPieceInTheWay_1 = require("../MovementClasses/IsPieceInTheWay");
 const PiecesAndPosition_1 = require("./PiecesAndPosition");
 class Pawn extends PiecesAndPosition_1.Piece {
-    canMoveTo(newPosition, positions) {
-        const distance = newPosition.distanceFrom(this.position);
-        const props = [
-            this.position.getPosition(),
-            newPosition.getPosition(),
-            positions,
-        ];
-        const canMove = new CanMoveToSquare_1.CanMoveToSquare(distance).pawn(this.getHasMoved());
-        const isInWay = new IsPieceInTheWay_1.IsPieceInTheWay(...props).checkPawnMove();
-        if (canMove && !isInWay)
+    constructor(pieceColour, file, rank) {
+        super(pieceColour, file, rank);
+        this._hasMoved = false;
+        this._moveCount = 0;
+    }
+    get hasMoved() {
+        return this._hasMoved;
+    }
+    set hasMoved(hasMoved) {
+        this._hasMoved = hasMoved;
+    }
+    get moveCount() {
+        return this._moveCount;
+    }
+    set moveCount(num) {
+        this._moveCount += num;
+    }
+    canMoveTo(newPosition) {
+        const { file, rank } = newPosition.distanceFrom(this.position);
+        if ((!file && Math.abs(rank) === 1) ||
+            (!file && Math.abs(rank) === 2 && !this.hasMoved))
             return true;
         return false;
     }
-    constructor(pieceColour, file, rank) {
-        super(pieceColour, file, rank);
-    }
+    move() { }
 }
 exports.Pawn = Pawn;

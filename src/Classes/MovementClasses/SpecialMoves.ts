@@ -1,5 +1,5 @@
-import { Position } from "../PieceClasses/PiecesAndPosition";
-import { Colour, PieceObject } from "../../Types";
+import { Piece, Position } from "../PieceClasses/PiecesAndPosition";
+import { Colour, PieceObject, RankFile } from "../../Types";
 import { IsPieceInTheWay } from "./IsPieceInTheWay";
 import { utils } from "../../utils/utils";
 import { MovementUtils } from "./MovementUtils";
@@ -7,25 +7,30 @@ import { MovementUtils } from "./MovementUtils";
 export class SpecialMoves {
   private pieces: PieceObject;
 
-  castle(side: number, colour: number, positions: string[]) {
+  castle(side: number, colour: number, pieceObj: PieceObject) {
     const castleRefObj = new utils().getCastleRef();
+    const positions = Object.keys(pieceObj).map((pos) => `${pos[1]}${pos[2]}`);
 
     const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } =
       castleRefObj;
 
-    const newKingPos = new Position(
-      newKingFile[side],
-      rank[colour]
-    ).getPosition();
+    if (pieceObj[oldKingCoord[colour]].constructor.name !== "King")
+      throw new Error();
+    if (pieceObj[oldRookCoord[colour][side]].constructor.name !== "Rook")
+      throw new Error();
 
-    const newRookPos = new Position(
-      newRookFile[side],
-      rank[colour]
-    ).getPosition();
+    const king = pieceObj[oldKingCoord[colour]];
+    const rook = pieceObj[oldRookCoord[colour][side]];
 
-    const oldKingPos = this.pieces[oldKingCoord[colour]].position.getPosition();
+    const newKingPos: RankFile = new Position(newKingFile[side], rank[colour])
+      .position;
+
+    const newRookPos: RankFile = new Position(newRookFile[side], rank[colour])
+      .position;
+
+    const oldKingPos = this.pieces[oldKingCoord[colour]].position.position;
     const oldRookPos =
-      this.pieces[oldRookCoord[colour][side]].position.getPosition();
+      this.pieces[oldRookCoord[colour][side]].position.position;
 
     const isPieceInWayKing = new IsPieceInTheWay(
       oldKingPos,
@@ -39,12 +44,7 @@ export class SpecialMoves {
       positions
     ).checkRankAndFile();
 
-    const hasNotMoved =
-      !this.pieces[oldKingCoord[colour]].getHasMoved() &&
-      !this.pieces[oldRookCoord[colour][side]].getHasMoved();
-
-    const king = this.pieces[oldKingCoord[colour]];
-    const rook = this.pieces[oldRookCoord[colour][side]];
+    const hasNotMoved = !king.hasMoved && !rook.hasMoved;
 
     try {
       if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {

@@ -1,27 +1,26 @@
-import { FuncProps } from "../../Types";
-import { CanMoveToSquare } from "../MovementClasses/CanMoveToSquare";
-import { IsPieceInTheWay } from "../MovementClasses/IsPieceInTheWay";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Rook extends Piece {
-  canMoveTo(newPosition: Position, positions: string[]): boolean {
-    const distance = newPosition.distanceFrom(this.position);
+  private _hasMoved: boolean;
 
-    const props: FuncProps = [
-      this.position.getPosition(),
-      newPosition.getPosition(),
-      positions,
-    ];
+  public get hasMoved(): boolean {
+    return this._hasMoved;
+  }
 
-    const canMove = new CanMoveToSquare(distance).rook();
-    const isInWay = new IsPieceInTheWay(...props).checkRankAndFile();
+  public set hasMoved(hasMoved) {
+    this._hasMoved = hasMoved;
+  }
 
-    if (canMove && !isInWay) return true;
+  canMoveTo(newPosition: Position): boolean {
+    const { file, rank } = newPosition.distanceFrom(this.position);
+
+    if (!file || !rank) return true;
 
     return false;
   }
 
   constructor(pieceColour: string, file: string, rank: number) {
     super(pieceColour, file, rank);
+    this._hasMoved = false;
   }
 }

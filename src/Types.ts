@@ -1,5 +1,3 @@
-import { Piece } from "./Classes/PieceClasses/PiecesAndPosition";
-
 export type PositionDiff = {
   file: number;
   rank: number;
@@ -19,6 +17,8 @@ export type FuncProps = [RankFile, RankFile, string[]];
 
 export type RankFile = { file: string; rank: number };
 export type RankFileDist = { file: number; rank: number };
-export type PieceObject = { [key: string]: Piece };
+export type PieceObject = {
+  [key: string]: any;
+};
 export type CustomPieceObject = { piece: string; colour: number };
 export type CustomPieceArray = CustomPieceObject[];

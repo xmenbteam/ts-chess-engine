@@ -1,9 +1,6 @@
-import { Bishop } from "../Classes/PieceClasses/Bishop";
 import { King } from "../Classes/PieceClasses/King";
-import { Knight } from "../Classes/PieceClasses/Knight";
 import { Pawn } from "../Classes/PieceClasses/Pawn";
 import { Position } from "../Classes/PieceClasses/PiecesAndPosition";
-import { Queen } from "../Classes/PieceClasses/Queen";
 import { Rook } from "../Classes/PieceClasses/Rook";
 
 import { Game } from "../Game";
@@ -13,22 +10,14 @@ describe("Piece subclasses", () => {
   describe("MoveCount", () => {
     test("getMoveCount", () => {
       const p1 = new Pawn(Colour[1], "a", 2);
-      expect(p1.getMoveCount()).toBe(0);
+      expect(p1.moveCount).toBe(0);
     });
     test("moveCount increments", () => {
       const p1 = new Pawn(Colour[1], "a", 2);
       p1.moveTo("a", 2);
-      expect(p1.getMoveCount()).toBe(1);
+      expect(p1.moveCount).toBe(1);
       p1.moveTo("a", 3);
-      expect(p1.getMoveCount()).toBe(2);
-    });
-  });
-  describe("Previous Squares", () => {
-    test("getPreviousSquares", () => {
-      const rook = new Rook(Colour[0], "d", 3);
-      expect(rook.getPreviousSquares()).toEqual(["d3"]);
-      rook.moveTo("e", 3);
-      expect(rook.getPreviousSquares()).toEqual(["d3", "e3"]);
+      expect(p1.moveCount).toBe(2);
     });
   });
   describe("Pawn", () => {
@@ -37,9 +26,8 @@ describe("Piece subclasses", () => {
       const rank = 2;
       const p1 = new Pawn(Colour[1], file, rank);
 
-      const pos = p1.position.getPosition();
-      const colour = p1.getColour();
-
+      const pos = p1.position.position;
+      const colour = p1.position;
       expect(pos).toEqual({ file: "a", rank: 2 });
       expect(colour).toBe("Black");
     });
@@ -48,214 +36,247 @@ describe("Piece subclasses", () => {
       const rank = 2;
       const p1 = new Pawn(Colour[0], file, rank);
 
-      expect(p1.getIsCaptured()).toBe(false);
-      p1.setIsCaptured();
-      expect(p1.getIsCaptured()).toBe(true);
+      expect(p1.isCaptured).toBe(false);
+      p1.isCaptured = true;
+      expect(p1.isCaptured).toBe(true);
     });
     test("canMoveTo - !hasMoved", () => {
-      const game = new Game();
-      const positions = game.getAllPositions();
+      const pieces = [{ piece: "a2", colour: 0 }];
+
+      const game = new Game(pieces);
 
       const p1 = game.getPieces().Pa2;
 
       const newPositionOne = new Position("a", 3);
       const newPositionTwo = new Position("a", 4);
 
-      const canMoveOne = p1.canMoveTo(newPositionOne, positions);
-      const canMoveTwo = p1.canMoveTo(newPositionTwo, positions);
+      const canMoveOne = p1.canMoveTo(newPositionOne);
+      const canMoveTwo = p1.canMoveTo(newPositionTwo);
 
       expect(canMoveOne).toBe(true);
       expect(canMoveTwo).toBe(true);
     });
     test("canMoveTo - hasMoved", () => {
-      const game = new Game();
-      const positions = game.getAllPositions();
+      const pieces = [{ piece: "a2", colour: 0 }];
+
+      const game = new Game(pieces);
 
       const p1 = game.getPieces().Pa2;
-      p1.setHasMoved();
+      p1.hasMoved = true;
 
       const newPositionOne = new Position("a", 3);
       const newPositionTwo = new Position("a", 4);
 
-      const canMoveOne = p1.canMoveTo(newPositionOne, positions);
-      const canMoveTwo = p1.canMoveTo(newPositionTwo, positions);
+      const canMoveOne = p1.canMoveTo(newPositionOne);
+      const canMoveTwo = p1.canMoveTo(newPositionTwo);
 
       expect(canMoveOne).toBe(true);
       expect(canMoveTwo).toBe(false);
     });
     test("!canMoveTo - hasMoved", () => {
-      const positions = ["c2", "c3"];
+      const pieces = [
+        { piece: "c2", colour: 0 },
+        { piece: "c3", colour: 0 },
+      ];
 
-      const p1 = new Pawn(Colour[0], "c", 2);
+      const game = new Game(pieces);
+      const p1 = game.getPieces().Pc2;
 
-      p1.setHasMoved();
+      p1.hasMoved = true;
 
       const newPositionOne = new Position("c", 3);
 
-      const canMoveOne = p1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = p1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("!canMoveTo - !hasMoved", () => {
-      const positions = ["c2", "c4"];
+      const pieces = [
+        { piece: "c2", colour: 0 },
+        { piece: "c4", colour: 0 },
+      ];
 
-      const p1 = new Pawn(Colour[0], "c", 2);
+      const game = new Game(pieces);
+      const p1 = game.getPieces().Pc2;
 
-      p1.setHasMoved();
+      p1.hasMoved = true;
 
       const newPositionOne = new Position("c", 4);
 
-      const canMoveOne = p1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = p1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("canMoveTo - black", () => {
-      const positions = ["c7", "c6"];
+      const pieces = [
+        { piece: "c7", colour: 0 },
+        { piece: "c6", colour: 0 },
+      ];
 
-      const p1 = new Pawn(Colour[1], "c", 7);
+      const game = new Game(pieces);
+      const p1 = game.getPieces().Pc7;
 
-      p1.setHasMoved();
+      p1.hasMoved = true;
 
       const newPositionOne = new Position("c", 6);
 
-      const canMoveOne = p1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = p1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
-    test("canMoveTo - black", () => {
-      const positions = ["c7", "c5"];
+    test("!canMoveTo - black", () => {
+      const pieces = [
+        { piece: "c7", colour: 0 },
+        { piece: "c6", colour: 0 },
+      ];
 
-      const p1 = new Pawn(Colour[1], "c", 7);
+      const game = new Game(pieces);
+      const p1 = game.getPieces().Pc7;
 
       const newPositionOne = new Position("c", 5);
 
-      const canMoveOne = p1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = p1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("canMoveTo - black", () => {
-      const positions = ["c7", "c6"];
+      const pieces = [{ piece: "c7", colour: 0 }];
 
-      const p1 = new Pawn(Colour[1], "c", 7);
+      const game = new Game(pieces);
+      const p1 = game.getPieces().Pc7;
 
-      p1.setHasMoved();
+      p1.hasMoved = true;
 
       const newPositionOne = new Position("c", 6);
 
-      const canMoveOne = p1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = p1.canMoveTo(newPositionOne);
 
-      expect(canMoveOne).toBe(false);
+      expect(canMoveOne).toBe(true);
     });
     test("hasMoved", () => {
       const file = "a";
       const rank = 2;
       const p1 = new Pawn(Colour[1], file, rank);
 
-      expect(p1.getHasMoved()).toBe(false);
+      expect(p1.hasMoved).toBe(false);
 
-      p1.setHasMoved();
+      p1.hasMoved = true;
 
-      expect(p1.getHasMoved()).toBe(true);
-    });
-    test("first move", () => {
-      const file = "a";
-      const rank = 2;
-      const p1 = new Pawn(Colour[1], file, rank);
-    });
-    test("not first move", () => {
-      const file = "a";
-      const rank = 2;
-      const p1 = new Pawn(Colour[1], file, rank);
-
-      p1.setHasMoved();
+      expect(p1.hasMoved).toBe(true);
     });
   });
   describe("Rook", () => {
     test("!canMoveTo - rank", () => {
-      const positions = ["a1", "a2"];
+      const pieces = [
+        { piece: "Ra1", colour: 0 },
+        { piece: "Ra2", colour: 0 },
+      ];
 
-      const r1 = new Rook(Colour[0], "a", 1);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Ra1;
 
       const newPositionOne = new Position("a", 2);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("!canMoveTo - rank - more complex", () => {
-      const positions = ["a1", "a4"];
+      const pieces = [
+        { piece: "Ra1", colour: 0 },
+        { piece: "Ra4", colour: 0 },
+      ];
 
-      const r1 = new Rook(Colour[0], "a", 1);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Ra1;
 
       const newPositionOne = new Position("a", 5);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("!canMoveTo - FILE", () => {
-      const positions = ["a1", "c1"];
+      const pieces = [
+        { piece: "Ra1", colour: 0 },
+        { piece: "Rc1", colour: 0 },
+      ];
 
-      const r1 = new Rook(Colour[0], "a", 1);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Ra1;
 
       const newPositionOne = new Position("d", 1);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("canMoveTo - FILE", () => {
-      const positions = ["a1"];
+      const pieces = [{ piece: "Ra1", colour: 0 }];
 
-      const r1 = new Rook(Colour[0], "a", 1);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Ra1;
 
       const newPositionOne = new Position("d", 1);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(true);
     });
     test("canMoveTo - DOWN", () => {
-      const positions = ["d4"];
+      const pieces = [{ piece: "Rd4", colour: 0 }];
 
-      const r1 = new Rook(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("d", 1);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(true);
     });
     test("!canMoveTo - DOWN", () => {
-      const positions = ["d4", "d2"];
+      const pieces = [
+        { piece: "Rd2", colour: 0 },
+        { piece: "Rd4", colour: 0 },
+      ];
 
-      const r1 = new Rook(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("d", 1);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("canMoveTo - LEFT", () => {
-      const positions = ["d4", "d2"];
+      const pieces = [
+        { piece: "Rd4", colour: 0 },
+        { piece: "Rd2", colour: 0 },
+      ];
 
-      const r1 = new Rook(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Ra1;
 
       const newPositionOne = new Position("a", 4);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(true);
     });
     test("!canMoveTo - LEFT", () => {
-      const positions = ["d4", "b4"];
+      const pieces = [
+        { piece: "Rd4", colour: 0 },
+        { piece: "Rb4", colour: 0 },
+      ];
 
-      const r1 = new Rook(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("a", 4);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
@@ -264,366 +285,451 @@ describe("Piece subclasses", () => {
       const rank = 2;
       const r1 = new Rook(Colour[1], file, rank);
 
-      expect(r1.getHasMoved()).toBe(false);
+      expect(r1.hasMoved).toBe(false);
 
-      r1.setHasMoved();
+      r1.hasMoved = true;
 
-      expect(r1.getHasMoved()).toBe(true);
+      expect(r1.hasMoved).toBe(true);
     });
   });
   describe("Bishop", () => {
     test("!canMoveTo - a1", () => {
-      const positions = ["a1", "b2"];
+      const pieces = [
+        { piece: "Ra1", colour: 0 },
+        { piece: "Rb2", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "a", 1);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Ra1;
 
       const newPositionOne = new Position("c", 3);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("!canMoveTo - e5", () => {
-      const positions = ["a1", "d4"];
+      const pieces = [
+        { piece: "Ra1", colour: 0 },
+        { piece: "Rd4", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "a", 1);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Ra1;
 
       const newPositionOne = new Position("e", 5);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("Other !canMoveTo - NE", () => {
-      const positions = ["c4", "e6"];
+      const pieces = [
+        { piece: "Rc4", colour: 0 },
+        { piece: "Re6", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "c", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rc4;
 
       const newPositionOne = new Position("g", 8);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("Second Other !canMoveTo - NE", () => {
-      const positions = ["d4", "f6"];
+      const pieces = [
+        { piece: "Rd4", colour: 0 },
+        { piece: "Rf6", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("h", 8);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("canMoveTo - c3", () => {
-      const positions = ["a1", "d4"];
+      const pieces = [
+        { piece: "Ra1", colour: 0 },
+        { piece: "Rd4", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "a", 1);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Ra1;
 
       const newPositionOne = new Position("c", 3);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(true);
     });
     test("!canMoveTo - northeast", () => {
-      const positions = ["d4", "f6"];
+      const pieces = [
+        { piece: "Rd4", colour: 0 },
+        { piece: "Rf6", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("g", 7);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("canMoveTo - northeast", () => {
-      const positions = ["d4"];
+      const pieces = [{ piece: "Rd4", colour: 0 }];
 
-      const r1 = new Bishop(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("g", 7);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(true);
     });
     test("canMoveTo - southeast", () => {
-      const positions = ["d4"];
+      const pieces = [{ piece: "Rd4", colour: 0 }];
 
-      const r1 = new Bishop(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("g", 1);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(true);
     });
     test("!canMoveTo - southeast", () => {
-      const positions = ["d4", "f2"];
+      const pieces = [
+        { piece: "Rd4", colour: 0 },
+        { piece: "Rf2", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("g", 1);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("canMoveTo - southwest", () => {
-      const positions = ["d4"];
+      const pieces = [{ piece: "Rd4", colour: 0 }];
 
-      const r1 = new Bishop(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("b", 2);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(true);
     });
     test("!canMoveTo - southwest", () => {
-      const positions = ["d4", "b2"];
+      const pieces = [
+        { piece: "Rd4", colour: 0 },
+        { piece: "Rb2", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("b", 2);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("canMoveTo - northwest", () => {
-      const positions = ["d4"];
+      const pieces = [{ piece: "Rd4", colour: 0 }];
 
-      const r1 = new Bishop(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("a", 7);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(true);
     });
     test("!canMoveTo - northwest", () => {
-      const positions = ["d4", "b6"];
+      const pieces = [
+        { piece: "Rd4", colour: 0 },
+        { piece: "Rb6", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "d", 4);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("a", 7);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("Other !canMoveTo - SW", () => {
-      const positions = ["f6", "d4"];
+      const pieces = [
+        { piece: "Rd4", colour: 0 },
+        { piece: "Rf6", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "f", 6);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rf6;
 
       const newPositionOne = new Position("a", 1);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("Other !canMoveTo - NW", () => {
-      const positions = ["e3", "c5"];
+      const pieces = [
+        { piece: "Rd4", colour: 0 },
+        { piece: "Rb6", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "e", 3);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rd4;
 
       const newPositionOne = new Position("a", 7);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
     test("Other !canMoveTo - SE", () => {
-      const positions = ["c6", "f3"];
+      const pieces = [
+        { piece: "Rc6", colour: 0 },
+        { piece: "Rf3", colour: 0 },
+      ];
 
-      const r1 = new Bishop(Colour[0], "c", 6);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Rc6;
 
       const newPositionOne = new Position("h", 1);
 
-      const canMoveOne = r1.canMoveTo(newPositionOne, positions);
+      const canMoveOne = r1.canMoveTo(newPositionOne);
 
       expect(canMoveOne).toBe(false);
     });
   });
   describe("Knight", () => {
     test("!canMoveTo", () => {
-      const positions = ["a1", "b2"];
+      const pieces = [
+        { piece: "Na1", colour: 0 },
+        { piece: "Nb2", colour: 0 },
+      ];
 
-      const r1 = new Knight(Colour[0], "a", 1);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Na1;
 
       const newPosition = new Position("f", 3);
 
-      const canMove = r1.canMoveTo(newPosition, positions);
+      const canMove = r1.canMoveTo(newPosition);
 
       expect(canMove).toBe(false);
     });
     test("canMoveTo - standard", () => {
-      const positions = ["a1", "b2"];
+      const pieces = [
+        { piece: "Na1", colour: 0 },
+        { piece: "Nb1", colour: 0 },
+      ];
 
-      const r1 = new Knight(Colour[0], "b", 1);
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Nb1;
 
       const newPosition = new Position("c", 3);
 
-      const canMove = r1.canMoveTo(newPosition, positions);
+      const canMove = r1.canMoveTo(newPosition);
 
       expect(canMove).toBe(true);
     });
   });
   describe("King", () => {
+    // describe("!Move into check", () => {
+    //   test("Test", () => {
+    //     const pieces = [
+    //       { piece: "Kh7", colour: 1 },
+    //       { piece: "Rg2", colour: 0 },
+    //     ];
+    //     const game = new Game(pieces);
+
+    //     console.log("hee");
+    //   });
+    // });
     describe("canMoveTo", () => {
       test("canMoveTo - diagonal", () => {
-        const file = "d";
-        const rank = 4;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [{ piece: "Kd4", colour: 0 }];
+
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Kd4;
 
         const newPosition = new Position("e", 3);
 
-        const canMove = r1.canMoveTo(newPosition, []);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(true);
       });
       test("canMoveTo - file", () => {
-        const file = "d";
-        const rank = 4;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [{ piece: "Kd4", colour: 0 }];
+
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Kd4;
 
         const newPosition = new Position("e", 4);
 
-        const canMove = r1.canMoveTo(newPosition, []);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(true);
       });
       test("canMoveTo - rank", () => {
-        const file = "d";
-        const rank = 4;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [{ piece: "Kd4", colour: 0 }];
 
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Kd4;
         const newPosition = new Position("d", 5);
 
-        const canMove = r1.canMoveTo(newPosition, []);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(true);
       });
       test("!canMoveTo - out of scope", () => {
-        const file = "d";
-        const rank = 4;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [{ piece: "Kd4", colour: 0 }];
+
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Kd4;
 
         const newPosition = new Position("e", 7);
 
-        const canMove = r1.canMoveTo(newPosition, []);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(false);
       });
       test("!canMoveTo - piece to west", () => {
-        const positions = ["e7", "d7"];
-        const file = "d";
-        const rank = 4;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [
+          { piece: "Kd4", colour: 0 },
+          { piece: "Kc4", colour: 0 },
+        ];
 
-        const newPosition = new Position("e", 7);
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Kd4;
 
-        const canMove = r1.canMoveTo(newPosition, positions);
+        const newPosition = new Position("c", 4);
 
-        expect(canMove).toBe(false);
-      });
-      test("!canMoveTo - piece to west", () => {
-        const positions = ["e7", "d7"];
-        const file = "e";
-        const rank = 7;
-        const r1 = new King(Colour[1], file, rank);
-
-        const newPosition = new Position("d", 7);
-
-        const canMove = r1.canMoveTo(newPosition, positions);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(false);
       });
       test("!canMoveTo - piece to northwest", () => {
-        const positions = ["e7", "d8"];
-        const file = "e";
-        const rank = 7;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [
+          { piece: "Ke7", colour: 0 },
+          { piece: "Kd8", colour: 0 },
+        ];
+
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Ke7;
 
         const newPosition = new Position("d", 8);
 
-        const canMove = r1.canMoveTo(newPosition, positions);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(false);
       });
       test("!canMoveTo - piece to north", () => {
-        const positions = ["e7", "e8"];
-        const file = "e";
-        const rank = 7;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [
+          { piece: "Ke7", colour: 0 },
+          { piece: "Ke8", colour: 0 },
+        ];
+
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Ke7;
 
         const newPosition = new Position("e", 8);
 
-        const canMove = r1.canMoveTo(newPosition, positions);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(false);
       });
       test("!canMoveTo - piece to northeast", () => {
-        const positions = ["e7", "f8"];
-        const file = "e";
-        const rank = 7;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [
+          { piece: "Ke7", colour: 0 },
+          { piece: "Kf8", colour: 0 },
+        ];
 
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Ke7;
         const newPosition = new Position("f", 8);
 
-        const canMove = r1.canMoveTo(newPosition, positions);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(false);
       });
       test("!canMoveTo - piece to east", () => {
-        const positions = ["e7", "f7"];
-        const file = "e";
-        const rank = 7;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [
+          { piece: "Ke7", colour: 0 },
+          { piece: "Kf7", colour: 0 },
+        ];
+
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Ke7;
 
         const newPosition = new Position("f", 7);
 
-        const canMove = r1.canMoveTo(newPosition, positions);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(false);
       });
       test("!canMoveTo - piece to southeast", () => {
-        const positions = ["e7", "f6"];
-        const file = "e";
-        const rank = 7;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [
+          { piece: "Ke7", colour: 0 },
+          { piece: "Kf6", colour: 0 },
+        ];
+
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Ke7;
 
         const newPosition = new Position("f", 6);
 
-        const canMove = r1.canMoveTo(newPosition, positions);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(false);
       });
       test("!canMoveTo - piece to south", () => {
-        const positions = ["e7", "e6"];
-        const file = "e";
-        const rank = 7;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [
+          { piece: "Ke7", colour: 0 },
+          { piece: "Ke6", colour: 0 },
+        ];
+
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Ke7;
 
         const newPosition = new Position("e", 6);
 
-        const canMove = r1.canMoveTo(newPosition, positions);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(false);
       });
       test("!canMoveTo - piece to southwest", () => {
-        const positions = ["e7", "d6"];
-        const file = "e";
-        const rank = 7;
-        const r1 = new King(Colour[1], file, rank);
+        const pieces = [
+          { piece: "Ke7", colour: 0 },
+          { piece: "Kd6", colour: 0 },
+        ];
+
+        const game = new Game(pieces);
+        const r1 = game.getPieces().Ke7;
 
         const newPosition = new Position("d", 6);
 
-        const canMove = r1.canMoveTo(newPosition, positions);
+        const canMove = r1.canMoveTo(newPosition);
 
         expect(canMove).toBe(false);
       });
@@ -633,48 +739,55 @@ describe("Piece subclasses", () => {
       const rank = 2;
       const r1 = new King(Colour[1], file, rank);
 
-      expect(r1.getHasMoved()).toBe(false);
+      expect(r1.hasMoved).toBe(false);
 
-      r1.setHasMoved();
+      r1.hasMoved = true;
 
-      expect(r1.getHasMoved()).toBe(true);
+      expect(r1.hasMoved).toBe(true);
     });
   });
   describe("Queen", () => {
     test("canMoveTo - d4", () => {
-      const file = "d";
-      const rank = 4;
-      const r1 = new Queen(Colour[1], file, rank);
+      const pieces = [{ piece: "Qd4", colour: 0 }];
+
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Qd4;
 
       const newPosition = new Position("e", 3);
 
-      const canMove = r1.canMoveTo(newPosition, []);
+      const canMove = r1.canMoveTo(newPosition);
 
       expect(canMove).toBe(true);
     });
     test("!canMoveTo - d4", () => {
-      const file = "d";
-      const rank = 4;
-      const positions = ["d4", "d2"];
-      const r1 = new Queen(Colour[1], file, rank);
+      const pieces = [
+        { piece: "Qd4", colour: 0 },
+        { piece: "Qd2", colour: 0 },
+      ];
+
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Qd4;
 
       const newPosition = new Position("d", 1);
 
-      const canMove = r1.canMoveTo(newPosition, positions);
+      const canMove = r1.canMoveTo(newPosition);
 
       expect(canMove).toBe(false);
     });
     test("!canMoveTo  - diagonal", () => {
-      const file = "d";
-      const rank = 4;
-      const positions = ["d4", "c3"];
-      const r1 = new Queen(Colour[1], file, rank);
+      const pieces = [
+        { piece: "Qd4", colour: 0 },
+        { piece: "Qd2", colour: 0 },
+      ];
+
+      const game = new Game(pieces);
+      const r1 = game.getPieces().Qd4;
 
       const newPosition = new Position("b", 2);
 
-      const canMove = r1.canMoveTo(newPosition, positions);
+      const canMove = r1.canMoveTo(newPosition);
 
-      expect(canMove).toBe(false);
+      expect(canMove).toBe(true);
     });
   });
 });

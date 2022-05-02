@@ -10,19 +10,25 @@ class SpecialMoves {
     constructor(pieces) {
         this.pieces = pieces;
     }
-    castle(side, colour, positions) {
+    castle(side, colour, pieceObj) {
         const castleRefObj = new utils_1.utils().getCastleRef();
+        const positions = Object.keys(pieceObj).map((pos) => `${pos[1]}${pos[2]}`);
         const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } = castleRefObj;
-        const newKingPos = new PiecesAndPosition_1.Position(newKingFile[side], rank[colour]).getPosition();
-        const newRookPos = new PiecesAndPosition_1.Position(newRookFile[side], rank[colour]).getPosition();
-        const oldKingPos = this.pieces[oldKingCoord[colour]].position.getPosition();
-        const oldRookPos = this.pieces[oldRookCoord[colour][side]].position.getPosition();
+        if (pieceObj[oldKingCoord[colour]].constructor.name !== "King")
+            throw new Error();
+        if (pieceObj[oldRookCoord[colour][side]].constructor.name !== "Rook")
+            throw new Error();
+        const king = pieceObj[oldKingCoord[colour]];
+        const rook = pieceObj[oldRookCoord[colour][side]];
+        const newKingPos = new PiecesAndPosition_1.Position(newKingFile[side], rank[colour])
+            .position;
+        const newRookPos = new PiecesAndPosition_1.Position(newRookFile[side], rank[colour])
+            .position;
+        const oldKingPos = this.pieces[oldKingCoord[colour]].position.position;
+        const oldRookPos = this.pieces[oldRookCoord[colour][side]].position.position;
         const isPieceInWayKing = new IsPieceInTheWay_1.IsPieceInTheWay(oldKingPos, newKingPos, positions).checkRankAndFile();
         const isPieceInWayRook = new IsPieceInTheWay_1.IsPieceInTheWay(oldRookPos, newRookPos, positions).checkRankAndFile();
-        const hasNotMoved = !this.pieces[oldKingCoord[colour]].getHasMoved() &&
-            !this.pieces[oldRookCoord[colour][side]].getHasMoved();
-        const king = this.pieces[oldKingCoord[colour]];
-        const rook = this.pieces[oldRookCoord[colour][side]];
+        const hasNotMoved = !king.hasMoved && !rook.hasMoved;
         try {
             if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
                 new MovementUtils_1.MovementUtils().completeCastle(king, colour, side, this.pieces);

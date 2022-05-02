@@ -13,6 +13,15 @@ class utils {
             g: 6,
             h: 7,
         };
+        this.flagRefObj = {
+            Knight: "N",
+            Bishop: "B",
+            Pawn: "P",
+            Queen: "Q",
+            King: "K",
+            Rook: "R",
+        };
+        this.HasMovedPieces = ["King", "Rook", "Pawn"];
         this.files = ["a", "b", "c", "d", "e", "f", "g", "h"];
         this.ranks = [1, 2, 3, 4, 5, 6, 7, 8];
         this.pawnTest = /^[a-h]\d$/;
@@ -31,11 +40,29 @@ class utils {
             rank: [1, 8],
         };
     }
+    getMoveDirection(oldPos, newPos) {
+        const { file, rank } = oldPos;
+        const { file: newFile, rank: newRank } = newPos;
+        const { letterRef } = new utils().getLetterRefs();
+        let direction = "";
+        const directionRef = {
+            NE: newRank > rank && letterRef[newFile] > letterRef[file],
+            SE: newRank < rank && letterRef[newFile] > letterRef[file],
+            NW: newRank > rank && letterRef[newFile] < letterRef[file],
+            SW: newRank < rank && letterRef[newFile] < letterRef[file],
+        };
+        for (const [dir, cond] of Object.entries(directionRef)) {
+            if (cond)
+                direction = dir;
+        }
+        return direction;
+    }
     getLetterRefs() {
         return {
             letterRef: this.letterRef,
             files: this.files,
             ranks: this.ranks,
+            flagRefObj: this.flagRefObj,
         };
     }
     getRegex() {
@@ -49,6 +76,9 @@ class utils {
     }
     getCastleRef() {
         return this.castleRefObj;
+    }
+    piecesThatNeedMoved() {
+        return this.HasMovedPieces;
     }
 }
 exports.utils = utils;

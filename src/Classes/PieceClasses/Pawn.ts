@@ -1,27 +1,41 @@
-import { FuncProps } from "../../Types";
-import { CanMoveToSquare } from "../MovementClasses/CanMoveToSquare";
-import { IsPieceInTheWay } from "../MovementClasses/IsPieceInTheWay";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Pawn extends Piece {
-  canMoveTo(newPosition: Position, positions: string[]): boolean {
-    const distance = newPosition.distanceFrom(this.position);
+  private _hasMoved: boolean;
+  private _moveCount: number;
 
-    const props: FuncProps = [
-      this.position.getPosition(),
-      newPosition.getPosition(),
-      positions,
-    ];
+  public get hasMoved() {
+    return this._hasMoved;
+  }
 
-    const canMove = new CanMoveToSquare(distance).pawn(this.getHasMoved());
-    const isInWay = new IsPieceInTheWay(...props).checkPawnMove();
+  public set hasMoved(hasMoved: boolean) {
+    this._hasMoved = hasMoved;
+  }
 
-    if (canMove && !isInWay) return true;
+  public get moveCount() {
+    return this._moveCount;
+  }
 
+  public set moveCount(num: number) {
+    this._moveCount += num;
+  }
+
+  canMoveTo(newPosition: Position): boolean {
+    const { file, rank } = newPosition.distanceFrom(this.position);
+
+    if (
+      (!file && Math.abs(rank) === 1) ||
+      (!file && Math.abs(rank) === 2 && !this.hasMoved)
+    )
+      return true;
     return false;
   }
 
+  move() {}
+
   constructor(pieceColour: string, file: string, rank: number) {
     super(pieceColour, file, rank);
+    this._hasMoved = false;
+    this._moveCount = 0;
   }
 }

@@ -1,4 +1,3 @@
-import { Position } from "../Classes/PieceClasses/PiecesAndPosition";
 import { RankFile } from "../Types";
 
 export class utils {
@@ -21,6 +20,8 @@ export class utils {
     King: "K",
     Rook: "R",
   };
+
+  private HasMovedPieces: string[] = ["King", "Rook", "Pawn"];
 
   private files: string[] = ["a", "b", "c", "d", "e", "f", "g", "h"];
   private ranks: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -84,5 +85,8 @@ export class utils {
 
   getCastleRef() {
     return this.castleRefObj;
+  }
+  piecesThatNeedMoved() {
+    return this.HasMovedPieces;
   }
 }

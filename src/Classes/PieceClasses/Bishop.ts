@@ -1,21 +1,10 @@
-import { FuncProps } from "../../Types";
-import { CanMoveToSquare } from "../MovementClasses/CanMoveToSquare";
-import { IsPieceInTheWay } from "../MovementClasses/IsPieceInTheWay";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Bishop extends Piece {
-  canMoveTo(newPosition: Position, positions: string[]): boolean {
-    const distance = newPosition.distanceFrom(this.position);
-    const props: FuncProps = [
-      this.position.getPosition(),
-      newPosition.getPosition(),
-      positions,
-    ];
+  canMoveTo(newPosition: Position): boolean {
+    const { rank, file } = newPosition.distanceFrom(this.position);
 
-    const canMove = new CanMoveToSquare(distance).bishop();
-    const isInWay = new IsPieceInTheWay(...props).checkDiagonal();
-
-    if (canMove && !isInWay) return true;
+    if (Math.abs(file) === Math.abs(rank)) return true;
 
     return false;
   }

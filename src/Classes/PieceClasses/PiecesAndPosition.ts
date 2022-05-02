@@ -1,95 +1,57 @@
-import { PositionDiff } from "../../Types";
+import { PositionDiff, RankFile } from "../../Types";
 import { utils } from "../../utils/utils";
 
 export class Position {
-  private file: string;
-  private rank: number;
+  private _position: { file: string; rank: number };
 
   distanceFrom(otherPosition: Position): PositionDiff {
     const { letterRef } = new utils().getLetterRefs();
 
-    const fileDiff = letterRef[this.file] - letterRef[otherPosition.file];
-    const rankDiff = this.rank - otherPosition.rank;
+    const fileDiff =
+      letterRef[this._position.file] - letterRef[otherPosition._position.file];
+    const rankDiff = this._position.rank - otherPosition._position.rank;
     return { file: fileDiff, rank: rankDiff };
   }
 
-  getPosition() {
-    return { file: this.file, rank: this.rank };
+  public get position(): RankFile {
+    return { file: this._position.file, rank: this._position.rank };
   }
 
-  setPosition(file: string, rank: number): void {
-    this.file = file;
-    this.rank = rank;
+  public set position({ file, rank }: RankFile) {
+    this._position = { file, rank };
   }
 
   constructor(file: string, rank: number) {
-    this.file = file;
-    this.rank = rank;
+    this._position = { file, rank };
   }
 }
 
 export abstract class Piece {
   position: Position;
-  private colour: string;
-  private isCaptured: boolean;
-  private hasMoved: boolean;
-  private moveCount: number;
-  private previousSquares: string[];
+  private _colour: string;
+  private _isCaptured: boolean;
 
   moveTo(file: string, rank: number): void {
-    this.position.setPosition(file, rank);
-    this.incrementMoveCount();
-    this.addPreviousSquare(file, rank);
+    this.position.position = { file, rank };
   }
 
-  getPreviousSquares() {
-    return this.previousSquares;
+  public set isCaptured(isCaptured) {
+    this._isCaptured = isCaptured;
   }
 
-  addPreviousSquare(file: string, rank: number) {
-    this.previousSquares.push(`${file}${rank}`);
+  public get isCaptured() {
+    return this._isCaptured;
   }
 
-  setIsCaptured() {
-    this.isCaptured = true;
+  public get colour() {
+    return this._colour;
   }
 
-  setIsFree() {
-    this.isCaptured = false;
-  }
-
-  getIsCaptured() {
-    return this.isCaptured;
-  }
-
-  getColour() {
-    return this.colour;
-  }
-
-  getHasMoved() {
-    return this.hasMoved;
-  }
-
-  setHasMoved() {
-    this.hasMoved = !this.hasMoved;
-  }
-
-  getMoveCount() {
-    return this.moveCount;
-  }
-
-  incrementMoveCount() {
-    this.moveCount++;
-  }
-
-  abstract canMoveTo(newPosition: Position, positions: string[]): boolean;
+  abstract canMoveTo(newPosition: Position): boolean;
 
   constructor(pieceColour: string, file: string, rank: number) {
     this.position = new Position(file, rank);
-    this.colour = pieceColour;
-    this.isCaptured = false;
-    this.hasMoved = false;
-    this.moveCount = 0;
-    this.previousSquares = [`${file}${rank}`];
+    this._colour = pieceColour;
+    this._isCaptured = false;
   }
 }

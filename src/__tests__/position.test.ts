@@ -6,7 +6,7 @@ describe("Position Class", () => {
     const rank = 5;
     const pos = new Position(file, rank);
 
-    const currentPos = pos.getPosition();
+    const currentPos = pos.position;
 
     expect(currentPos.rank).toBe(rank);
     expect(currentPos.file).toBe(file);
@@ -22,13 +22,11 @@ describe("Position Class", () => {
     expect(diffTwo).toEqual({ file: -2, rank: -2 });
   });
   test("setPosition", () => {
-    const file = "g";
-    const rank = 5;
-    const pos = new Position(file, rank);
+    const pos = new Position("g", 5);
 
-    pos.setPosition("h", 7);
+    pos.position = { file: "h", rank: 7 };
 
-    const currentPos = pos.getPosition();
+    const currentPos = pos.position;
     expect(currentPos.file).toBe("h");
     expect(currentPos.rank).toBe(7);
   });

@@ -28,7 +28,7 @@ describe("Standard Game", () => {
       const game = new Game();
       const pieces = game.getPieces();
 
-      pieces.Pg2.position.setPosition("g", 3);
+      pieces.Pg2.position.position = { file: "g", rank: 3 };
 
       const actual = game.getPiecesThatCanMove(pos, move, colour);
       const expected = ["Bf1"];
@@ -42,9 +42,9 @@ describe("Standard Game", () => {
       const game = new Game();
       const move = "e4";
       const pieces = game.getPieces();
-      expect(pieces.Pe2.getHasMoved()).toBe(false);
+      expect(pieces.Pe2.hasMoved).toBe(false);
       game.makeMove(move, 0);
-      expect(pieces.Pe4.getHasMoved()).toBe(true);
+      expect(pieces.Pe4.hasMoved).toBe(true);
       expect("Pe4" in pieces).toBe(true);
       expect("Pe2" in pieces).toBe(false);
     });
@@ -52,10 +52,10 @@ describe("Standard Game", () => {
       const game = new Game();
       const move = "e4";
       const pieces = game.getPieces();
-      expect(pieces.Pe2.getHasMoved()).toBe(false);
+      expect(pieces.Pe2.hasMoved).toBe(false);
       game.makeMove(move, 0);
 
-      expect(pieces.Pe4.getHasMoved()).toBe(true);
+      expect(pieces.Pe4.hasMoved).toBe(true);
       expect("Pe4" in pieces).toBe(true);
       expect("Pe2" in pieces).toBe(false);
     });
@@ -68,7 +68,7 @@ describe("Standard Game", () => {
       expect(moveTime.msg).toBe("Nb1 moved to c3!");
       expect("Nb1" in pieces).toBe(false);
       expect("Nc3" in pieces).toBe(true);
-      expect(pieces.Nc3.getHasMoved()).toBe(true);
+      expect(pieces.Nc3.hasMoved).toBe(true);
     });
     test("Fail - piece in way - Ra1 - c1", () => {
       const game = new Game();
@@ -79,7 +79,7 @@ describe("Standard Game", () => {
       expect(moveTime.msg).toBe("Fail!");
       expect("Rc1" in pieces).toBe(false);
       expect("Ra1" in pieces).toBe(true);
-      expect(pieces.Ra1.getHasMoved()).toBe(false);
+      expect(pieces.Ra1.hasMoved).toBe(false);
     });
     test("Fail - piece can't move - Ra1 - Rd6", () => {
       const game = new Game();
@@ -90,7 +90,7 @@ describe("Standard Game", () => {
       expect(moveTime.msg).toBe("Fail!");
       expect("Rd6" in pieces).toBe(false);
       expect("Ra1" in pieces).toBe(true);
-      expect(pieces.Ra1.getHasMoved()).toBe(false);
+      expect(pieces.Ra1.hasMoved).toBe(false);
     });
   });
 
@@ -109,8 +109,8 @@ describe("Standard Game", () => {
 
         expect("Kg1" in pieces).toBe(true);
         expect("Rf1" in pieces).toBe(true);
-        expect(pieces.Kg1.getHasMoved()).toBe(true);
-        expect(pieces.Rf1.getHasMoved()).toBe(true);
+        expect(pieces.Kg1.hasMoved).toBe(true);
+        expect(pieces.Rf1.hasMoved).toBe(true);
         expect(castle.msg).toBe("White castled Kingside!");
       });
       test("!White castles kingside", () => {
@@ -125,8 +125,8 @@ describe("Standard Game", () => {
         const castle = game.makeMove(castleKing, 0);
         expect("Kg1" in pieces).toBe(false);
         expect("Rf1" in pieces).toBe(false);
-        expect(pieces.Ke1.getHasMoved()).toBe(false);
-        expect(pieces.Rh1.getHasMoved()).toBe(false);
+        expect(pieces.Ke1.hasMoved).toBe(false);
+        expect(pieces.Rh1.hasMoved).toBe(false);
         expect(castle.msg).toBe("White Failed to castle Kingside!");
       });
       test("Black castles kingside", () => {
@@ -142,8 +142,8 @@ describe("Standard Game", () => {
 
         expect("Kg8" in pieces).toBe(true);
         expect("Rf8" in pieces).toBe(true);
-        expect(pieces.Kg8.getHasMoved()).toBe(true);
-        expect(pieces.Rf8.getHasMoved()).toBe(true);
+        expect(pieces.Kg8.hasMoved).toBe(true);
+        expect(pieces.Rf8.hasMoved).toBe(true);
         expect(castle.msg).toBe("Black castled Kingside!");
       });
     });
@@ -159,8 +159,8 @@ describe("Standard Game", () => {
 
         expect("Kc1" in pieces).toBe(true);
         expect("Rd1" in pieces).toBe(true);
-        expect(pieces.Kc1.getHasMoved()).toBe(true);
-        expect(pieces.Rd1.getHasMoved()).toBe(true);
+        expect(pieces.Kc1.hasMoved).toBe(true);
+        expect(pieces.Rd1.hasMoved).toBe(true);
         expect(castle.msg).toBe("White castled Queenside!");
       });
       test("!White castles queenside", () => {
@@ -175,8 +175,8 @@ describe("Standard Game", () => {
         const castle = game.makeMove(castleQueen, 0);
         expect("Kc1" in pieces).toBe(false);
         expect("Rd1" in pieces).toBe(false);
-        expect(pieces.Ke1.getHasMoved()).toBe(false);
-        expect(pieces.Rh1.getHasMoved()).toBe(false);
+        expect(pieces.Ke1.hasMoved).toBe(false);
+        expect(pieces.Rh1.hasMoved).toBe(false);
         expect(castle.msg).toBe("White Failed to castle Queenside!");
       });
       test("Black castles queenside", () => {
@@ -192,8 +192,8 @@ describe("Standard Game", () => {
 
         expect("Kc8" in pieces).toBe(true);
         expect("Rd8" in pieces).toBe(true);
-        expect(pieces.Kc8.getHasMoved()).toBe(true);
-        expect(pieces.Rd8.getHasMoved()).toBe(true);
+        expect(pieces.Kc8.hasMoved).toBe(true);
+        expect(pieces.Rd8.hasMoved).toBe(true);
         expect(castle.msg).toBe("Black castled Queenside!");
       });
     });
@@ -215,7 +215,7 @@ describe("Standard Game", () => {
       const game = new Game(piecesArray);
       const pieces = game.getPieces();
 
-      pieces.Kd3.setIsCaptured();
+      pieces.Kd3.isCaptured = true;
       expect(game.getAllPositions()).toEqual(["e3"]);
     });
   });
