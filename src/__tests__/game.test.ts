@@ -214,11 +214,12 @@ describe("Standard Game", () => {
   });
 
   describe.only("makeMove", () => {
-    test("Move one piece - e2 - e4", () => {
+    test.only("Move one piece - e2 - e4", () => {
       const game = new Game();
       const move = "e4";
       const pieces = game.pieces;
-      game.makeMove(move, 0);
+      const moveMsg = game.makeMove(move, 0);
+      console.log({ moveMsg });
       expect("Pe4" in pieces).toBe(true);
       expect("Pe2" in pieces).toBe(false);
     });
@@ -237,29 +238,18 @@ describe("Standard Game", () => {
       const pieces = game.pieces;
       expect("Nb1" in pieces).toBe(true);
       const moveTime = game.makeMove(move, 0);
-      expect(moveTime.msg).toBe("Nb1 moved to c3!");
+      expect(moveTime.msg).toBe("Knight moved to c3!");
       expect("Nb1" in pieces).toBe(false);
       expect("Nc3" in pieces).toBe(true);
     });
-    test("Fail - piece in way - Ra1 - c1", () => {
+    test("Cannot move rook", () => {
       const game = new Game();
-      const move = "Rc1";
+      const move = "Ra3";
       const pieces = game.pieces;
-      expect("Ra1" in pieces).toBe(true);
+      console.log(game.pieces.Ra1);
       const moveTime = game.makeMove(move, 0);
-      expect(moveTime.msg).toBe("Fail!");
-      expect("Rc1" in pieces).toBe(false);
-      expect("Ra1" in pieces).toBe(true);
-    });
-    test("Fail - piece can't move - Ra1 - Rd6", () => {
-      const game = new Game();
-      const move = "Rd6";
-      const pieces = game.pieces;
-      expect("Ra1" in pieces).toBe(true);
-      const moveTime = game.makeMove(move, 0);
-      expect(moveTime.msg).toBe("Fail!");
-      expect("Rd6" in pieces).toBe(false);
-      expect("Ra1" in pieces).toBe(true);
+      console.log(game.pieces.Ra3);
+      console.log(moveTime);
     });
   });
 

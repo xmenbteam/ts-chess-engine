@@ -21,7 +21,7 @@ import { IsPieceInTheWay } from "./Classes/MovementClasses/IsPieceInTheWay";
 
 export class Game {
   private _isWhiteMove: boolean;
-  private _pieces: { [key: string]: Piece };
+  private _pieces: PieceObject;
 
   private static makePieces(): PieceObject {
     return {
@@ -138,7 +138,7 @@ export class Game {
     return king[0];
   }
 
-  getPiece(positionMovingTo: Position, move: string, colour: number): any[] {
+  getPiece(positionMovingTo: Position, move: string, colour: number): Piece {
     const { dubiousFile, dubiousRank } = new utils().getRegex();
 
     const pieceObj: { [key: string]: Piece } = this.pieces;
@@ -158,22 +158,26 @@ export class Game {
       move = `${move[0]}${move[2]}${move[3]}`;
     }
 
-    return pieceArray.reduce((object: any, piece: [string, Piece]) => {
-      let [piecePos, p] = piece;
-      const k = piecePos[0] === move[0];
-      const m = p.canMoveTo(positionMovingTo);
-      const c = p.colour === Colour[colour];
+    const finalPiece = pieceArray.reduce(
+      (object: any, piece: [string, Piece]) => {
+        let [piecePos, p] = piece;
+        const k = piecePos[0] === move[0];
+        const m = p.canMoveTo(positionMovingTo);
+        const c = p.colour === Colour[colour];
 
-      if (dubiousFileChar) match = piecePos[1] === dubiousFileChar;
-      if (dubiousRankChar) match = piecePos[2] === dubiousRankChar;
+        if (dubiousFileChar) match = piecePos[1] === dubiousFileChar;
+        if (dubiousRankChar) match = piecePos[2] === dubiousRankChar;
 
-      if (dubiousFileChar || dubiousRankChar) {
-        if (m && c && k && match) object[piecePos] = p;
-      } else {
-        if (m && c && k) object[piecePos] = p;
-      }
-      return object;
-    }, {});
+        if (dubiousFileChar || dubiousRankChar) {
+          if (m && c && k && match) object = p;
+        } else {
+          if (m && c && k) object = p;
+        }
+        return object;
+      },
+      {}
+    );
+    return finalPiece;
   }
 
   capturePiece(
@@ -201,6 +205,7 @@ export class Game {
       new MovementUtils().completeMove(
         pieceObj,
         capturePiece,
+        targetPiece.position,
         `${flag}${capFile}${capRank}`
       );
       targetPiece.isCaptured = true;
@@ -235,9 +240,12 @@ export class Game {
       return new SpecialMoves(this.pieces).castle(side, colour, this.pieces);
     }
     // Can piece move here?
-    let destiPos: Position, destiRankFile: string;
+    let destiPos: Position, destiRankFile: string, isPieceInWay: boolean;
 
-    if (dubiousFile || dubiousRank) {
+    const isDubiousFile = dubiousFile.test(move);
+    const isDubiousRank = dubiousRank.test(move);
+
+    if (isDubiousFile || isDubiousRank) {
       destiPos = new Position(move[2], Number(move[3]));
       destiRankFile = `${move[2]}${move[3]}`;
     } else {
@@ -245,19 +253,31 @@ export class Game {
       destiRankFile = `${move[1]}${move[2]}`;
     }
 
-    const pieceThatCanMove = this.getPiece(destiPos, move, colour)[0];
-    const piecePos = pieceThatCanMove.position.position;
-    const canPieceMoveThere = new IsPieceInTheWay(
-      piecePos,
-      destiPos,
-      this.pieces
-    ).checkBoth();
+    const pieceThatCanMove: Piece = this.getPiece(destiPos, move, colour);
 
-    if (canPieceMoveThere)
+    if (
+      pieceThatCanMove.constructor.name === "Knight" &&
+      pieceThatCanMove.canMoveTo(destiPos)
+    )
+      isPieceInWay = true;
+    else
+      isPieceInWay = new IsPieceInTheWay(
+        pieceThatCanMove.position,
+        destiPos,
+        this.pieces
+      ).checkBoth();
+
+    console.log(
+      { move, colour, destiPos, isPieceInWay },
+      pieceThatCanMove.position,
+      pieceThatCanMove.constructor.name
+    );
+    if (!isPieceInWay)
       try {
         const piece = new MovementUtils().completeMove(
           this.pieces,
           pieceThatCanMove,
+          destiPos,
           move
         );
         return { msg: `${piece} moved to ${destiRankFile}!` };

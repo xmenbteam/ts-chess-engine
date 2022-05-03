@@ -128,7 +128,7 @@ class Game {
             dubiousRankChar = move[1];
             move = `${move[0]}${move[2]}${move[3]}`;
         }
-        return pieceArray.reduce((object, piece) => {
+        const finalPiece = pieceArray.reduce((object, piece) => {
             let [piecePos, p] = piece;
             const k = piecePos[0] === move[0];
             const m = p.canMoveTo(positionMovingTo);
@@ -139,14 +139,15 @@ class Game {
                 match = piecePos[2] === dubiousRankChar;
             if (dubiousFileChar || dubiousRankChar) {
                 if (m && c && k && match)
-                    object[piecePos] = p;
+                    object = p;
             }
             else {
                 if (m && c && k)
-                    object[piecePos] = p;
+                    object = p;
             }
             return object;
         }, {});
+        return finalPiece;
     }
     capturePiece(capturePiece, targetPiece) {
         const { flagRefObj } = new utils_1.utils().getLetterRefs();
@@ -161,7 +162,7 @@ class Game {
         else
             canCapture = new CaptureClasses_1.Capture().canCapture(capturePiece, targetPiece);
         if (canCapture) {
-            new MovementUtils_1.MovementUtils().completeMove(pieceObj, capturePiece, `${flag}${capFile}${capRank}`);
+            new MovementUtils_1.MovementUtils().completeMove(pieceObj, capturePiece, targetPiece.position, `${flag}${capFile}${capRank}`);
             targetPiece.isCaptured = true;
             return {
                 msg: `${targetPiece.colour} ${targetPiece.constructor.name} on ${file}${rank} Captured!`,
@@ -190,8 +191,10 @@ class Game {
             return new SpecialMoves_1.SpecialMoves(this.pieces).castle(side, colour, this.pieces);
         }
         // Can piece move here?
-        let destiPos, destiRankFile;
-        if (dubiousFile || dubiousRank) {
+        let destiPos, destiRankFile, isPieceInWay;
+        const isDubiousFile = dubiousFile.test(move);
+        const isDubiousRank = dubiousRank.test(move);
+        if (isDubiousFile || isDubiousRank) {
             destiPos = new PiecesAndPosition_1.Position(move[2], Number(move[3]));
             destiRankFile = `${move[2]}${move[3]}`;
         }
@@ -199,12 +202,16 @@ class Game {
             destiPos = new PiecesAndPosition_1.Position(move[1], Number(move[2]));
             destiRankFile = `${move[1]}${move[2]}`;
         }
-        const pieceThatCanMove = this.getPiece(destiPos, move, colour)[0];
-        const piecePos = pieceThatCanMove.position.position;
-        const canPieceMoveThere = new IsPieceInTheWay_1.IsPieceInTheWay(piecePos, destiPos, this.pieces).checkBoth();
-        if (canPieceMoveThere)
+        const pieceThatCanMove = this.getPiece(destiPos, move, colour);
+        if (pieceThatCanMove.constructor.name === "Knight" &&
+            pieceThatCanMove.canMoveTo(destiPos))
+            isPieceInWay = true;
+        else
+            isPieceInWay = new IsPieceInTheWay_1.IsPieceInTheWay(pieceThatCanMove.position, destiPos, this.pieces).checkBoth();
+        console.log({ move, colour, destiPos, isPieceInWay }, pieceThatCanMove.position, pieceThatCanMove.constructor.name);
+        if (!isPieceInWay)
             try {
-                const piece = new MovementUtils_1.MovementUtils().completeMove(this.pieces, pieceThatCanMove, move);
+                const piece = new MovementUtils_1.MovementUtils().completeMove(this.pieces, pieceThatCanMove, destiPos, move);
                 return { msg: `${piece} moved to ${destiRankFile}!` };
             }
             catch (err) {

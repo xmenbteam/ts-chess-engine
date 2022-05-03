@@ -3,13 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MovementUtils = void 0;
 const utils_1 = require("../../utils/utils");
 class MovementUtils {
-    completeMove(pieceObj, piece, move) {
+    completeMove(pieceObj, piece, destiPos, move) {
         const flag = move[0];
         const { file: f, rank: r } = piece.position.position;
         piece.position.position = { file: f, rank: Number(r) };
-        pieceObj[`${flag}${f}${r}`] = piece;
+        const { file: newF, rank: newR } = destiPos.position;
+        console.log({ f, r, newF, newR });
+        const newKey = `${flag}${newF}${newR}`;
+        pieceObj[newKey] = piece;
+        console.log(newKey);
         delete pieceObj[`${flag}${f}${r}`];
-        return piece;
+        return piece.constructor.name;
     }
     completeCastle(piece, colour, side, pieces) {
         const castleRefObj = new utils_1.utils().getCastleRef();

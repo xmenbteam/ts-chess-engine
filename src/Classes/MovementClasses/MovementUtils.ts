@@ -1,20 +1,34 @@
 import { PieceObject } from "../../Types";
 import { utils } from "../../utils/utils";
 import { King } from "../PieceClasses/King";
-import { Piece } from "../PieceClasses/PiecesAndPosition";
+import { Piece, Position } from "../PieceClasses/PiecesAndPosition";
 import { Rook } from "../PieceClasses/Rook";
 
 export class MovementUtils {
-  completeMove(pieceObj: PieceObject, piece: Piece, move: string) {
+  completeMove(
+    pieceObj: PieceObject,
+    piece: Piece,
+    destiPos: Position,
+    move: string
+  ) {
     const flag = move[0];
 
     const { file: f, rank: r } = piece.position.position;
 
     piece.position.position = { file: f, rank: Number(r) };
-    pieceObj[`${flag}${f}${r}`] = piece;
+
+    const { file: newF, rank: newR } = destiPos.position;
+
+    console.log({ f, r, newF, newR });
+
+    const newKey = `${flag}${newF}${newR}`;
+    pieceObj[newKey] = piece;
+
+    console.log(newKey);
+
     delete pieceObj[`${flag}${f}${r}`];
 
-    return piece;
+    return piece.constructor.name;
   }
 
   completeCastle(
