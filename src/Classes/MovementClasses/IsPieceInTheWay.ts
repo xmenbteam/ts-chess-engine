@@ -62,33 +62,30 @@ export class IsPieceInTheWay {
   }
 
   checkBoth() {
-    // const { file, rank } = this.piecePos.position;
-    // const { file: destiFile, rank: destiRank } = this.destiPos.position;
+    const { file: destiFileDist, rank: destiRankDist } =
+      this.destiPos.distanceFrom(this.piecePos);
 
-    // if (file === destiFile || rank === destiRank) this.checkRankAndFile();
-    // else this.checkDiagonal();
+    if (!destiFileDist || !destiRankDist) this.checkRankAndFile();
+    else this.checkDiagonal();
     return this.isInWay;
   }
 
   checkKingMove() {
-    // const { file: pieceFile, rank: pieceRank } = this.piecePos.position;
-    // const ignoreYourself = this.positions.filter((p) => p !== this.pieceCoords);
-    // const { letterRef, files } = new utils().getLetterRefs();
+    const { file: destiFileDist, rank: destiRankDist } =
+      this.destiPos.distanceFrom(this.piecePos);
 
-    // const wrongSquares = [
-    //   `${files[letterRef[pieceFile] - 1]}${pieceRank}`,
-    //   `${files[letterRef[pieceFile] - 1]}${pieceRank + 1}`,
-    //   `${files[letterRef[pieceFile]]}${pieceRank + 1}`,
-    //   `${files[letterRef[pieceFile] + 1]}${pieceRank + 1}`,
-    //   `${files[letterRef[pieceFile] + 1]}${pieceRank}`,
-    //   `${files[letterRef[pieceFile] + 1]}${pieceRank - 1}`,
-    //   `${files[letterRef[pieceFile]]}${pieceRank - 1}`,
-    //   `${files[letterRef[pieceFile] - 1]}${pieceRank - 1}`,
-    // ];
+    for (let piece in this.allPieces) {
+      const { file: fileDistance, rank: rankDistance } = this.allPieces[
+        piece
+      ].position.distanceFrom(this.piecePos);
 
-    // wrongSquares.forEach((squ) => {
-    //   if (ignoreYourself.includes(squ)) this.isInWay = true;
-    // });
+      if (
+        (Math.abs(rankDistance) === 1 && !fileDistance) ||
+        (!rankDistance && Math.abs(fileDistance) === 1) ||
+        (Math.abs(fileDistance) === 1 && Math.abs(rankDistance) === 1)
+      )
+        this.isInWay = true;
+    }
 
     return this.isInWay;
   }
