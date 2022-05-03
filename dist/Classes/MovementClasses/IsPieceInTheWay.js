@@ -3,11 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IsPieceInTheWay = void 0;
 const utils_1 = require("../../utils/utils");
 class IsPieceInTheWay {
-    constructor(piecePos, newPos, positions) {
+    constructor(piecePos, newPos) {
         this.isInWay = false;
         this.piecePos = piecePos;
         this.newPos = newPos;
-        this.positions = positions;
         this.pieceCoords = "";
         this.ignoreYourself = [];
         this.wrongSquares = [];

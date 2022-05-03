@@ -11,6 +11,7 @@ import { utils } from "./utils/utils";
 import { MovementUtils } from "./Classes/MovementClasses/MovementUtils";
 import { Capture } from "./Classes/CaptureClasses";
 import { ErrorPiece } from "./Classes/PieceClasses/Error";
+import { IsPieceInTheWay } from "./Classes/MovementClasses/IsPieceInTheWay";
 
 export class Game {
   private _isWhiteMove: boolean;
@@ -151,11 +152,7 @@ export class Game {
       move = `${move[0]}${move[2]}${move[3]}`;
     }
 
-    // if (this.isKingInCheck(colour)) {
-    //   const { file, rank } = this.findKing(colour).position.position;
-    //   return [`K${file}${rank}`];
-    // } else
-    const result = pieceArray.reduce((object: any, piece: [string, Piece]) => {
+    return pieceArray.reduce((object: any, piece: [string, Piece]) => {
       let [piecePos, p] = piece;
       const k = piecePos[0] === move[0];
       const m = p.canMoveTo(positionMovingTo);
@@ -171,10 +168,6 @@ export class Game {
       }
       return object;
     }, {});
-
-    // console.log(result);
-
-    return result;
   }
 
   capturePiece(
@@ -225,21 +218,9 @@ export class Game {
     return isInCheck;
   }
 
-  getSquaresKingCanMoveTo(colour: number) {
-    const pieceObj: { [key: string]: Piece } = this.pieces;
-  }
-  // isKingInCheckMate(colour: number): boolean {
-  //   const king = this.findKing(colour);
-
-  //   return false;
-  // }
-
   makeMove(move: string, colour: number): { [msg: string]: string } {
-    const { pawnTest } = new utils().getRegex();
+    const { pawnTest, dubiousFile, dubiousRank } = new utils().getRegex();
     const pieceObj: PieceObject = this.pieces;
-
-    // THIS IS WHERE YOU CHECK IF THE PIECE CAN MOVE
-    // GAME says this
 
     if (pawnTest.test(move)) move = `P${move}`;
 
@@ -249,13 +230,13 @@ export class Game {
       return new SpecialMoves(pieceObj).castle(side, colour, pieceObj);
     }
     // Can piece move here?
-    const newPosition = new Position(move[1], Number(move[2]));
-    const pieceThatCanMove = Object.values(pieceObj).reduce(
-      (obj, piece): Piece => {
-        if (piece.canMoveTo(newPosition)) obj = piece;
-        return obj;
-      }
-    );
+    let newPosition: Position;
+
+    if (dubiousFile || dubiousRank)
+      newPosition = new Position(move[2], Number(move[3]));
+    else newPosition = new Position(move[1], Number(move[2]));
+
+    const pieceThatCanMove = this.getPiece(newPosition, move, colour)[0];
 
     try {
       const piece = new MovementUtils().completeMove(

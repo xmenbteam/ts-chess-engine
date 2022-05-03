@@ -127,11 +127,7 @@ class Game {
             dubiousRankChar = move[1];
             move = `${move[0]}${move[2]}${move[3]}`;
         }
-        // if (this.isKingInCheck(colour)) {
-        //   const { file, rank } = this.findKing(colour).position.position;
-        //   return [`K${file}${rank}`];
-        // } else
-        const result = pieceArray.reduce((object, piece) => {
+        return pieceArray.reduce((object, piece) => {
             let [piecePos, p] = piece;
             const k = piecePos[0] === move[0];
             const m = p.canMoveTo(positionMovingTo);
@@ -150,8 +146,6 @@ class Game {
             }
             return object;
         }, {});
-        // console.log(result);
-        return result;
     }
     capturePiece(capturePiece, targetPiece) {
         const { flagRefObj } = new utils_1.utils().getLetterRefs();
@@ -184,18 +178,9 @@ class Game {
         });
         return isInCheck;
     }
-    getSquaresKingCanMoveTo(colour) {
-        const pieceObj = this.pieces;
-    }
-    // isKingInCheckMate(colour: number): boolean {
-    //   const king = this.findKing(colour);
-    //   return false;
-    // }
     makeMove(move, colour) {
-        const { pawnTest } = new utils_1.utils().getRegex();
+        const { pawnTest, dubiousFile, dubiousRank } = new utils_1.utils().getRegex();
         const pieceObj = this.pieces;
-        // THIS IS WHERE YOU CHECK IF THE PIECE CAN MOVE
-        // GAME says this
         if (pawnTest.test(move))
             move = `P${move}`;
         if (move === "0-0" || move === "0-0-0") {
@@ -205,12 +190,12 @@ class Game {
             return new SpecialMoves_1.SpecialMoves(pieceObj).castle(side, colour, pieceObj);
         }
         // Can piece move here?
-        const newPosition = new PiecesAndPosition_1.Position(move[1], Number(move[2]));
-        const pieceThatCanMove = Object.values(pieceObj).reduce((obj, piece) => {
-            if (piece.canMoveTo(newPosition))
-                obj = piece;
-            return obj;
-        });
+        let newPosition;
+        if (dubiousFile || dubiousRank)
+            newPosition = new PiecesAndPosition_1.Position(move[2], Number(move[3]));
+        else
+            newPosition = new PiecesAndPosition_1.Position(move[1], Number(move[2]));
+        const pieceThatCanMove = this.getPiece(newPosition, move, colour)[0];
         try {
             const piece = new MovementUtils_1.MovementUtils().completeMove(pieceObj, pieceThatCanMove, move);
             return { msg: `${piece} moved to ${move[1]}${move[2]}!` };

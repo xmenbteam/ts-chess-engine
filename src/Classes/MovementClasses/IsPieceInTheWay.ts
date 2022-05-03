@@ -5,7 +5,7 @@ export class IsPieceInTheWay {
   private isInWay: boolean = false;
   private piecePos: RankFile;
   private newPos: RankFile;
-  private positions: string[];
+  // HERE
   private pieceCoords: string;
   private ignoreYourself: string[];
   private wrongSquares: string[];
@@ -132,10 +132,9 @@ export class IsPieceInTheWay {
     return this.isInWay;
   }
 
-  constructor(piecePos: RankFile, newPos: RankFile, positions: string[]) {
+  constructor(piecePos: RankFile, newPos: RankFile) {
     this.piecePos = piecePos;
     this.newPos = newPos;
-    this.positions = positions;
     this.pieceCoords = "";
     this.ignoreYourself = [];
     this.wrongSquares = [];
