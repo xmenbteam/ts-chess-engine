@@ -1,15 +1,16 @@
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class King extends Piece {
-  // private _hasMoved: boolean;
+  private _hasMoved: boolean;
 
-  // public get hasMoved(): boolean {
-  //   return this._hasMoved;
-  // }
+  public get hasMoved(): boolean {
+    return this._hasMoved;
+  }
 
-  // public set hasMoved(hasMoved) {
-  //   this._hasMoved = hasMoved;
-  // }
+  public set hasMoved(hasMoved) {
+    this._hasMoved = hasMoved;
+  }
+
   canMoveTo(newPosition: Position): boolean {
     const { rank, file } = newPosition.distanceFrom(this.position);
     if (
@@ -22,8 +23,14 @@ export class King extends Piece {
     return false;
   }
 
+  moveTo(file: string, rank: number) {
+    this.position.position = { file, rank };
+    this.hasMoved = true;
+    return { hasMoved: this.hasMoved };
+  }
+
   constructor(pieceColour: string, file: string, rank: number) {
     super(pieceColour, file, rank);
-    // this._hasMoved = false;
+    this._hasMoved = false;
   }
 }

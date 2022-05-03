@@ -82,7 +82,7 @@ describe("Capture", () => {
       });
     });
     describe("canEnPassant", () => {
-      test.only("enPassant", () => {
+      test("enPassant", () => {
         const pieces = [
           { piece: "Pe7", colour: 1 },
           { piece: "Pd2", colour: 0 },
@@ -101,7 +101,7 @@ describe("Capture", () => {
 
         expect(enPass).toBe(true);
       });
-      test("!enPassant - white moves two spaces", () => {
+      test("enPassant - white moves two spaces", () => {
         const blackPawn = new Pawn(Colour[1], "e", 7);
         const whitePawn = new Pawn(Colour[0], "d", 2);
 
@@ -111,7 +111,7 @@ describe("Capture", () => {
 
         const enPass = new Capture(whitePawn, blackPawn).canEnPassant();
 
-        expect(enPass).toBe(false);
+        expect(enPass).toBe(true);
       });
       test("!enPassant - black moves one space twice", () => {
         const blackPawn = new Pawn(Colour[1], "e", 7);

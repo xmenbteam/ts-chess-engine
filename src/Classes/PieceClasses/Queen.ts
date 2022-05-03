@@ -8,6 +8,10 @@ export class Queen extends Piece {
     return false;
   }
 
+  moveTo(file: string, rank: number) {
+    this.position.position = { file, rank };
+  }
+
   constructor(pieceColour: string, file: string, rank: number) {
     super(pieceColour, file, rank);
   }

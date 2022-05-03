@@ -192,7 +192,7 @@ export class Game {
       new MovementUtils().completeMove(
         pieceObj,
         capturePiece,
-        `${flag}${capFile}${Number(capRank)}`
+        `${flag}${capFile}${capRank}`
       );
       targetPiece.isCaptured = true;
 
