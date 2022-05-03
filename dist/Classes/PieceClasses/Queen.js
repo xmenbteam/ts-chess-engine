@@ -9,6 +9,9 @@ class Queen extends PiecesAndPosition_1.Piece {
             return true;
         return false;
     }
+    moveTo(file, rank) {
+        this.position.position = { file, rank };
+    }
     constructor(pieceColour, file, rank) {
         super(pieceColour, file, rank);
     }

@@ -8,6 +8,7 @@ export class Bishop extends Piece {
 
     return false;
   }
+
   moveTo(file: string, rank: number) {
     this.position.position = { file, rank };
   }

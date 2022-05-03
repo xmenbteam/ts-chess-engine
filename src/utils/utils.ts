@@ -31,6 +31,8 @@ export class utils {
   private nameTest = /[RNBQKP]/;
   private fileReg = /[a-h]/;
   private rankReg = /[1-8]/;
+  private dubiousPieceFileReg = /^[RNQBK][a-h]{2}[1-8]$/;
+  private dubiousPieceRankReg = /^[RNQBK][1-8][a-h][1-8]$/;
 
   private castleRefObj = {
     oldKingCoord: ["Ke1", "Ke8"],
@@ -80,6 +82,8 @@ export class utils {
       fileReg: this.fileReg,
       rankReg: this.rankReg,
       nameTest: this.nameTest,
+      dubiousFile: this.dubiousPieceFileReg,
+      dubiousRank: this.dubiousPieceRankReg,
     };
   }
 

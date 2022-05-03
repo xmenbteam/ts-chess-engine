@@ -3,46 +3,40 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Capture = void 0;
 const utils_1 = require("../utils/utils");
 class Capture {
-    constructor(capturingPiece, targetPiece) {
-        this.capturingPiece = capturingPiece;
-        this.targetPiece = targetPiece;
-    }
-    isPieceSameColour() {
-        const p1Colour = this.capturingPiece.colour;
-        const p2Colour = this.targetPiece.colour;
+    isPieceSameColour(capturingPiece, targetPiece) {
+        const p1Colour = capturingPiece.colour;
+        const p2Colour = targetPiece.colour;
         return p1Colour === p2Colour ? true : false;
     }
-    canCapture() {
-        const { file: targetFile, rank: targetRank } = this.targetPiece.position.position;
-        const canMove = this.capturingPiece.canMoveTo(this.targetPiece.position);
-        const isSameColour = this.isPieceSameColour();
+    canCapture(capturingPiece, targetPiece) {
+        const canMove = capturingPiece.canMoveTo(targetPiece.position);
+        const isSameColour = this.isPieceSameColour(capturingPiece, targetPiece);
         if (canMove && !isSameColour)
             return true;
         return false;
     }
-    canPawnCapture() {
-        const { file, rank } = this.targetPiece.position.distanceFrom(this.capturingPiece.position);
-        const isPawn = this.capturingPiece.constructor.name === "Pawn";
+    canPawnCapture(capturingPiece, targetPiece) {
+        const { file, rank } = targetPiece.position.distanceFrom(capturingPiece.position);
+        const isPawn = capturingPiece.constructor.name === "Pawn";
         const canCapture = file === 1 && Math.abs(rank) === 1;
-        if (isPawn && canCapture && !this.isPieceSameColour())
+        if (isPawn &&
+            canCapture &&
+            !this.isPieceSameColour(capturingPiece, targetPiece))
             return true;
         return false;
     }
-    canEnPassant() {
+    canEnPassant(capturingPiece, targetPiece) {
+        var _a, _b;
         const { letterRef } = new utils_1.utils().getLetterRefs();
-        const arePawns = this.capturingPiece.constructor.name === "Pawn" &&
-            this.targetPiece.constructor.name === "Pawn";
-        const { file: capFile, rank: capRank } = this.capturingPiece.position.position;
-        const { file: targFile, rank: targRank } = this.targetPiece.position.position;
-        const capCount = this.capturingPiece.moveCount;
-        const targCount = this.targetPiece.moveCount;
-        console.log({ capCount, targCount });
-        const maxFile = Math.max(letterRef[capFile], letterRef[targFile]);
-        const minFile = Math.min(letterRef[capFile], letterRef[targFile]);
+        const arePawns = capturingPiece.constructor.name === "Pawn" &&
+            targetPiece.constructor.name === "Pawn";
+        const { file: capFile, rank: capRank } = capturingPiece.position.position;
+        const { file: targFile, rank: targRank } = targetPiece.position.position;
+        const capCount = (_a = capturingPiece.moveTo(capFile, capRank)) === null || _a === void 0 ? void 0 : _a.moveCount;
+        const targCount = (_b = targetPiece.moveTo(targFile, targRank)) === null || _b === void 0 ? void 0 : _b.moveCount;
         const isParallel = capRank === targRank;
-        const rightMoves = (capCount === 2 || capCount === 3) && targCount === 1;
-        const areNextToEachOther = maxFile - minFile === 1;
-        console.log({ arePawns, isParallel, rightMoves, areNextToEachOther });
+        const rightMoves = capCount && capCount <= 3 && targCount === 1;
+        const areNextToEachOther = Math.abs(letterRef[capFile] - letterRef[targFile]) === 1;
         if (arePawns && isParallel && rightMoves && areNextToEachOther)
             return true;
         return false;

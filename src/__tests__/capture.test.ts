@@ -11,9 +11,9 @@ describe("Capture", () => {
       const r1 = new Rook(Colour[0], "d", 3);
       const r2 = new Rook(Colour[0], "d", 6);
 
-      const newCapture = new Capture(r1, r2);
+      const newCapture = new Capture();
 
-      const isSame = newCapture.isPieceSameColour();
+      const isSame = newCapture.isPieceSameColour(r1, r2);
 
       expect(isSame).toBe(true);
     });
@@ -21,9 +21,9 @@ describe("Capture", () => {
       const r1 = new Rook(Colour[0], "d", 3);
       const r2 = new Rook(Colour[1], "d", 6);
 
-      const newCapture = new Capture(r1, r2);
+      const newCapture = new Capture();
 
-      const isSame = newCapture.isPieceSameColour();
+      const isSame = newCapture.isPieceSameColour(r1, r2);
 
       expect(isSame).toBe(false);
     });
@@ -33,7 +33,7 @@ describe("Capture", () => {
       const r1 = new Rook(Colour[0], "d", 3);
       const r2 = new Rook(Colour[1], "d", 6);
 
-      const canCapture = new Capture(r1, r2).canCapture();
+      const canCapture = new Capture().canCapture(r1, r2);
 
       expect(canCapture).toBe(true);
     });
@@ -41,7 +41,7 @@ describe("Capture", () => {
       const capturingPiece = new Bishop(Colour[0], "b", 2);
       const targetPiece = new Rook(Colour[1], "e", 5);
 
-      const canCapture = new Capture(capturingPiece, targetPiece).canCapture();
+      const canCapture = new Capture().canCapture(capturingPiece, targetPiece);
 
       expect(canCapture).toBe(true);
     });
@@ -49,7 +49,7 @@ describe("Capture", () => {
       const capturingPiece = new Bishop(Colour[0], "h", 2);
       const targetPiece = new Rook(Colour[1], "e", 5);
 
-      const canCapture = new Capture(capturingPiece, targetPiece).canCapture();
+      const canCapture = new Capture().canCapture(capturingPiece, targetPiece);
 
       expect(canCapture).toBe(true);
     });
@@ -57,7 +57,7 @@ describe("Capture", () => {
       const r1 = new Rook(Colour[0], "d", 3);
       const r2 = new Rook(Colour[0], "d", 6);
 
-      const canCapture = new Capture(r1, r2).canCapture();
+      const canCapture = new Capture().canCapture(r1, r2);
 
       expect(canCapture).toBe(false);
     });
@@ -68,7 +68,7 @@ describe("Capture", () => {
         const pawn = new Pawn(Colour[0], "c", 2);
         const rook = new Rook(Colour[1], "d", 3);
 
-        const pawnCapture = new Capture(pawn, rook).canPawnCapture();
+        const pawnCapture = new Capture().canPawnCapture(pawn, rook);
 
         expect(pawnCapture).toBe(true);
       });
@@ -76,28 +76,22 @@ describe("Capture", () => {
         const pawn = new Pawn(Colour[0], "c", 2);
         const rook = new Rook(Colour[0], "d", 3);
 
-        const pawnCapture = new Capture(pawn, rook).canPawnCapture();
+        const pawnCapture = new Capture().canPawnCapture(pawn, rook);
 
         expect(pawnCapture).toBe(false);
       });
     });
     describe("canEnPassant", () => {
       test("enPassant", () => {
-        const pieces = [
-          { piece: "Pe7", colour: 1 },
-          { piece: "Pd2", colour: 0 },
-        ];
-        const testGame = new Game(pieces);
-
-        const blackPawn = testGame.getPieces().Pe7;
-        const whitePawn = testGame.getPieces().Pd2;
+        const blackPawn = new Pawn(Colour[1], "e", 7);
+        const whitePawn = new Pawn(Colour[0], "d", 2);
 
         blackPawn.moveTo("e", 5);
         whitePawn.moveTo("d", 3);
         whitePawn.moveTo("d", 4);
         whitePawn.moveTo("d", 5);
 
-        const enPass = new Capture(whitePawn, blackPawn).canEnPassant();
+        const enPass = new Capture().canEnPassant(whitePawn, blackPawn);
 
         expect(enPass).toBe(true);
       });
@@ -109,7 +103,7 @@ describe("Capture", () => {
         whitePawn.moveTo("d", 4);
         whitePawn.moveTo("d", 5);
 
-        const enPass = new Capture(whitePawn, blackPawn).canEnPassant();
+        const enPass = new Capture().canEnPassant(whitePawn, blackPawn);
 
         expect(enPass).toBe(true);
       });
@@ -123,7 +117,7 @@ describe("Capture", () => {
         whitePawn.moveTo("d", 4);
         whitePawn.moveTo("d", 5);
 
-        const enPass = new Capture(whitePawn, blackPawn).canEnPassant();
+        const enPass = new Capture().canEnPassant(whitePawn, blackPawn);
 
         expect(enPass).toBe(false);
       });
@@ -137,7 +131,7 @@ describe("Capture", () => {
       ];
       const testGame = new Game(pieces);
 
-      const gamePieces = testGame.getPieces();
+      const gamePieces = testGame.pieces;
       const whiteRook = gamePieces.Rd6;
       const blackRook = gamePieces.Rd2;
 
@@ -153,7 +147,7 @@ describe("Capture", () => {
       ];
       const testGame = new Game(pieces);
 
-      const gamePieces = testGame.getPieces();
+      const gamePieces = testGame.pieces;
       const whiteRook = gamePieces.Rd6;
       const blackBishop = gamePieces.Ba3;
 
@@ -169,7 +163,7 @@ describe("Capture", () => {
       ];
       const testGame = new Game(pieces);
 
-      const gamePieces = testGame.getPieces();
+      const gamePieces = testGame.pieces;
       const whiteRook = gamePieces.Rd6;
       const blackKnight = gamePieces.Nc4;
 
@@ -185,7 +179,7 @@ describe("Capture", () => {
       ];
       const testGame = new Game(pieces);
 
-      const gamePieces = testGame.getPieces();
+      const gamePieces = testGame.pieces;
       const whitePawn = gamePieces.Pe5;
       const blackRook = gamePieces.Rf6;
 

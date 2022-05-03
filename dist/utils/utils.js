@@ -29,6 +29,8 @@ class utils {
         this.nameTest = /[RNBQKP]/;
         this.fileReg = /[a-h]/;
         this.rankReg = /[1-8]/;
+        this.dubiousPieceFileReg = /^[RNQBK][a-h]{2}[1-8]$/;
+        this.dubiousPieceRankReg = /^[RNQBK][1-8][a-h][1-8]$/;
         this.castleRefObj = {
             oldKingCoord: ["Ke1", "Ke8"],
             oldRookCoord: [
@@ -72,6 +74,8 @@ class utils {
             fileReg: this.fileReg,
             rankReg: this.rankReg,
             nameTest: this.nameTest,
+            dubiousFile: this.dubiousPieceFileReg,
+            dubiousRank: this.dubiousPieceRankReg,
         };
     }
     getCastleRef() {

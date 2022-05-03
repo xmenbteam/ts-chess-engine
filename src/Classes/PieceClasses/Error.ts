@@ -1,6 +1,6 @@
 import { Piece, Position } from "./PiecesAndPosition";
 
-export class Error extends Piece {
+export class ErrorPiece extends Piece {
   canMoveTo(newPosition: Position): boolean {
     return false;
   }

@@ -31,8 +31,6 @@ export abstract class Piece {
   private _colour: string;
   private _isCaptured: boolean;
 
-  // OVERWRITE THIS FUNCTION IN CHILD CLASSES!!!!
-
   public set isCaptured(isCaptured) {
     this._isCaptured = isCaptured;
   }

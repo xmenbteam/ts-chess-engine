@@ -1,3 +1,5 @@
+import { Piece } from "./Classes/PieceClasses/PiecesAndPosition";
+
 export type PositionDiff = {
   file: number;
   rank: number;
@@ -23,3 +25,4 @@ export type PieceObject = {
 export type CustomPieceObject = { piece: string; colour: number };
 export type CustomPieceArray = CustomPieceObject[];
 export type MoveToObj = { hasMoved: boolean; moveCount?: number };
+export type PieceArray = [string, Piece][];

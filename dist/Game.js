@@ -13,16 +13,17 @@ const SpecialMoves_1 = require("./Classes/MovementClasses/SpecialMoves");
 const utils_1 = require("./utils/utils");
 const MovementUtils_1 = require("./Classes/MovementClasses/MovementUtils");
 const CaptureClasses_1 = require("./Classes/CaptureClasses");
+const Error_1 = require("./Classes/PieceClasses/Error");
 class Game {
     constructor(pieces) {
-        this.turnCount = 0;
+        this._isWhiteMove = true;
         if (!pieces)
-            this.pieces = Game.makePieces();
+            this._pieces = Game.makePieces();
         else
-            this.pieces = Game.makeCustomPieces(pieces);
+            this._pieces = Game.makeCustomPieces(pieces);
     }
     static makePieces() {
-        const pieces = {
+        return {
             Pa2: new Pawn_1.Pawn(Types_1.Colour[0], "a", 2),
             Pb2: new Pawn_1.Pawn(Types_1.Colour[0], "b", 2),
             Pc2: new Pawn_1.Pawn(Types_1.Colour[0], "c", 2),
@@ -56,7 +57,6 @@ class Game {
             Ng8: new Knight_1.Knight(Types_1.Colour[1], "g", 8),
             Rh8: new Rook_1.Rook(Types_1.Colour[1], "h", 8),
         };
-        return pieces;
     }
     static makeCustomPieces(pieces) {
         const { pawnTest, fileReg, rankReg, nameTest } = new utils_1.utils().getRegex();
@@ -70,7 +70,8 @@ class Game {
             const posCheck = Object.keys(customPieces).map((coord) => `${coord[1]}${coord[2]}`);
             if (!customPieces.hasOwnProperty(piece) && !posCheck.includes(`${f}${r}`))
                 customPieces[piece] = Game.makeCustomPiece(n, colour, f, Number(r));
-            // else customPieces[`error${i}`] = new Error(Colour[colour], "z", 99 + i);
+            else
+                customPieces[`error${i}`] = new Error_1.ErrorPiece(Types_1.Colour[colour], "z", 99 + i);
         });
         return customPieces;
     }
@@ -85,74 +86,87 @@ class Game {
         };
         return ref[name];
     }
-    getPieces() {
-        return this.pieces;
+    get pieces() {
+        return this._pieces;
     }
-    getColourTurn() {
-        return this.turnCount % 2 === 0 ? Types_1.Colour[0] : Types_1.Colour[1];
+    get isWhiteMove() {
+        return this._isWhiteMove;
     }
-    incTurnCount() {
-        this.turnCount++;
+    set isWhiteMove(value) {
+        this._isWhiteMove = value;
     }
-    isPieceThere(file, rank) {
-        for (let piece in this.pieces) {
-            const rankCheck = this.pieces[piece].position.position.rank === rank;
-            const fileCheck = this.pieces[piece].position.position.file === file;
+    isPieceThere(position) {
+        const { rank, file } = position.position;
+        for (let piece in this._pieces) {
+            const rankCheck = this._pieces[piece].position.position.rank === rank;
+            const fileCheck = this._pieces[piece].position.position.file === file;
             if (fileCheck && rankCheck)
                 return true;
         }
         return false;
     }
-    getAllPositions() {
-        return Object.values(this.getPieces()).reduce((array, piece) => {
-            if (piece.isCaptured === false)
-                array.push(`${piece.position.position.file}${piece.position.position.rank}`);
-            return array;
-        }, []);
-    }
     findKing(colour) {
-        const pieceArray = Object.values(this.getPieces());
+        const pieceArray = Object.values(this.pieces);
         const king = pieceArray.filter((piece) => {
             return (piece.colour === Types_1.Colour[colour] && piece.constructor.name === "King");
         });
         return king[0];
     }
-    getPiecesThatCanMove(pos, move, colour) {
-        const pieceObj = this.getPieces();
+    getPiece(positionMovingTo, move, colour) {
+        const { dubiousFile, dubiousRank } = new utils_1.utils().getRegex();
+        const pieceObj = this.pieces;
         const pieceArray = Object.entries(pieceObj);
-        if (this.isKingInCheck(colour)) {
-            const { file, rank } = this.findKing(colour).position.position;
-            return [`K${file}${rank}`];
+        let match;
+        let dubiousFileChar = "";
+        let dubiousRankChar = "";
+        if (dubiousFile.test(move)) {
+            dubiousFileChar = move[1];
+            move = `${move[0]}${move[2]}${move[3]}`;
         }
-        else
-            return pieceArray
-                .filter(([piecePos, p]) => {
-                const result = piecePos[0] === move[0];
-                return result;
-            })
-                .reduce((array, piece) => {
-                const [piecePos, p] = piece;
-                const m = p.canMoveTo(pos);
-                const c = p.colour === Types_1.Colour[colour];
-                if (m && c)
-                    array.push(piecePos);
-                return array;
-            }, []);
+        if (dubiousRank.test(move)) {
+            dubiousRankChar = move[1];
+            move = `${move[0]}${move[2]}${move[3]}`;
+        }
+        // if (this.isKingInCheck(colour)) {
+        //   const { file, rank } = this.findKing(colour).position.position;
+        //   return [`K${file}${rank}`];
+        // } else
+        const result = pieceArray.reduce((object, piece) => {
+            let [piecePos, p] = piece;
+            const k = piecePos[0] === move[0];
+            const m = p.canMoveTo(positionMovingTo);
+            const c = p.colour === Types_1.Colour[colour];
+            if (dubiousFileChar)
+                match = piecePos[1] === dubiousFileChar;
+            if (dubiousRankChar)
+                match = piecePos[2] === dubiousRankChar;
+            if (dubiousFileChar || dubiousRankChar) {
+                if (m && c && k && match)
+                    object[piecePos] = p;
+            }
+            else {
+                if (m && c && k)
+                    object[piecePos] = p;
+            }
+            return object;
+        }, {});
+        // console.log(result);
+        return result;
     }
     capturePiece(capturePiece, targetPiece) {
         const { flagRefObj } = new utils_1.utils().getLetterRefs();
         const { file: capFile, rank: capRank } = capturePiece.position.position;
         const { file, rank } = targetPiece.position.position;
-        const pieceObj = this.getPieces();
+        const pieceObj = this.pieces;
         const name = capturePiece.constructor.name;
         const flag = flagRefObj[name];
         let canCapture;
         if (capturePiece.constructor.name === "Pawn")
-            canCapture = new CaptureClasses_1.Capture(capturePiece, targetPiece).canPawnCapture();
+            canCapture = new CaptureClasses_1.Capture().canPawnCapture(capturePiece, targetPiece);
         else
-            canCapture = new CaptureClasses_1.Capture(capturePiece, targetPiece).canCapture();
+            canCapture = new CaptureClasses_1.Capture().canCapture(capturePiece, targetPiece);
         if (canCapture) {
-            new MovementUtils_1.MovementUtils().completeMove(pieceObj, capturePiece, `${flag}${capFile}${Number(capRank)}`);
+            new MovementUtils_1.MovementUtils().completeMove(pieceObj, capturePiece, `${flag}${capFile}${capRank}`);
             targetPiece.isCaptured = true;
             return {
                 msg: `${targetPiece.colour} ${targetPiece.constructor.name} on ${file}${rank} Captured!`,
@@ -161,17 +175,17 @@ class Game {
         return { msg: "Could not capture!" };
     }
     isKingInCheck(colour) {
-        const pieceArray = Object.values(this.getPieces());
+        const pieceArray = Object.values(this.pieces);
         let isInCheck = false;
         pieceArray.forEach((piece) => {
-            const canCapture = new CaptureClasses_1.Capture(piece, this.findKing(colour)).canCapture();
+            const canCapture = new CaptureClasses_1.Capture().canCapture(piece, this.findKing(colour));
             if (canCapture)
                 isInCheck = true;
         });
         return isInCheck;
     }
     getSquaresKingCanMoveTo(colour) {
-        const pieceObj = this.getPieces();
+        const pieceObj = this.pieces;
     }
     // isKingInCheckMate(colour: number): boolean {
     //   const king = this.findKing(colour);
@@ -179,7 +193,7 @@ class Game {
     // }
     makeMove(move, colour) {
         const { pawnTest } = new utils_1.utils().getRegex();
-        const pieceObj = this.getPieces();
+        const pieceObj = this.pieces;
         // THIS IS WHERE YOU CHECK IF THE PIECE CAN MOVE
         // GAME says this
         if (pawnTest.test(move))
