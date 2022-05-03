@@ -22,11 +22,9 @@ export class SpecialMoves {
     const king = pieceObj[oldKingCoord[colour]];
     const rook = pieceObj[oldRookCoord[colour][side]];
 
-    const newKingPos: RankFile = new Position(newKingFile[side], rank[colour])
-      .position;
+    const newKingPos: Position = new Position(newKingFile[side], rank[colour]);
 
-    const newRookPos: RankFile = new Position(newRookFile[side], rank[colour])
-      .position;
+    const newRookPos: Position = new Position(newRookFile[side], rank[colour]);
 
     const oldKingPos = this.pieces[oldKingCoord[colour]].position.position;
     const oldRookPos =
@@ -35,13 +33,13 @@ export class SpecialMoves {
     const isPieceInWayKing = new IsPieceInTheWay(
       oldKingPos,
       newKingPos,
-      positions
+      this.pieces
     ).checkRankAndFile();
 
     const isPieceInWayRook = new IsPieceInTheWay(
       oldRookPos,
       newRookPos,
-      positions
+      this.pieces
     ).checkRankAndFile();
 
     const hasNotMoved = !king.hasMoved && !rook.hasMoved;

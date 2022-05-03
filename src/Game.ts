@@ -5,7 +5,13 @@ import { Pawn } from "./Classes/PieceClasses/Pawn";
 import { Piece, Position } from "./Classes/PieceClasses/PiecesAndPosition";
 import { Queen } from "./Classes/PieceClasses/Queen";
 import { Rook } from "./Classes/PieceClasses/Rook";
-import { Colour, CustomPieceArray, PieceArray, PieceObject } from "./Types";
+import {
+  Colour,
+  CustomPieceArray,
+  PieceArray,
+  PieceObject,
+  RankFile,
+} from "./Types";
 import { SpecialMoves } from "./Classes/MovementClasses/SpecialMoves";
 import { utils } from "./utils/utils";
 import { MovementUtils } from "./Classes/MovementClasses/MovementUtils";
@@ -220,34 +226,45 @@ export class Game {
 
   makeMove(move: string, colour: number): { [msg: string]: string } {
     const { pawnTest, dubiousFile, dubiousRank } = new utils().getRegex();
-    const pieceObj: PieceObject = this.pieces;
 
     if (pawnTest.test(move)) move = `P${move}`;
 
     if (move === "0-0" || move === "0-0-0") {
       let side: number = 0;
       if (move === "0-0-0") side = 1;
-      return new SpecialMoves(pieceObj).castle(side, colour, pieceObj);
+      return new SpecialMoves(this.pieces).castle(side, colour, this.pieces);
     }
     // Can piece move here?
-    let newPosition: Position;
+    let destiPos: Position, destiRankFile: string;
 
-    if (dubiousFile || dubiousRank)
-      newPosition = new Position(move[2], Number(move[3]));
-    else newPosition = new Position(move[1], Number(move[2]));
-
-    const pieceThatCanMove = this.getPiece(newPosition, move, colour)[0];
-
-    try {
-      const piece = new MovementUtils().completeMove(
-        pieceObj,
-        pieceThatCanMove,
-        move
-      );
-      return { msg: `${piece} moved to ${move[1]}${move[2]}!` };
-    } catch (err: any) {
-      return { msg: "Fail!", err };
+    if (dubiousFile || dubiousRank) {
+      destiPos = new Position(move[2], Number(move[3]));
+      destiRankFile = `${move[2]}${move[3]}`;
+    } else {
+      destiPos = new Position(move[1], Number(move[2]));
+      destiRankFile = `${move[1]}${move[2]}`;
     }
+
+    const pieceThatCanMove = this.getPiece(destiPos, move, colour)[0];
+    const piecePos = pieceThatCanMove.position.position;
+    const canPieceMoveThere = new IsPieceInTheWay(
+      piecePos,
+      destiPos,
+      this.pieces
+    ).checkBoth();
+
+    if (canPieceMoveThere)
+      try {
+        const piece = new MovementUtils().completeMove(
+          this.pieces,
+          pieceThatCanMove,
+          move
+        );
+        return { msg: `${piece} moved to ${destiRankFile}!` };
+      } catch (err: any) {
+        return { msg: "Fail!", err };
+      }
+    else return { msg: "Fail!" };
   }
 
   makeTurn(move: string) {

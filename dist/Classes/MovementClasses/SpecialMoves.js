@@ -20,14 +20,12 @@ class SpecialMoves {
             throw new Error();
         const king = pieceObj[oldKingCoord[colour]];
         const rook = pieceObj[oldRookCoord[colour][side]];
-        const newKingPos = new PiecesAndPosition_1.Position(newKingFile[side], rank[colour])
-            .position;
-        const newRookPos = new PiecesAndPosition_1.Position(newRookFile[side], rank[colour])
-            .position;
+        const newKingPos = new PiecesAndPosition_1.Position(newKingFile[side], rank[colour]);
+        const newRookPos = new PiecesAndPosition_1.Position(newRookFile[side], rank[colour]);
         const oldKingPos = this.pieces[oldKingCoord[colour]].position.position;
         const oldRookPos = this.pieces[oldRookCoord[colour][side]].position.position;
-        const isPieceInWayKing = new IsPieceInTheWay_1.IsPieceInTheWay(oldKingPos, newKingPos, positions).checkRankAndFile();
-        const isPieceInWayRook = new IsPieceInTheWay_1.IsPieceInTheWay(oldRookPos, newRookPos, positions).checkRankAndFile();
+        const isPieceInWayKing = new IsPieceInTheWay_1.IsPieceInTheWay(oldKingPos, newKingPos, this.pieces).checkRankAndFile();
+        const isPieceInWayRook = new IsPieceInTheWay_1.IsPieceInTheWay(oldRookPos, newRookPos, this.pieces).checkRankAndFile();
         const hasNotMoved = !king.hasMoved && !rook.hasMoved;
         try {
             if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
