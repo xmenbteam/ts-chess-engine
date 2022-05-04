@@ -12,7 +12,6 @@ class SpecialMoves {
     }
     castle(side, colour, pieceObj) {
         const castleRefObj = new utils_1.utils().getCastleRef();
-        const positions = Object.keys(pieceObj).map((pos) => `${pos[1]}${pos[2]}`);
         const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } = castleRefObj;
         if (pieceObj[oldKingCoord[colour]].constructor.name !== "King")
             throw new Error();
@@ -22,8 +21,8 @@ class SpecialMoves {
         const rook = pieceObj[oldRookCoord[colour][side]];
         const newKingPos = new PiecesAndPosition_1.Position(newKingFile[side], rank[colour]);
         const newRookPos = new PiecesAndPosition_1.Position(newRookFile[side], rank[colour]);
-        const oldKingPos = this.pieces[oldKingCoord[colour]].position.position;
-        const oldRookPos = this.pieces[oldRookCoord[colour][side]].position.position;
+        const oldKingPos = this.pieces[oldKingCoord[colour]].position;
+        const oldRookPos = this.pieces[oldRookCoord[colour][side]].position;
         const isPieceInWayKing = new IsPieceInTheWay_1.IsPieceInTheWay(oldKingPos, newKingPos, this.pieces).checkRankAndFile();
         const isPieceInWayRook = new IsPieceInTheWay_1.IsPieceInTheWay(oldRookPos, newRookPos, this.pieces).checkRankAndFile();
         const hasNotMoved = !king.hasMoved && !rook.hasMoved;

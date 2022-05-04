@@ -244,166 +244,99 @@ describe("Standard Game", () => {
       expect("Rg5" in gamePieces).toBe(true);
       expect(gamePieces.Rg5.position.position).toEqual({ file: "g", rank: 5 });
     });
-    // test("Custom can move, Rook vs Bishop", () => {
-    //   const pieces = [
-    //     { piece: "Rg1", colour: 0 },
-    //     { piece: "Bc1", colour: 0 },
-    //   ];
-    //   const game = new Game(pieces);
-    //   const gamePieces = game.pieces;
-    //   const move = "Bg5";
-    //   const moveTime = game.makeMove(move, 0);
-    //   expect(moveTime.msg).toBe("Bishop moved to g5!");
-    //   expect("Bc1" in gamePieces).toBe(false);
-    //   expect("Bg5" in gamePieces).toBe(true);
-    //   expect(gamePieces.Bg5.position.position).toEqual({ file: "g", rank: 5 });
-    // });
   });
 
-  //   xdescribe("castling", () => {
-  //     describe("kingSide", () => {
-  //       test("White castles kingside", () => {
-  //         const game = new Game();
-  //         const pieces = game.pieces
-  //         const moves = ["g3", "Bg2", "Nf3"];
-  //         moves.forEach((move) => {
-  //           game.makeMove(move, 0);
-  //         });
+  describe("castling", () => {
+    describe("kingSide", () => {
+      test("White castles kingside", () => {
+        const game = new Game();
+        const pieces = game.pieces;
+        const moves = ["g3", "Bg2", "Nf3"];
+        moves.forEach((move) => {
+          game.makeMove(move, 0);
+        });
 
-  //         const castleKing = "0-0";
-  //         const castle = game.makeMove(castleKing, 0);
+        const castleKing = "0-0";
+        const castle = game.makeMove(castleKing, 0);
 
-  //         expect("Kg1" in pieces).toBe(true);
-  //         expect("Rf1" in pieces).toBe(true);
-  //         expect(pieces.Kg1.hasMoved).toBe(true);
-  //         expect(pieces.Rf1.hasMoved).toBe(true);
-  //         expect(castle.msg).toBe("White castled Kingside!");
-  //       });
-  //       test("!White castles kingside", () => {
-  //         const game = new Game();
-  //         const pieces = game.pieces
-  //         const moves = ["g3", "Nf3"];
-  //         moves.forEach((move) => {
-  //           game.makeMove(move, 0);
-  //         });
+        expect("Kg1" in pieces).toBe(true);
+        expect("Rf1" in pieces).toBe(true);
+        expect(castle.msg).toBe("White castled Kingside!");
+      });
+      test("!White castles kingside", () => {
+        const game = new Game();
+        const pieces = game.pieces;
+        const moves = ["g3", "Nf3"];
+        moves.forEach((move) => {
+          game.makeMove(move, 0);
+        });
 
-  //         const castleKing = "0-0";
-  //         const castle = game.makeMove(castleKing, 0);
-  //         expect("Kg1" in pieces).toBe(false);
-  //         expect("Rf1" in pieces).toBe(false);
-  //         expect(pieces.Ke1.hasMoved).toBe(false);
-  //         expect(pieces.Rh1.hasMoved).toBe(false);
-  //         expect(castle.msg).toBe("White Failed to castle Kingside!");
-  //       });
-  //       test("Black castles kingside", () => {
-  //         const game = new Game();
-  //         const pieces = game.pieces
-  //         const moves = ["e6", "Be7", "Nf6"];
-  //         moves.forEach((move) => {
-  //           game.makeMove(move, 1);
-  //         });
+        const castleKing = "0-0";
+        const castle = game.makeMove(castleKing, 0);
+        expect("Kg1" in pieces).toBe(false);
+        expect("Rf1" in pieces).toBe(false);
+        expect(castle.msg).toBe("White Failed to castle Kingside!");
+      });
+      test("Black castles kingside", () => {
+        const game = new Game();
+        const pieces = game.pieces;
+        const moves = ["e6", "Be7", "Nf6"];
+        moves.forEach((move) => {
+          game.makeMove(move, 1);
+        });
 
-  //         const castleKing = "0-0";
-  //         const castle = game.makeMove(castleKing, 1);
+        const castleKing = "0-0";
+        const castle = game.makeMove(castleKing, 1);
 
-  //         expect("Kg8" in pieces).toBe(true);
-  //         expect("Rf8" in pieces).toBe(true);
-  //         expect(pieces.Kg8.hasMoved).toBe(true);
-  //         expect(pieces.Rf8.hasMoved).toBe(true);
-  //         expect(castle.msg).toBe("Black castled Kingside!");
-  //       });
-  //     });
-  //     describe("queenSide", () => {
-  //       test("White castles queenside", () => {
-  //         const game = new Game();
-  //         const pieces = game.pieces
-  //         const moves = ["b3", "c3", "Na3", "Bb2", "Qc2"];
-  //         moves.forEach((move) => game.makeMove(move, 0));
+        expect("Kg8" in pieces).toBe(true);
+        expect("Rf8" in pieces).toBe(true);
+        expect(castle.msg).toBe("Black castled Kingside!");
+      });
+    });
+    describe("queenSide", () => {
+      test("White castles queenside", () => {
+        const game = new Game();
+        const pieces = game.pieces;
+        const moves = ["b3", "c3", "Na3", "Bb2", "Qc2"];
+        moves.forEach((move) => game.makeMove(move, 0));
 
-  //         const castleQueen = "0-0-0";
-  //         const castle = game.makeMove(castleQueen, 0);
+        const castleQueen = "0-0-0";
+        const castle = game.makeMove(castleQueen, 0);
 
-  //         expect("Kc1" in pieces).toBe(true);
-  //         expect("Rd1" in pieces).toBe(true);
-  //         expect(pieces.Kc1.hasMoved).toBe(true);
-  //         expect(pieces.Rd1.hasMoved).toBe(true);
-  //         expect(castle.msg).toBe("White castled Queenside!");
-  //       });
-  //       test("!White castles queenside", () => {
-  //         const game = new Game();
-  //         const pieces = game.pieces
-  //         const moves = ["b3", "c3", "Na3", "Qc2"];
-  //         moves.forEach((move) => {
-  //           game.makeMove(move, 0);
-  //         });
+        expect("Kc1" in pieces).toBe(true);
+        expect("Rd1" in pieces).toBe(true);
 
-  //         const castleQueen = "0-0-0";
-  //         const castle = game.makeMove(castleQueen, 0);
-  //         expect("Kc1" in pieces).toBe(false);
-  //         expect("Rd1" in pieces).toBe(false);
-  //         expect(pieces.Ke1.hasMoved).toBe(false);
-  //         expect(pieces.Rh1.hasMoved).toBe(false);
-  //         expect(castle.msg).toBe("White Failed to castle Queenside!");
-  //       });
-  //       test("Black castles queenside", () => {
-  //         const game = new Game();
-  //         const pieces = game.pieces
-  //         const moves = ["b6", "c6", "Na6", "Bb7", "Qc7"];
-  //         moves.forEach((move) => {
-  //           game.makeMove(move, 1);
-  //         });
+        expect(castle.msg).toBe("White castled Queenside!");
+      });
+      test("!White castles queenside", () => {
+        const game = new Game();
+        const pieces = game.pieces;
+        const moves = ["b3", "c3", "Na3", "Qc2"];
+        moves.forEach((move) => {
+          game.makeMove(move, 0);
+        });
 
-  //         const castleQueen = "0-0-0";
-  //         const castle = game.makeMove(castleQueen, 1);
+        const castleQueen = "0-0-0";
+        const castle = game.makeMove(castleQueen, 0);
+        expect("Kc1" in pieces).toBe(false);
+        expect("Rd1" in pieces).toBe(false);
+        expect(castle.msg).toBe("White Failed to castle Queenside!");
+      });
+      test("Black castles queenside", () => {
+        const game = new Game();
+        const pieces = game.pieces;
+        const moves = ["b6", "c6", "Na6", "Bb7", "Qc7"];
+        moves.forEach((move) => {
+          game.makeMove(move, 1);
+        });
 
-  //         expect("Kc8" in pieces).toBe(true);
-  //         expect("Rd8" in pieces).toBe(true);
-  //         expect(pieces.Kc8.hasMoved).toBe(true);
-  //         expect(pieces.Rd8.hasMoved).toBe(true);
-  //         expect(castle.msg).toBe("Black castled Queenside!");
-  //       });
-  //     });
-  //   });
-  //   describe("getAllPositions", () => {
-  //     test("Get all pieces", () => {
-  //       const piecesArray: CustomPieceArray = [
-  //         { piece: "Kd3", colour: 0 },
-  //         { piece: "Ke3", colour: 0 },
-  //       ];
-  //       const game = new Game(piecesArray);
-  //       expect(game.getAllPositions()).toEqual(["d3", "e3"]);
-  //     });
-  //     test("Get all UNCAPTURED pieces", () => {
-  //       const piecesArray: CustomPieceArray = [
-  //         { piece: "Kd3", colour: 0 },
-  //         { piece: "Ke3", colour: 0 },
-  //       ];
-  //       const game = new Game(piecesArray);
-  //       const pieces = game.pieces
+        const castleQueen = "0-0-0";
+        const castle = game.makeMove(castleQueen, 1);
 
-  //       pieces.Kd3.isCaptured = true;
-  //       expect(game.getAllPositions()).toEqual(["e3"]);
-  //     });
-  //   });
-
-  //   xdescribe("turn", () => {
-  //     test("Takes a standard chess notation", () => {
-  //       const game = new Game();
-
-  //       const move = "Nf3 a6";
-  //       const turns = game.makeTurn(move);
-
-  //       const pieces = game.getAllPositions();
-
-  //       const expected = [
-  //         { msg: "Ng1 moved to f3!" },
-  //         { msg: "Pa7 moved to a6!" },
-  //       ];
-
-  //       expect(pieces.includes("f3")).toBe(true);
-  //       expect(pieces.includes("a6")).toBe(true);
-  //       expect(turns).toEqual(expected);
-  //     });
-  //   });
-  // });
+        expect("Kc8" in pieces).toBe(true);
+        expect("Rd8" in pieces).toBe(true);
+        expect(castle.msg).toBe("Black castled Queenside!");
+      });
+    });
+  });
 });

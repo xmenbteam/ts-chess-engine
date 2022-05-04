@@ -171,13 +171,12 @@ class Game {
         return { msg: "Could not capture!" };
     }
     isKingInCheck(colour) {
-        const pieceArray = Object.values(this.pieces);
         let isInCheck = false;
-        pieceArray.forEach((piece) => {
-            const canCapture = new CaptureClasses_1.Capture().canCapture(piece, this.findKing(colour));
+        for (let piece in this.pieces) {
+            const canCapture = new CaptureClasses_1.Capture().canCapture(this.pieces[piece], this.findKing(colour));
             if (canCapture)
                 isInCheck = true;
-        });
+        }
         return isInCheck;
     }
     makeMove(move, colour) {
@@ -190,7 +189,6 @@ class Game {
                 side = 1;
             return new SpecialMoves_1.SpecialMoves(this.pieces).castle(side, colour, this.pieces);
         }
-        // Can piece move here?
         let destiPos, destiRankFile, isPieceInWay;
         const isDubiousFile = dubiousFile.test(move);
         const isDubiousRank = dubiousRank.test(move);

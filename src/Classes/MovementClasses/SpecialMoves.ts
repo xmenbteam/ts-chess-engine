@@ -9,7 +9,6 @@ export class SpecialMoves {
 
   castle(side: number, colour: number, pieceObj: PieceObject) {
     const castleRefObj = new utils().getCastleRef();
-    const positions = Object.keys(pieceObj).map((pos) => `${pos[1]}${pos[2]}`);
 
     const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } =
       castleRefObj;
@@ -26,9 +25,8 @@ export class SpecialMoves {
 
     const newRookPos: Position = new Position(newRookFile[side], rank[colour]);
 
-    const oldKingPos = this.pieces[oldKingCoord[colour]].position.position;
-    const oldRookPos =
-      this.pieces[oldRookCoord[colour][side]].position.position;
+    const oldKingPos = this.pieces[oldKingCoord[colour]].position;
+    const oldRookPos = this.pieces[oldRookCoord[colour][side]].position;
 
     const isPieceInWayKing = new IsPieceInTheWay(
       oldKingPos,

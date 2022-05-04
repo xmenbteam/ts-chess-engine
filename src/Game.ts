@@ -219,13 +219,15 @@ export class Game {
   }
 
   isKingInCheck(colour: number): boolean {
-    const pieceArray = Object.values(this.pieces);
     let isInCheck: boolean = false;
 
-    pieceArray.forEach((piece) => {
-      const canCapture = new Capture().canCapture(piece, this.findKing(colour));
+    for (let piece in this.pieces) {
+      const canCapture = new Capture().canCapture(
+        this.pieces[piece],
+        this.findKing(colour)
+      );
       if (canCapture) isInCheck = true;
-    });
+    }
 
     return isInCheck;
   }
@@ -240,7 +242,7 @@ export class Game {
       if (move === "0-0-0") side = 1;
       return new SpecialMoves(this.pieces).castle(side, colour, this.pieces);
     }
-    // Can piece move here?
+
     let destiPos: Position, destiRankFile: string, isPieceInWay: boolean;
 
     const isDubiousFile = dubiousFile.test(move);
