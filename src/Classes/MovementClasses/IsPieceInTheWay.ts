@@ -12,47 +12,13 @@ export class IsPieceInTheWay {
     const { file: destiFileDist, rank: destiRankDist } =
       this.destiPos.distanceFrom(this.piecePos);
 
-    console.log({ destiFileDist, destiRankDist });
-
-    const directionRef = (
-      pieceFileDist: number,
-      pieceRankDist: number,
-      destiFileDist: number,
-      destiRankDist: number
-    ): string => {
-      const refObj = {
-        N:
-          pieceFileDist === 0 &&
-          pieceRankDist > 0 &&
-          pieceRankDist < destiRankDist,
-        S:
-          pieceFileDist === 0 &&
-          pieceFileDist < 0 &&
-          pieceFileDist > destiFileDist,
-        E:
-          pieceRankDist === 0 &&
-          pieceFileDist > 0 &&
-          pieceRankDist < destiRankDist,
-        W:
-          pieceRankDist === 0 &&
-          pieceFileDist < 0 &&
-          pieceFileDist > destiFileDist,
-      };
-      for (const [dir, cond] of Object.entries(refObj)) {
-        if (cond) return dir;
-      }
-      return "";
-    };
-
     for (let piece in this.allPieces) {
       const { file: pieceFileDist, rank: pieceRankDist } = this.allPieces[
         piece
       ].position.distanceFrom(this.piecePos);
-      const dirFromPiece = directionRef(
+      const dirFromPiece = new utils().rankAndFileDirRef(
         pieceFileDist,
-        pieceRankDist,
-        destiFileDist,
-        destiRankDist
+        pieceRankDist
       );
 
       if (dirFromPiece === "N")
@@ -64,8 +30,6 @@ export class IsPieceInTheWay {
       if (dirFromPiece === "W")
         if (pieceFileDist > destiFileDist) this.isInWay = true;
     }
-
-    console.log("isinwat", this.isInWay);
 
     return this.isInWay;
   }
@@ -81,17 +45,19 @@ export class IsPieceInTheWay {
       this.destiPos.distanceFrom(this.piecePos);
 
     for (let piece in this.allPieces) {
-      const { file: fileDistance, rank: rankDistance } = this.allPieces[
+      const { file: pieceFileDist, rank: pieceRankDist } = this.allPieces[
         piece
       ].position.distanceFrom(this.piecePos);
 
-      if (
-        Math.abs(rankDistance) > 0 &&
-        Math.abs(fileDistance) > 0 &&
-        Math.abs(rankDistance) === Math.abs(fileDistance) &&
-        Math.abs(destiFileDist) === Math.abs(destiRankDist)
-      )
-        this.isInWay = true;
+      const dirFromPiece = new utils().diagonalDirRef(
+        pieceFileDist,
+        pieceRankDist
+      );
+
+      if (dirFromPiece === "NE" || dirFromPiece === "SE")
+        if (pieceRankDist < destiRankDist) this.isInWay = true;
+      if (dirFromPiece === "NW" || dirFromPiece === "SW")
+        if (pieceRankDist > destiRankDist) this.isInWay = true;
     }
 
     return this.isInWay;
@@ -101,11 +67,9 @@ export class IsPieceInTheWay {
     const { file: destiFileDist, rank: destiRankDist } =
       this.destiPos.distanceFrom(this.piecePos);
 
-    console.log({ destiFileDist, destiRankDist });
-    console.log(this.isInWay);
-
     if (!destiFileDist || !destiRankDist) return this.checkRankAndFile();
-    else return this.checkDiagonal();
+    if (Math.abs(destiFileDist) === Math.abs(destiRankDist))
+      return this.checkDiagonal();
   }
 
   checkKingMove() {

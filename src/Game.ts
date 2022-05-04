@@ -259,7 +259,7 @@ export class Game {
       pieceThatCanMove.constructor.name === "Knight" &&
       pieceThatCanMove.canMoveTo(destiPos)
     )
-      isPieceInWay = true;
+      isPieceInWay = false;
     else
       isPieceInWay = new IsPieceInTheWay(
         pieceThatCanMove.position,

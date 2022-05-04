@@ -45,24 +45,34 @@ export class utils {
     rank: [1, 8],
   };
 
-  getMoveDirection(oldPos: RankFile, newPos: RankFile) {
-    const { file, rank } = oldPos;
-    const { file: newFile, rank: newRank } = newPos;
-    const { letterRef } = new utils().getLetterRefs();
-
+  diagonalDirRef(pieceFileDist: number, pieceRankDist: number) {
     let direction: string = "";
 
     const directionRef = {
-      NE: newRank > rank && letterRef[newFile] > letterRef[file],
-      SE: newRank < rank && letterRef[newFile] > letterRef[file],
-      NW: newRank > rank && letterRef[newFile] < letterRef[file],
-      SW: newRank < rank && letterRef[newFile] < letterRef[file],
+      NE: pieceFileDist > 0 && pieceRankDist > 0,
+      SE: pieceFileDist < 0 && pieceRankDist > 0,
+      NW: pieceFileDist < 0 && pieceRankDist > 0,
+      SW: pieceFileDist > 0 && pieceRankDist < 0,
     };
 
     for (const [dir, cond] of Object.entries(directionRef)) {
       if (cond) direction = dir;
     }
 
+    return direction;
+  }
+
+  rankAndFileDirRef(pieceFileDist: number, pieceRankDist: number): string {
+    let direction: string = "";
+    const refObj = {
+      N: !pieceFileDist && pieceRankDist > 0,
+      S: !pieceFileDist && pieceFileDist < 0,
+      E: !pieceRankDist && pieceFileDist > 0,
+      W: !pieceRankDist && pieceFileDist < 0,
+    };
+    for (const [dir, cond] of Object.entries(refObj)) {
+      if (cond) direction = dir;
+    }
     return direction;
   }
 

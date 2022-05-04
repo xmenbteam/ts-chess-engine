@@ -213,7 +213,7 @@ describe("Standard Game", () => {
     });
   });
 
-  describe.only("makeMove", () => {
+  describe("makeMove", () => {
     test("Move one piece - e2 - e4", () => {
       const game = new Game();
       const move = "e4";
@@ -222,6 +222,7 @@ describe("Standard Game", () => {
       console.log({ moveMsg });
       expect("Pe4" in pieces).toBe(true);
       expect("Pe2" in pieces).toBe(false);
+      expect(pieces.Pe4.position.position).toEqual({ file: "e", rank: 4 });
     });
     test("Move piece - e2 - e4", () => {
       const game = new Game();
@@ -250,6 +251,34 @@ describe("Standard Game", () => {
       expect("Ra3" in pieces).toBe(false);
       expect(moveTime.msg).toBe("Fail!");
     });
+    test("Custom can move, Rook vs Bishop", () => {
+      const pieces = [
+        { piece: "Rg1", colour: 0 },
+        { piece: "Bc1", colour: 0 },
+      ];
+      const game = new Game(pieces);
+      const gamePieces = game.pieces;
+      const move = "Rg5";
+      const moveTime = game.makeMove(move, 0);
+      expect(moveTime.msg).toBe("Rook moved to g5!");
+      expect("Rg1" in gamePieces).toBe(false);
+      expect("Rg5" in gamePieces).toBe(true);
+      expect(gamePieces.Rg5.position.position).toEqual({ file: "g", rank: 5 });
+    });
+    // test("Custom can move, Rook vs Bishop", () => {
+    //   const pieces = [
+    //     { piece: "Rg1", colour: 0 },
+    //     { piece: "Bc1", colour: 0 },
+    //   ];
+    //   const game = new Game(pieces);
+    //   const gamePieces = game.pieces;
+    //   const move = "Bg5";
+    //   const moveTime = game.makeMove(move, 0);
+    //   expect(moveTime.msg).toBe("Bishop moved to g5!");
+    //   expect("Bc1" in gamePieces).toBe(false);
+    //   expect("Bg5" in gamePieces).toBe(true);
+    //   expect(gamePieces.Bg5.position.position).toEqual({ file: "g", rank: 5 });
+    // });
   });
 
   //   xdescribe("castling", () => {

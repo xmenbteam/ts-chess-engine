@@ -6,12 +6,10 @@ class MovementUtils {
     completeMove(pieceObj, piece, destiPos, move) {
         const flag = move[0];
         const { file: f, rank: r } = piece.position.position;
-        piece.position.position = { file: f, rank: Number(r) };
         const { file: newF, rank: newR } = destiPos.position;
-        console.log({ f, r, newF, newR });
+        piece.position.position = { file: newF, rank: Number(newR) };
         const newKey = `${flag}${newF}${newR}`;
         pieceObj[newKey] = piece;
-        console.log(newKey);
         delete pieceObj[`${flag}${f}${r}`];
         return piece.constructor.name;
     }

@@ -205,7 +205,7 @@ class Game {
         const pieceThatCanMove = this.getPiece(destiPos, move, colour);
         if (pieceThatCanMove.constructor.name === "Knight" &&
             pieceThatCanMove.canMoveTo(destiPos))
-            isPieceInWay = true;
+            isPieceInWay = false;
         else
             isPieceInWay = new IsPieceInTheWay_1.IsPieceInTheWay(pieceThatCanMove.position, destiPos, this.pieces).checkBoth();
         if (!isPieceInWay)
