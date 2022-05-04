@@ -177,6 +177,7 @@ export class Game {
       },
       {}
     );
+
     return finalPiece;
   }
 

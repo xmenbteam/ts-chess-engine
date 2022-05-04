@@ -31,13 +31,9 @@ describe("Standard Game", () => {
       const colour = 0;
 
       const piece = game.getPiece(pos, move, colour);
-      const pieceArray = Object.entries(piece);
-      expect(pieceArray.length).toBe(1);
-      expect(pieceArray[0][0]).toBe("Pe2");
-      expect(pieceArray[0][1].position.position).toEqual({
-        file: "e",
-        rank: 2,
-      });
+      expect(piece.constructor.name).toBe("Pawn");
+      expect(piece.colour).toBe("White");
+      expect(piece.position.position).toEqual({ file: "e", rank: 2 });
     });
     test("No pieces can move there", () => {
       const game = new Game();
@@ -60,13 +56,9 @@ describe("Standard Game", () => {
       const colour = 1;
 
       const piece = game.getPiece(pos, move, colour);
-      const pieceArray = Object.entries(piece);
-      expect(pieceArray.length).toBe(1);
-      expect(pieceArray[0][0]).toBe("Qd4");
-      expect(pieceArray[0][1].position.position).toEqual({
-        file: "d",
-        rank: 4,
-      });
+      expect(piece.constructor.name).toBe("Queen");
+      expect(piece.colour).toBe("Black");
+      expect(piece.position.position).toEqual({ file: "d", rank: 4 });
     });
     test("Two possible pieces - Qe4, Nd2 - e4", () => {
       const pieces = [
@@ -80,13 +72,9 @@ describe("Standard Game", () => {
       const colour = 1;
 
       const piece = game.getPiece(pos, move, colour);
-      const pieceArray = Object.entries(piece);
-      expect(pieceArray.length).toBe(1);
-      expect(pieceArray[0][0]).toBe("Qd4");
-      expect(pieceArray[0][1].position.position).toEqual({
-        file: "d",
-        rank: 4,
-      });
+      expect(piece.constructor.name).toBe("Queen");
+      expect(piece.colour).toBe("Black");
+      expect(piece.position.position).toEqual({ file: "d", rank: 4 });
     });
     test("Two of the same piece, same RANK - Nb3, Ne6 - c5", () => {
       const pieces = [
@@ -100,13 +88,9 @@ describe("Standard Game", () => {
       const colour = 1;
 
       const piece = game.getPiece(pos, move, colour);
-      const pieceArray = Object.entries(piece);
-      expect(pieceArray.length).toBe(1);
-      expect(pieceArray[0][0]).toBe("Nb3");
-      expect(pieceArray[0][1].position.position).toEqual({
-        file: "b",
-        rank: 3,
-      });
+      expect(piece.constructor.name).toBe("Knight");
+      expect(piece.colour).toBe("Black");
+      expect(piece.position.position).toEqual({ file: "b", rank: 3 });
     });
     test("Two of the same piece, same FILE - Nb3, Ne6 - c5", () => {
       const pieces = [
@@ -120,13 +104,9 @@ describe("Standard Game", () => {
       const colour = 1;
 
       const piece = game.getPiece(pos, move, colour);
-      const pieceArray = Object.entries(piece);
-      expect(pieceArray.length).toBe(1);
-      expect(pieceArray[0][0]).toBe("Nd7");
-      expect(pieceArray[0][1].position.position).toEqual({
-        file: "d",
-        rank: 7,
-      });
+      expect(piece.constructor.name).toBe("Knight");
+      expect(piece.colour).toBe("Black");
+      expect(piece.position.position).toEqual({ file: "d", rank: 7 });
     });
   });
   describe("Custom Game", () => {
@@ -219,7 +199,6 @@ describe("Standard Game", () => {
       const move = "e4";
       const pieces = game.pieces;
       const moveMsg = game.makeMove(move, 0);
-      console.log({ moveMsg });
       expect("Pe4" in pieces).toBe(true);
       expect("Pe2" in pieces).toBe(false);
       expect(pieces.Pe4.position.position).toEqual({ file: "e", rank: 4 });

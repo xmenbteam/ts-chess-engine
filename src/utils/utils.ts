@@ -50,9 +50,9 @@ export class utils {
 
     const directionRef = {
       NE: pieceFileDist > 0 && pieceRankDist > 0,
-      SE: pieceFileDist < 0 && pieceRankDist > 0,
+      SE: pieceFileDist > 0 && pieceRankDist < 0,
       NW: pieceFileDist < 0 && pieceRankDist > 0,
-      SW: pieceFileDist > 0 && pieceRankDist < 0,
+      SW: pieceFileDist < 0 && pieceRankDist < 0,
     };
 
     for (const [dir, cond] of Object.entries(directionRef)) {
@@ -66,7 +66,7 @@ export class utils {
     let direction: string = "";
     const refObj = {
       N: !pieceFileDist && pieceRankDist > 0,
-      S: !pieceFileDist && pieceFileDist < 0,
+      S: !pieceFileDist && pieceRankDist < 0,
       E: !pieceRankDist && pieceFileDist > 0,
       W: !pieceRankDist && pieceFileDist < 0,
     };

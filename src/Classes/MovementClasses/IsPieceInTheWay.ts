@@ -21,14 +21,14 @@ export class IsPieceInTheWay {
         pieceRankDist
       );
 
-      if (dirFromPiece === "N")
-        if (pieceRankDist < destiRankDist) this.isInWay = true;
-      if (dirFromPiece === "S")
-        if (pieceRankDist > destiRankDist) this.isInWay = true;
-      if (dirFromPiece === "E")
-        if (pieceFileDist < destiFileDist) this.isInWay = true;
-      if (dirFromPiece === "W")
-        if (pieceFileDist > destiFileDist) this.isInWay = true;
+      if (dirFromPiece === "N" && pieceRankDist < destiRankDist)
+        this.isInWay = true;
+      if (dirFromPiece === "S" && pieceRankDist > destiRankDist)
+        this.isInWay = true;
+      if (dirFromPiece === "E" && pieceFileDist < destiFileDist)
+        this.isInWay = true;
+      if (dirFromPiece === "W" && pieceFileDist > destiFileDist)
+        this.isInWay = true;
     }
 
     return this.isInWay;
@@ -54,10 +54,35 @@ export class IsPieceInTheWay {
         pieceRankDist
       );
 
-      if (dirFromPiece === "NE" || dirFromPiece === "SE")
-        if (pieceRankDist < destiRankDist) this.isInWay = true;
-      if (dirFromPiece === "NW" || dirFromPiece === "SW")
-        if (pieceRankDist > destiRankDist) this.isInWay = true;
+      if (
+        dirFromPiece === "NE" &&
+        Math.abs(pieceFileDist) === Math.abs(pieceRankDist) &&
+        pieceRankDist < destiRankDist &&
+        pieceFileDist < destiFileDist
+      )
+        this.isInWay = true;
+      if (
+        dirFromPiece === "SW" &&
+        Math.abs(pieceFileDist) === Math.abs(pieceRankDist) &&
+        pieceFileDist === pieceRankDist &&
+        pieceRankDist > destiRankDist &&
+        pieceFileDist > destiFileDist
+      )
+        this.isInWay = true;
+      if (
+        dirFromPiece === "SE" &&
+        Math.abs(pieceFileDist) === Math.abs(pieceRankDist) &&
+        pieceRankDist > destiRankDist &&
+        pieceFileDist < destiFileDist
+      )
+        this.isInWay = true;
+      if (
+        dirFromPiece === "NW" &&
+        Math.abs(pieceFileDist) === Math.abs(pieceRankDist) &&
+        pieceRankDist < destiRankDist &&
+        pieceFileDist > destiFileDist
+      )
+        this.isInWay = true;
     }
 
     return this.isInWay;
@@ -70,6 +95,7 @@ export class IsPieceInTheWay {
     if (!destiFileDist || !destiRankDist) return this.checkRankAndFile();
     if (Math.abs(destiFileDist) === Math.abs(destiRankDist))
       return this.checkDiagonal();
+    else return false;
   }
 
   checkKingMove() {

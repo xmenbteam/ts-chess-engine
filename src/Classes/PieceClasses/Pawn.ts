@@ -4,19 +4,19 @@ export class Pawn extends Piece {
   private _hasMoved: boolean;
   private _moveCount: number;
 
-  private get hasMoved() {
+  get hasMoved() {
     return this._hasMoved;
   }
 
-  private set hasMoved(hasMoved: boolean) {
+  set hasMoved(hasMoved: boolean) {
     if (!this.hasMoved) this._hasMoved = hasMoved;
   }
 
-  private get moveCount() {
+  get moveCount() {
     return this._moveCount;
   }
 
-  private set moveCount(num: number) {
+  set moveCount(num: number) {
     this._moveCount += num;
   }
 

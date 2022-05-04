@@ -250,7 +250,7 @@ describe("IsPieceInTheWay", () => {
         rookPos,
         destiPos,
         gamePieces
-      ).checkDiagonal();
+      ).checkBoth();
 
       expect(diagonalCheck).toBe(false);
     });
@@ -268,7 +268,7 @@ describe("IsPieceInTheWay", () => {
         rookPos,
         destiPos,
         gamePieces
-      ).checkDiagonal();
+      ).checkBoth();
 
       expect(diagonalCheck).toBe(false);
     });
@@ -286,7 +286,7 @@ describe("IsPieceInTheWay", () => {
         rookPos,
         destiPos,
         gamePieces
-      ).checkDiagonal();
+      ).checkBoth();
 
       expect(diagonalCheck).toBe(false);
     });
@@ -304,7 +304,7 @@ describe("IsPieceInTheWay", () => {
         rookPos,
         destiPos,
         gamePieces
-      ).checkDiagonal();
+      ).checkBoth();
 
       expect(diagonalCheck).toBe(false);
     });
