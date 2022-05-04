@@ -267,11 +267,6 @@ export class Game {
         this.pieces
       ).checkBoth();
 
-    console.log(
-      { move, colour, destiPos, isPieceInWay },
-      pieceThatCanMove.position,
-      pieceThatCanMove.constructor.name
-    );
     if (!isPieceInWay)
       try {
         const piece = new MovementUtils().completeMove(

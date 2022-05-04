@@ -208,7 +208,6 @@ class Game {
             isPieceInWay = true;
         else
             isPieceInWay = new IsPieceInTheWay_1.IsPieceInTheWay(pieceThatCanMove.position, destiPos, this.pieces).checkBoth();
-        console.log({ move, colour, destiPos, isPieceInWay }, pieceThatCanMove.position, pieceThatCanMove.constructor.name);
         if (!isPieceInWay)
             try {
                 const piece = new MovementUtils_1.MovementUtils().completeMove(this.pieces, pieceThatCanMove, destiPos, move);

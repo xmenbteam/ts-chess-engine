@@ -214,7 +214,7 @@ describe("Standard Game", () => {
   });
 
   describe.only("makeMove", () => {
-    test.only("Move one piece - e2 - e4", () => {
+    test("Move one piece - e2 - e4", () => {
       const game = new Game();
       const move = "e4";
       const pieces = game.pieces;
@@ -246,10 +246,9 @@ describe("Standard Game", () => {
       const game = new Game();
       const move = "Ra3";
       const pieces = game.pieces;
-      console.log(game.pieces.Ra1);
       const moveTime = game.makeMove(move, 0);
-      console.log(game.pieces.Ra3);
-      console.log(moveTime);
+      expect("Ra3" in pieces).toBe(false);
+      expect(moveTime.msg).toBe("Fail!");
     });
   });
 

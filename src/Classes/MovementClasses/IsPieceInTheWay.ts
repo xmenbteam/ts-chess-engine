@@ -14,37 +14,55 @@ export class IsPieceInTheWay {
 
     console.log({ destiFileDist, destiRankDist });
 
+    const directionRef = (
+      pieceFileDist: number,
+      pieceRankDist: number,
+      destiFileDist: number,
+      destiRankDist: number
+    ): string => {
+      const refObj = {
+        N:
+          pieceFileDist === 0 &&
+          pieceRankDist > 0 &&
+          pieceRankDist < destiRankDist,
+        S:
+          pieceFileDist === 0 &&
+          pieceFileDist < 0 &&
+          pieceFileDist > destiFileDist,
+        E:
+          pieceRankDist === 0 &&
+          pieceFileDist > 0 &&
+          pieceRankDist < destiRankDist,
+        W:
+          pieceRankDist === 0 &&
+          pieceFileDist < 0 &&
+          pieceFileDist > destiFileDist,
+      };
+      for (const [dir, cond] of Object.entries(refObj)) {
+        if (cond) return dir;
+      }
+      return "";
+    };
+
     for (let piece in this.allPieces) {
       const { file: pieceFileDist, rank: pieceRankDist } = this.allPieces[
         piece
       ].position.distanceFrom(this.piecePos);
+      const dirFromPiece = directionRef(
+        pieceFileDist,
+        pieceRankDist,
+        destiFileDist,
+        destiRankDist
+      );
 
-      if (
-        pieceFileDist === 0 &&
-        pieceRankDist > 0 &&
-        pieceRankDist < destiRankDist
-      )
-        this.isInWay = true;
-
-      if (
-        pieceFileDist === 0 &&
-        pieceFileDist < 0 &&
-        pieceFileDist > destiFileDist
-      )
-        this.isInWay = true;
-      if (
-        pieceRankDist === 0 &&
-        pieceFileDist > 0 &&
-        pieceRankDist < destiRankDist
-      )
-        this.isInWay = true;
-
-      if (
-        pieceRankDist === 0 &&
-        pieceFileDist < 0 &&
-        pieceFileDist > destiFileDist
-      )
-        this.isInWay = true;
+      if (dirFromPiece === "N")
+        if (pieceRankDist < destiRankDist) this.isInWay = true;
+      if (dirFromPiece === "S")
+        if (pieceRankDist > destiRankDist) this.isInWay = true;
+      if (dirFromPiece === "E")
+        if (pieceFileDist < destiFileDist) this.isInWay = true;
+      if (dirFromPiece === "W")
+        if (pieceFileDist > destiFileDist) this.isInWay = true;
     }
 
     console.log("isinwat", this.isInWay);
