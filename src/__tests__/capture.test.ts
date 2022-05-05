@@ -214,16 +214,41 @@ describe("Check", () => {
   });
 });
 
-// describe("Checkmate", () => {
-//   test("isKingInCheckMate", () => {
-//     const pieces: CustomPieceArray = [
-//       { piece: "Kh7", colour: 1 },
-//       { piece: "Rh2", colour: 0 },
-//       { piece: "Qg2", colour: 0 },
-//     ];
+describe("Can piece block check", () => {
+  test("canPieceBlockCheck", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kd7", colour: 1 },
+      { piece: "Rc4", colour: 1 },
+      { piece: "Rd2", colour: 0 },
+    ];
 
-//     const game = new Game(pieces);
+    const game = new Game(pieces);
 
-//     expect(game.isKingInCheckMate(1)).toBe(true);
-//   });
-// });
+    expect(game.canPieceBlockCheck(1)).toBe(true);
+  });
+});
+
+describe("Checkmate", () => {
+  test("!isKingInCheckMate - king in corner", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kh8", colour: 1 },
+      { piece: "Rh2", colour: 0 },
+      // { piece: "Qg2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+    expect(game.isKingInCheck(1)).toBe(true);
+    expect(game.isKingInCheckMate(1)).toBe(false);
+  });
+  xtest("isKingInCheckMate - king in corner", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kh8", colour: 1 },
+      { piece: "Rh2", colour: 0 },
+      { piece: "Qg2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.isKingInCheckMate(1)).toBe(true);
+  });
+});

@@ -59,6 +59,17 @@ class Game {
             Rh8: new Rook_1.Rook(Types_1.Colour[1], "h", 8),
         };
     }
+    static makeCustomPiece(name, colour, f, r) {
+        const ref = {
+            P: new Pawn_1.Pawn(Types_1.Colour[colour], f, r),
+            R: new Rook_1.Rook(Types_1.Colour[colour], f, r),
+            N: new Knight_1.Knight(Types_1.Colour[colour], f, r),
+            Q: new Queen_1.Queen(Types_1.Colour[colour], f, r),
+            K: new King_1.King(Types_1.Colour[colour], f, r),
+            B: new Bishop_1.Bishop(Types_1.Colour[colour], f, r),
+        };
+        return ref[name];
+    }
     static makeCustomPieces(pieces) {
         const { pawnTest, fileReg, rankReg, nameTest } = new utils_1.utils().getRegex();
         const customPieces = {};
@@ -76,17 +87,6 @@ class Game {
         });
         return customPieces;
     }
-    static makeCustomPiece(name, colour, f, r) {
-        const ref = {
-            P: new Pawn_1.Pawn(Types_1.Colour[colour], f, r),
-            R: new Rook_1.Rook(Types_1.Colour[colour], f, r),
-            N: new Knight_1.Knight(Types_1.Colour[colour], f, r),
-            Q: new Queen_1.Queen(Types_1.Colour[colour], f, r),
-            K: new King_1.King(Types_1.Colour[colour], f, r),
-            B: new Bishop_1.Bishop(Types_1.Colour[colour], f, r),
-        };
-        return ref[name];
-    }
     get pieces() {
         return this._pieces;
     }
@@ -95,6 +95,48 @@ class Game {
     }
     set isWhiteMove(value) {
         this._isWhiteMove = value;
+    }
+    makeMove(move, colour) {
+        const { pawnTest, dubiousFile, dubiousRank } = new utils_1.utils().getRegex();
+        if (pawnTest.test(move))
+            move = `P${move}`;
+        if (move === "0-0" || move === "0-0-0") {
+            let side = 0;
+            if (move === "0-0-0")
+                side = 1;
+            return new SpecialMoves_1.SpecialMoves(this.pieces).castle(side, colour, this.pieces);
+        }
+        let destiPos, destiRankFile, isPieceInWay;
+        const isDubiousFile = dubiousFile.test(move);
+        const isDubiousRank = dubiousRank.test(move);
+        if (isDubiousFile || isDubiousRank) {
+            destiPos = new PiecesAndPosition_1.Position(move[2], Number(move[3]));
+            destiRankFile = `${move[2]}${move[3]}`;
+        }
+        else {
+            destiPos = new PiecesAndPosition_1.Position(move[1], Number(move[2]));
+            destiRankFile = `${move[1]}${move[2]}`;
+        }
+        const pieceThatCanMove = this.getPiece(destiPos, move, colour);
+        if (pieceThatCanMove.constructor.name === "Knight" &&
+            pieceThatCanMove.canMoveTo(destiPos))
+            isPieceInWay = false;
+        else
+            isPieceInWay = new IsPieceInTheWay_1.IsPieceInTheWay(pieceThatCanMove.position, destiPos, this.pieces).checkBoth();
+        if (!isPieceInWay)
+            try {
+                const piece = new MovementUtils_1.MovementUtils().completeMove(this.pieces, pieceThatCanMove, destiPos, move);
+                return { msg: `${piece} moved to ${destiRankFile}!` };
+            }
+            catch (err) {
+                return { msg: "Fail!", err };
+            }
+        else
+            return { msg: "Fail!" };
+    }
+    makeTurn(move) {
+        const [white, black] = move.split(" ");
+        return [this.makeMove(white, 0), this.makeMove(black, 1)];
     }
     isPieceThere(position) {
         const { rank, file } = position.position;
@@ -170,6 +212,7 @@ class Game {
         }
         return { msg: "Could not capture!" };
     }
+    // 1. Is King in check?
     isKingInCheck(colour) {
         let isInCheck = false;
         for (let piece in this.pieces) {
@@ -179,47 +222,33 @@ class Game {
         }
         return isInCheck;
     }
-    makeMove(move, colour) {
-        const { pawnTest, dubiousFile, dubiousRank } = new utils_1.utils().getRegex();
-        if (pawnTest.test(move))
-            move = `P${move}`;
-        if (move === "0-0" || move === "0-0-0") {
-            let side = 0;
-            if (move === "0-0-0")
-                side = 1;
-            return new SpecialMoves_1.SpecialMoves(this.pieces).castle(side, colour, this.pieces);
-        }
-        let destiPos, destiRankFile, isPieceInWay;
-        const isDubiousFile = dubiousFile.test(move);
-        const isDubiousRank = dubiousRank.test(move);
-        if (isDubiousFile || isDubiousRank) {
-            destiPos = new PiecesAndPosition_1.Position(move[2], Number(move[3]));
-            destiRankFile = `${move[2]}${move[3]}`;
-        }
-        else {
-            destiPos = new PiecesAndPosition_1.Position(move[1], Number(move[2]));
-            destiRankFile = `${move[1]}${move[2]}`;
-        }
-        const pieceThatCanMove = this.getPiece(destiPos, move, colour);
-        if (pieceThatCanMove.constructor.name === "Knight" &&
-            pieceThatCanMove.canMoveTo(destiPos))
-            isPieceInWay = false;
-        else
-            isPieceInWay = new IsPieceInTheWay_1.IsPieceInTheWay(pieceThatCanMove.position, destiPos, this.pieces).checkBoth();
-        if (!isPieceInWay)
-            try {
-                const piece = new MovementUtils_1.MovementUtils().completeMove(this.pieces, pieceThatCanMove, destiPos, move);
-                return { msg: `${piece} moved to ${destiRankFile}!` };
-            }
-            catch (err) {
-                return { msg: "Fail!", err };
-            }
-        else
-            return { msg: "Fail!" };
+    // 2. Can piece block the check?
+    canPieceBlockCheck(colour) {
+        const king = this.findKing(colour);
+        const isKingInCheck = this.isKingInCheck(colour);
+        return false;
     }
-    makeTurn(move) {
-        const [white, black] = move.split(" ");
-        return [this.makeMove(white, 0), this.makeMove(black, 1)];
+    // 3. Can the king move out of check?
+    // 4. Can the checking piece be taken?
+    isKingInCheckMate(colour) {
+        let isKingInCheckMate = false;
+        const king = this.findKing(colour);
+        const isKingInCheck = this.isKingInCheck(colour);
+        let canKingMove = true;
+        // If king moved to any of these squares, would it be in check?
+        // const positionsKingCanMoveTo =
+        // Find a way of looping through potential squares the king can move to
+        // piece.canMoveTo(position)
+        // If a king moved there, would it be in check?
+        /*
+        1. Check
+        2. Can't block
+        3. Can't move
+        4.
+        */
+        if (isKingInCheck && !canKingMove)
+            isKingInCheckMate = true;
+        return isKingInCheckMate;
     }
 }
 exports.Game = Game;
