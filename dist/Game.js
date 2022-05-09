@@ -1,4 +1,16 @@
 "use strict";
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var _Game_isWhiteMove, _Game_pieces;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = void 0;
 const Bishop_1 = require("./Classes/PieceClasses/Bishop");
@@ -17,11 +29,13 @@ const Error_1 = require("./Classes/PieceClasses/Error");
 const IsPieceInTheWay_1 = require("./Classes/MovementClasses/IsPieceInTheWay");
 class Game {
     constructor(pieces) {
-        this._isWhiteMove = true;
+        _Game_isWhiteMove.set(this, void 0);
+        _Game_pieces.set(this, void 0);
+        __classPrivateFieldSet(this, _Game_isWhiteMove, true, "f");
         if (!pieces)
-            this._pieces = Game.makePieces();
+            __classPrivateFieldSet(this, _Game_pieces, Game.makePieces(), "f");
         else
-            this._pieces = Game.makeCustomPieces(pieces);
+            __classPrivateFieldSet(this, _Game_pieces, Game.makeCustomPieces(pieces), "f");
     }
     static makePieces() {
         return {
@@ -88,13 +102,13 @@ class Game {
         return customPieces;
     }
     get pieces() {
-        return this._pieces;
+        return __classPrivateFieldGet(this, _Game_pieces, "f");
     }
     get isWhiteMove() {
-        return this._isWhiteMove;
+        return __classPrivateFieldGet(this, _Game_isWhiteMove, "f");
     }
     set isWhiteMove(value) {
-        this._isWhiteMove = value;
+        __classPrivateFieldSet(this, _Game_isWhiteMove, value, "f");
     }
     makeMove(move, colour) {
         const { pawnTest, dubiousFile, dubiousRank } = utils_1.utils.getRegex();
@@ -104,7 +118,7 @@ class Game {
             let side = 0;
             if (move === "0-0-0")
                 side = 1;
-            return new SpecialMoves_1.SpecialMoves(this.pieces).castle(side, colour, this.pieces);
+            return SpecialMoves_1.SpecialMoves.castle(side, colour, this.pieces);
         }
         let destiPos, destiRankFile, isPieceInWay;
         const isDubiousFile = dubiousFile.test(move);
@@ -140,9 +154,9 @@ class Game {
     }
     isPieceThere(position) {
         const { rank, file } = position.position;
-        for (let piece in this._pieces) {
-            const rankCheck = this._pieces[piece].position.position.rank === rank;
-            const fileCheck = this._pieces[piece].position.position.file === file;
+        for (let piece in __classPrivateFieldGet(this, _Game_pieces, "f")) {
+            const rankCheck = __classPrivateFieldGet(this, _Game_pieces, "f")[piece].position.position.rank === rank;
+            const fileCheck = __classPrivateFieldGet(this, _Game_pieces, "f")[piece].position.position.file === file;
             if (fileCheck && rankCheck)
                 return true;
         }
@@ -200,9 +214,9 @@ class Game {
         const flag = flagRefObj[name];
         let canCapture;
         if (capturePiece.constructor.name === "Pawn")
-            canCapture = new CaptureClasses_1.Capture().canPawnCapture(capturePiece, targetPiece);
+            canCapture = CaptureClasses_1.Capture.canPawnCapture(capturePiece, targetPiece);
         else
-            canCapture = new CaptureClasses_1.Capture().canCapture(capturePiece, targetPiece);
+            canCapture = CaptureClasses_1.Capture.canCapture(capturePiece, targetPiece);
         if (canCapture) {
             MovementUtils_1.MovementUtils.completeMove(pieceObj, capturePiece, targetPiece.position, `${flag}${capFile}${capRank}`);
             targetPiece.isCaptured = true;
@@ -216,7 +230,7 @@ class Game {
     isKingInCheck(colour) {
         let isInCheck = false;
         for (let piece in this.pieces) {
-            const canCapture = new CaptureClasses_1.Capture().canCapture(this.pieces[piece], this.findKing(colour));
+            const canCapture = CaptureClasses_1.Capture.canCapture(this.pieces[piece], this.findKing(colour));
             if (canCapture)
                 isInCheck = true;
         }
@@ -253,3 +267,4 @@ class Game {
     }
 }
 exports.Game = Game;
+_Game_isWhiteMove = new WeakMap(), _Game_pieces = new WeakMap();

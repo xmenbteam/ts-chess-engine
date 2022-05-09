@@ -1,14 +1,14 @@
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class King extends Piece {
-  private _hasMoved: boolean;
+  #hasMoved: boolean;
 
-  public get hasMoved(): boolean {
-    return this._hasMoved;
+  get hasMoved(): boolean {
+    return this.#hasMoved;
   }
 
-  public set hasMoved(hasMoved) {
-    this._hasMoved = hasMoved;
+  set hasMoved(hasMoved) {
+    this.#hasMoved = hasMoved;
   }
 
   canMoveTo(newPosition: Position): boolean {
@@ -31,6 +31,6 @@ export class King extends Piece {
 
   constructor(pieceColour: string, file: string, rank: number) {
     super(pieceColour, file, rank);
-    this._hasMoved = false;
+    this.#hasMoved = false;
   }
 }

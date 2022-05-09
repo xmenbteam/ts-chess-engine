@@ -3,19 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Capture = void 0;
 const utils_1 = require("../utils/utils");
 class Capture {
-    isPieceSameColour(capturingPiece, targetPiece) {
+    static isPieceSameColour(capturingPiece, targetPiece) {
         const p1Colour = capturingPiece.colour;
         const p2Colour = targetPiece.colour;
         return p1Colour === p2Colour ? true : false;
     }
-    canCapture(capturingPiece, targetPiece) {
+    static canCapture(capturingPiece, targetPiece) {
         const canMove = capturingPiece.canMoveTo(targetPiece.position);
         const isSameColour = this.isPieceSameColour(capturingPiece, targetPiece);
         if (canMove && !isSameColour)
             return true;
         return false;
     }
-    canPawnCapture(capturingPiece, targetPiece) {
+    static canPawnCapture(capturingPiece, targetPiece) {
         const { file, rank } = targetPiece.position.distanceFrom(capturingPiece.position);
         const isPawn = capturingPiece.constructor.name === "Pawn";
         const canCapture = file === 1 && Math.abs(rank) === 1;
@@ -25,7 +25,7 @@ class Capture {
             return true;
         return false;
     }
-    canEnPassant(capturingPiece, targetPiece) {
+    static canEnPassant(capturingPiece, targetPiece) {
         var _a, _b;
         const { letterRef } = utils_1.utils.getLetterRefs();
         const arePawns = capturingPiece.constructor.name === "Pawn" &&

@@ -1,14 +1,14 @@
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Rook extends Piece {
-  private _hasMoved: boolean;
+  #hasMoved: boolean;
 
   public get hasMoved(): boolean {
-    return this._hasMoved;
+    return this.#hasMoved;
   }
 
   public set hasMoved(hasMoved) {
-    this._hasMoved = hasMoved;
+    this.#hasMoved = hasMoved;
   }
 
   canMoveTo(newPosition: Position): boolean {
@@ -27,6 +27,6 @@ export class Rook extends Piece {
 
   constructor(pieceColour: string, file: string, rank: number) {
     super(pieceColour, file, rank);
-    this._hasMoved = false;
+    this.#hasMoved = false;
   }
 }

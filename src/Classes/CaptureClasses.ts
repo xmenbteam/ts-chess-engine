@@ -2,14 +2,14 @@ import { utils } from "../utils/utils";
 import { Piece } from "./PieceClasses/PiecesAndPosition";
 
 export class Capture {
-  isPieceSameColour(capturingPiece: Piece, targetPiece: Piece): boolean {
+  static isPieceSameColour(capturingPiece: Piece, targetPiece: Piece): boolean {
     const p1Colour = capturingPiece.colour;
     const p2Colour = targetPiece.colour;
 
     return p1Colour === p2Colour ? true : false;
   }
 
-  canCapture(capturingPiece: Piece, targetPiece: Piece): boolean {
+  static canCapture(capturingPiece: Piece, targetPiece: Piece): boolean {
     const canMove = capturingPiece.canMoveTo(targetPiece.position);
     const isSameColour = this.isPieceSameColour(capturingPiece, targetPiece);
 
@@ -17,7 +17,7 @@ export class Capture {
     return false;
   }
 
-  canPawnCapture(capturingPiece: Piece, targetPiece: Piece): boolean {
+  static canPawnCapture(capturingPiece: Piece, targetPiece: Piece): boolean {
     const { file, rank } = targetPiece.position.distanceFrom(
       capturingPiece.position
     );
@@ -34,7 +34,7 @@ export class Capture {
     return false;
   }
 
-  canEnPassant(capturingPiece: Piece, targetPiece: Piece): boolean {
+  static canEnPassant(capturingPiece: Piece, targetPiece: Piece): boolean {
     const { letterRef } = utils.getLetterRefs();
     const arePawns =
       capturingPiece.constructor.name === "Pawn" &&

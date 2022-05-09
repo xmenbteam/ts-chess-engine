@@ -2,45 +2,45 @@ import { MoveToObj, PositionDiff, RankFile } from "../../Types";
 import { utils } from "../../utils/utils";
 
 export class Position {
-  private _position: { file: string; rank: number };
+  #position: { file: string; rank: number };
 
   distanceFrom(otherPosition: Position): PositionDiff {
     const { letterRef } = utils.getLetterRefs();
 
     const fileDiff =
-      letterRef[this._position.file] - letterRef[otherPosition._position.file];
-    const rankDiff = this._position.rank - otherPosition._position.rank;
+      letterRef[this.#position.file] - letterRef[otherPosition.#position.file];
+    const rankDiff = this.#position.rank - otherPosition.#position.rank;
     return { file: fileDiff, rank: rankDiff };
   }
 
-  public get position(): RankFile {
-    return { file: this._position.file, rank: this._position.rank };
+  get position(): RankFile {
+    return { file: this.#position.file, rank: this.#position.rank };
   }
 
-  public set position({ file, rank }: RankFile) {
-    this._position = { file, rank };
+  set position({ file, rank }: RankFile) {
+    this.#position = { file, rank };
   }
 
   constructor(file: string, rank: number) {
-    this._position = { file, rank };
+    this.#position = { file, rank };
   }
 }
 
 export abstract class Piece {
   position: Position;
-  private _colour: string;
-  private _isCaptured: boolean;
+  #colour: string;
+  #isCaptured: boolean;
 
-  public set isCaptured(isCaptured) {
-    this._isCaptured = isCaptured;
+  set isCaptured(isCaptured) {
+    this.#isCaptured = isCaptured;
   }
 
-  public get isCaptured() {
-    return this._isCaptured;
+  get isCaptured() {
+    return this.#isCaptured;
   }
 
-  public get colour() {
-    return this._colour;
+  get colour() {
+    return this.#colour;
   }
 
   abstract canMoveTo(newPosition: Position): boolean;
@@ -48,7 +48,7 @@ export abstract class Piece {
 
   constructor(pieceColour: string, file: string, rank: number) {
     this.position = new Position(file, rank);
-    this._colour = pieceColour;
-    this._isCaptured = false;
+    this.#colour = pieceColour;
+    this.#isCaptured = false;
   }
 }

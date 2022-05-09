@@ -1,23 +1,23 @@
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Pawn extends Piece {
-  private _hasMoved: boolean;
-  private _moveCount: number;
+  #hasMoved: boolean;
+  #moveCount: number;
 
   get hasMoved() {
-    return this._hasMoved;
+    return this.#hasMoved;
   }
 
   set hasMoved(hasMoved: boolean) {
-    if (!this.hasMoved) this._hasMoved = hasMoved;
+    if (!this.hasMoved) this.#hasMoved = hasMoved;
   }
 
   get moveCount() {
-    return this._moveCount;
+    return this.#moveCount;
   }
 
   set moveCount(num: number) {
-    this._moveCount += num;
+    this.#moveCount += num;
   }
 
   canMoveTo(newPosition: Position): boolean {
@@ -40,7 +40,7 @@ export class Pawn extends Piece {
 
   constructor(pieceColour: string, file: string, rank: number) {
     super(pieceColour, file, rank);
-    this._hasMoved = false;
-    this._moveCount = 0;
+    this.#hasMoved = false;
+    this.#moveCount = 0;
   }
 }

@@ -11,9 +11,7 @@ describe("Capture", () => {
       const r1 = new Rook(Colour[0], "d", 3);
       const r2 = new Rook(Colour[0], "d", 6);
 
-      const newCapture = new Capture();
-
-      const isSame = newCapture.isPieceSameColour(r1, r2);
+      const isSame = Capture.isPieceSameColour(r1, r2);
 
       expect(isSame).toBe(true);
     });
@@ -21,9 +19,7 @@ describe("Capture", () => {
       const r1 = new Rook(Colour[0], "d", 3);
       const r2 = new Rook(Colour[1], "d", 6);
 
-      const newCapture = new Capture();
-
-      const isSame = newCapture.isPieceSameColour(r1, r2);
+      const isSame = Capture.isPieceSameColour(r1, r2);
 
       expect(isSame).toBe(false);
     });
@@ -33,7 +29,7 @@ describe("Capture", () => {
       const r1 = new Rook(Colour[0], "d", 3);
       const r2 = new Rook(Colour[1], "d", 6);
 
-      const canCapture = new Capture().canCapture(r1, r2);
+      const canCapture = Capture.canCapture(r1, r2);
 
       expect(canCapture).toBe(true);
     });
@@ -41,7 +37,7 @@ describe("Capture", () => {
       const capturingPiece = new Bishop(Colour[0], "b", 2);
       const targetPiece = new Rook(Colour[1], "e", 5);
 
-      const canCapture = new Capture().canCapture(capturingPiece, targetPiece);
+      const canCapture = Capture.canCapture(capturingPiece, targetPiece);
 
       expect(canCapture).toBe(true);
     });
@@ -49,7 +45,7 @@ describe("Capture", () => {
       const capturingPiece = new Bishop(Colour[0], "h", 2);
       const targetPiece = new Rook(Colour[1], "e", 5);
 
-      const canCapture = new Capture().canCapture(capturingPiece, targetPiece);
+      const canCapture = Capture.canCapture(capturingPiece, targetPiece);
 
       expect(canCapture).toBe(true);
     });
@@ -57,7 +53,7 @@ describe("Capture", () => {
       const r1 = new Rook(Colour[0], "d", 3);
       const r2 = new Rook(Colour[0], "d", 6);
 
-      const canCapture = new Capture().canCapture(r1, r2);
+      const canCapture = Capture.canCapture(r1, r2);
 
       expect(canCapture).toBe(false);
     });
@@ -68,7 +64,7 @@ describe("Capture", () => {
         const pawn = new Pawn(Colour[0], "c", 2);
         const rook = new Rook(Colour[1], "d", 3);
 
-        const pawnCapture = new Capture().canPawnCapture(pawn, rook);
+        const pawnCapture = Capture.canPawnCapture(pawn, rook);
 
         expect(pawnCapture).toBe(true);
       });
@@ -76,7 +72,7 @@ describe("Capture", () => {
         const pawn = new Pawn(Colour[0], "c", 2);
         const rook = new Rook(Colour[0], "d", 3);
 
-        const pawnCapture = new Capture().canPawnCapture(pawn, rook);
+        const pawnCapture = Capture.canPawnCapture(pawn, rook);
 
         expect(pawnCapture).toBe(false);
       });
@@ -91,7 +87,7 @@ describe("Capture", () => {
         whitePawn.moveTo("d", 4);
         whitePawn.moveTo("d", 5);
 
-        const enPass = new Capture().canEnPassant(whitePawn, blackPawn);
+        const enPass = Capture.canEnPassant(whitePawn, blackPawn);
 
         expect(enPass).toBe(true);
       });
@@ -103,7 +99,7 @@ describe("Capture", () => {
         whitePawn.moveTo("d", 4);
         whitePawn.moveTo("d", 5);
 
-        const enPass = new Capture().canEnPassant(whitePawn, blackPawn);
+        const enPass = Capture.canEnPassant(whitePawn, blackPawn);
 
         expect(enPass).toBe(true);
       });
@@ -117,7 +113,7 @@ describe("Capture", () => {
         whitePawn.moveTo("d", 4);
         whitePawn.moveTo("d", 5);
 
-        const enPass = new Capture().canEnPassant(whitePawn, blackPawn);
+        const enPass = Capture.canEnPassant(whitePawn, blackPawn);
 
         expect(enPass).toBe(false);
       });

@@ -1,13 +1,11 @@
-import { Piece, Position } from "../PieceClasses/PiecesAndPosition";
+import { Position } from "../PieceClasses/PiecesAndPosition";
 import { Colour, PieceObject, RankFile } from "../../Types";
 import { IsPieceInTheWay } from "./IsPieceInTheWay";
 import { utils } from "../../utils/utils";
 import { MovementUtils } from "./MovementUtils";
 
 export class SpecialMoves {
-  private pieces: PieceObject;
-
-  castle(side: number, colour: number, pieceObj: PieceObject) {
+  static castle(side: number, colour: number, pieceObj: PieceObject) {
     const castleRefObj = utils.getCastleRef();
 
     const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } =
@@ -25,27 +23,27 @@ export class SpecialMoves {
 
     const newRookPos: Position = new Position(newRookFile[side], rank[colour]);
 
-    const oldKingPos = this.pieces[oldKingCoord[colour]].position;
-    const oldRookPos = this.pieces[oldRookCoord[colour][side]].position;
+    const oldKingPos = pieceObj[oldKingCoord[colour]].position;
+    const oldRookPos = pieceObj[oldRookCoord[colour][side]].position;
 
     const isPieceInWayKing = IsPieceInTheWay.checkRankAndFile(
       oldKingPos,
       newKingPos,
-      this.pieces
+      pieceObj
     );
 
     const isPieceInWayRook = IsPieceInTheWay.checkRankAndFile(
       oldRookPos,
       newRookPos,
-      this.pieces
+      pieceObj
     );
 
     const hasNotMoved = !king.hasMoved && !rook.hasMoved;
 
     try {
       if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
-        MovementUtils.completeCastle(king, colour, side, this.pieces);
-        MovementUtils.completeCastle(rook, colour, side, this.pieces);
+        MovementUtils.completeCastle(king, colour, side, pieceObj);
+        MovementUtils.completeCastle(rook, colour, side, pieceObj);
 
         return {
           msg: `${Colour[colour]} castled ${side ? "Queen" : "King"}side!`,
@@ -60,9 +58,5 @@ export class SpecialMoves {
       console.log("CASTLING", err);
       return { msg: "ERROR" };
     }
-  }
-
-  constructor(pieces: PieceObject) {
-    this.pieces = pieces;
   }
 }
