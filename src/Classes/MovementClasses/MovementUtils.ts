@@ -5,13 +5,10 @@ import { Piece, Position } from "../PieceClasses/PiecesAndPosition";
 import { Rook } from "../PieceClasses/Rook";
 
 export class MovementUtils {
-  static completeMove(
-    pieceObj: PieceObject,
-    piece: Piece,
-    destiPos: Position,
-    move: string
-  ) {
-    const flag = move[0];
+  static completeMove(pieceObj: PieceObject, piece: Piece, destiPos: Position) {
+    const { flagRefObj } = utils.getLetterRefs();
+
+    const flag = flagRefObj[piece.constructor.name];
 
     const { file: f, rank: r } = piece.position.position;
 

@@ -66,16 +66,5 @@ class IsPieceInTheWay {
         else
             return false;
     }
-    static checkKingMove(piecePos, destiPos, allPieces) {
-        let isInWay = false;
-        for (let piece in allPieces) {
-            const { file: fileDistance, rank: rankDistance } = allPieces[piece].position.distanceFrom(piecePos);
-            if ((Math.abs(rankDistance) === 1 && !fileDistance) ||
-                (!rankDistance && Math.abs(fileDistance) === 1) ||
-                (Math.abs(fileDistance) === 1 && Math.abs(rankDistance) === 1))
-                isInWay = true;
-        }
-        return isInWay;
-    }
 }
 exports.IsPieceInTheWay = IsPieceInTheWay;

@@ -15,8 +15,8 @@ export class King extends Piece {
     const { rank, file } = newPosition.distanceFrom(this.position);
     if (
       (Math.abs(file) === 1 && Math.abs(rank) === 1) ||
-      (Math.abs(file) === 1 && !Math.abs(rank)) ||
-      (!Math.abs(file) && Math.abs(rank) === 1)
+      (Math.abs(file) === 1 && !rank) ||
+      (!file && Math.abs(rank) === 1)
     )
       return true;
 

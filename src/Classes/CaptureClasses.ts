@@ -22,6 +22,9 @@ export class Capture {
       capturingPiece.position
     );
     const isPawn = capturingPiece.constructor.name === "Pawn";
+
+    if (!isPawn) throw new Error("Piece must be a pawn!");
+
     const canCapture = file === 1 && Math.abs(rank) === 1;
 
     if (
@@ -39,6 +42,8 @@ export class Capture {
     const arePawns =
       capturingPiece.constructor.name === "Pawn" &&
       targetPiece.constructor.name === "Pawn";
+
+    if (!arePawns) throw new Error("Both pieces must be pawns!");
 
     const { file: capFile, rank: capRank } = capturingPiece.position.position;
     const { file: targFile, rank: targRank } = targetPiece.position.position;

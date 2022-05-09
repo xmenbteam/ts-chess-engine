@@ -99,25 +99,4 @@ export class IsPieceInTheWay {
       return IsPieceInTheWay.checkDiagonal(piecePos, destiPos, allPieces);
     else return false;
   }
-
-  static checkKingMove(
-    piecePos: Position,
-    destiPos: Position,
-    allPieces: PieceObject
-  ) {
-    let isInWay: boolean = false;
-    for (let piece in allPieces) {
-      const { file: fileDistance, rank: rankDistance } =
-        allPieces[piece].position.distanceFrom(piecePos);
-
-      if (
-        (Math.abs(rankDistance) === 1 && !fileDistance) ||
-        (!rankDistance && Math.abs(fileDistance) === 1) ||
-        (Math.abs(fileDistance) === 1 && Math.abs(rankDistance) === 1)
-      )
-        isInWay = true;
-    }
-
-    return isInWay;
-  }
 }

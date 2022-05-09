@@ -153,8 +153,7 @@ export class Game {
         const piece = MovementUtils.completeMove(
           this.pieces,
           pieceThatCanMove,
-          destiPos,
-          move
+          destiPos
         );
         return { msg: `${piece} moved to ${destiRankFile}!` };
       } catch (err: any) {
@@ -239,16 +238,9 @@ export class Game {
     capturePiece: Piece,
     targetPiece: Piece
   ): { [msg: string]: string } {
-    const { flagRefObj } = utils.getLetterRefs();
-
-    const { file: capFile, rank: capRank } = capturePiece.position.position;
-
     const { file, rank } = targetPiece.position.position;
 
     const pieceObj = this.pieces;
-
-    const name = capturePiece.constructor.name;
-    const flag = flagRefObj[name];
 
     let canCapture: boolean;
 
@@ -257,12 +249,7 @@ export class Game {
     else canCapture = Capture.canCapture(capturePiece, targetPiece);
 
     if (canCapture) {
-      MovementUtils.completeMove(
-        pieceObj,
-        capturePiece,
-        targetPiece.position,
-        `${flag}${capFile}${capRank}`
-      );
+      MovementUtils.completeMove(pieceObj, capturePiece, targetPiece.position);
       targetPiece.isCaptured = true;
 
       return {

@@ -139,7 +139,7 @@ class Game {
             isPieceInWay = IsPieceInTheWay_1.IsPieceInTheWay.checkBoth(pieceThatCanMove.position, destiPos, this.pieces);
         if (!isPieceInWay)
             try {
-                const piece = MovementUtils_1.MovementUtils.completeMove(this.pieces, pieceThatCanMove, destiPos, move);
+                const piece = MovementUtils_1.MovementUtils.completeMove(this.pieces, pieceThatCanMove, destiPos);
                 return { msg: `${piece} moved to ${destiRankFile}!` };
             }
             catch (err) {
@@ -206,19 +206,15 @@ class Game {
         return finalPiece;
     }
     capturePiece(capturePiece, targetPiece) {
-        const { flagRefObj } = utils_1.utils.getLetterRefs();
-        const { file: capFile, rank: capRank } = capturePiece.position.position;
         const { file, rank } = targetPiece.position.position;
         const pieceObj = this.pieces;
-        const name = capturePiece.constructor.name;
-        const flag = flagRefObj[name];
         let canCapture;
         if (capturePiece.constructor.name === "Pawn")
             canCapture = CaptureClasses_1.Capture.canPawnCapture(capturePiece, targetPiece);
         else
             canCapture = CaptureClasses_1.Capture.canCapture(capturePiece, targetPiece);
         if (canCapture) {
-            MovementUtils_1.MovementUtils.completeMove(pieceObj, capturePiece, targetPiece.position, `${flag}${capFile}${capRank}`);
+            MovementUtils_1.MovementUtils.completeMove(pieceObj, capturePiece, targetPiece.position);
             targetPiece.isCaptured = true;
             return {
                 msg: `${targetPiece.colour} ${targetPiece.constructor.name} on ${file}${rank} Captured!`,

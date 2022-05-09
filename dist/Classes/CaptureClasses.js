@@ -18,6 +18,8 @@ class Capture {
     static canPawnCapture(capturingPiece, targetPiece) {
         const { file, rank } = targetPiece.position.distanceFrom(capturingPiece.position);
         const isPawn = capturingPiece.constructor.name === "Pawn";
+        if (!isPawn)
+            throw new Error("Piece must be a pawn!");
         const canCapture = file === 1 && Math.abs(rank) === 1;
         if (isPawn &&
             canCapture &&
@@ -30,6 +32,8 @@ class Capture {
         const { letterRef } = utils_1.utils.getLetterRefs();
         const arePawns = capturingPiece.constructor.name === "Pawn" &&
             targetPiece.constructor.name === "Pawn";
+        if (!arePawns)
+            throw new Error("Both pieces must be pawns!");
         const { file: capFile, rank: capRank } = capturingPiece.position.position;
         const { file: targFile, rank: targRank } = targetPiece.position.position;
         const capCount = (_a = capturingPiece.moveTo(capFile, capRank)) === null || _a === void 0 ? void 0 : _a.moveCount;
