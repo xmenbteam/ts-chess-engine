@@ -1,5 +1,3 @@
-import { RankFile } from "../Types";
-
 export class utils {
   private letterRef: { [file: string]: number } = {
     a: 0,
@@ -45,7 +43,7 @@ export class utils {
     rank: [1, 8],
   };
 
-  diagonalDirRef(pieceFileDist: number, pieceRankDist: number) {
+  static diagonalDirRef(pieceFileDist: number, pieceRankDist: number) {
     let direction: string = "";
 
     const directionRef = {
@@ -62,7 +60,10 @@ export class utils {
     return direction;
   }
 
-  rankAndFileDirRef(pieceFileDist: number, pieceRankDist: number): string {
+  static rankAndFileDirRef(
+    pieceFileDist: number,
+    pieceRankDist: number
+  ): string {
     let direction: string = "";
     const refObj = {
       N: !pieceFileDist && pieceRankDist > 0,
@@ -76,31 +77,31 @@ export class utils {
     return direction;
   }
 
-  getLetterRefs() {
+  static getLetterRefs() {
     return {
-      letterRef: this.letterRef,
-      files: this.files,
-      // ranks: this.ranks,
-      flagRefObj: this.flagRefObj,
+      letterRef: new utils().letterRef,
+      files: new utils().files,
+      // ranks: new utils().ranks,
+      flagRefObj: new utils().flagRefObj,
     };
   }
 
-  getRegex() {
+  static getRegex() {
     return {
-      pawnTest: this.pawnTest,
-      pieceTest: this.pieceTest,
-      fileReg: this.fileReg,
-      rankReg: this.rankReg,
-      nameTest: this.nameTest,
-      dubiousFile: this.dubiousPieceFileReg,
-      dubiousRank: this.dubiousPieceRankReg,
+      pawnTest: new utils().pawnTest,
+      pieceTest: new utils().pieceTest,
+      fileReg: new utils().fileReg,
+      rankReg: new utils().rankReg,
+      nameTest: new utils().nameTest,
+      dubiousFile: new utils().dubiousPieceFileReg,
+      dubiousRank: new utils().dubiousPieceRankReg,
     };
   }
 
-  getCastleRef() {
-    return this.castleRefObj;
+  static getCastleRef() {
+    return new utils().castleRefObj;
   }
-  piecesThatNeedMoved() {
-    return this.HasMovedPieces;
+  static piecesThatNeedMoved() {
+    return new utils().HasMovedPieces;
   }
 }

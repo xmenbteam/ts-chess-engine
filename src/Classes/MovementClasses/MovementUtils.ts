@@ -5,7 +5,7 @@ import { Piece, Position } from "../PieceClasses/PiecesAndPosition";
 import { Rook } from "../PieceClasses/Rook";
 
 export class MovementUtils {
-  completeMove(
+  static completeMove(
     pieceObj: PieceObject,
     piece: Piece,
     destiPos: Position,
@@ -27,13 +27,13 @@ export class MovementUtils {
     return piece.constructor.name;
   }
 
-  completeCastle(
+  static completeCastle(
     piece: King | Rook,
     colour: number,
     side: number,
     pieces: PieceObject
   ) {
-    const castleRefObj = new utils().getCastleRef();
+    const castleRefObj = utils.getCastleRef();
     const { newKingFile, rank, oldKingCoord, newRookFile, oldRookCoord } =
       castleRefObj;
 

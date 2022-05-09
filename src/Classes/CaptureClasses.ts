@@ -11,7 +11,6 @@ export class Capture {
 
   canCapture(capturingPiece: Piece, targetPiece: Piece): boolean {
     const canMove = capturingPiece.canMoveTo(targetPiece.position);
-
     const isSameColour = this.isPieceSameColour(capturingPiece, targetPiece);
 
     if (canMove && !isSameColour) return true;
@@ -36,7 +35,7 @@ export class Capture {
   }
 
   canEnPassant(capturingPiece: Piece, targetPiece: Piece): boolean {
-    const { letterRef } = new utils().getLetterRefs();
+    const { letterRef } = utils.getLetterRefs();
     const arePawns =
       capturingPiece.constructor.name === "Pawn" &&
       targetPiece.constructor.name === "Pawn";

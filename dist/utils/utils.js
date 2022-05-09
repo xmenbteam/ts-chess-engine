@@ -42,7 +42,7 @@ class utils {
             rank: [1, 8],
         };
     }
-    diagonalDirRef(pieceFileDist, pieceRankDist) {
+    static diagonalDirRef(pieceFileDist, pieceRankDist) {
         let direction = "";
         const directionRef = {
             NE: pieceFileDist > 0 && pieceRankDist > 0,
@@ -56,7 +56,7 @@ class utils {
         }
         return direction;
     }
-    rankAndFileDirRef(pieceFileDist, pieceRankDist) {
+    static rankAndFileDirRef(pieceFileDist, pieceRankDist) {
         let direction = "";
         const refObj = {
             N: !pieceFileDist && pieceRankDist > 0,
@@ -70,30 +70,30 @@ class utils {
         }
         return direction;
     }
-    getLetterRefs() {
+    static getLetterRefs() {
         return {
-            letterRef: this.letterRef,
-            files: this.files,
-            // ranks: this.ranks,
-            flagRefObj: this.flagRefObj,
+            letterRef: new utils().letterRef,
+            files: new utils().files,
+            // ranks: new utils().ranks,
+            flagRefObj: new utils().flagRefObj,
         };
     }
-    getRegex() {
+    static getRegex() {
         return {
-            pawnTest: this.pawnTest,
-            pieceTest: this.pieceTest,
-            fileReg: this.fileReg,
-            rankReg: this.rankReg,
-            nameTest: this.nameTest,
-            dubiousFile: this.dubiousPieceFileReg,
-            dubiousRank: this.dubiousPieceRankReg,
+            pawnTest: new utils().pawnTest,
+            pieceTest: new utils().pieceTest,
+            fileReg: new utils().fileReg,
+            rankReg: new utils().rankReg,
+            nameTest: new utils().nameTest,
+            dubiousFile: new utils().dubiousPieceFileReg,
+            dubiousRank: new utils().dubiousPieceRankReg,
         };
     }
-    getCastleRef() {
-        return this.castleRefObj;
+    static getCastleRef() {
+        return new utils().castleRefObj;
     }
-    piecesThatNeedMoved() {
-        return this.HasMovedPieces;
+    static piecesThatNeedMoved() {
+        return new utils().HasMovedPieces;
     }
 }
 exports.utils = utils;

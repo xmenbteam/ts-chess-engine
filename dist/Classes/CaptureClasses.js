@@ -27,7 +27,7 @@ class Capture {
     }
     canEnPassant(capturingPiece, targetPiece) {
         var _a, _b;
-        const { letterRef } = new utils_1.utils().getLetterRefs();
+        const { letterRef } = utils_1.utils.getLetterRefs();
         const arePawns = capturingPiece.constructor.name === "Pawn" &&
             targetPiece.constructor.name === "Pawn";
         const { file: capFile, rank: capRank } = capturingPiece.position.position;

@@ -8,7 +8,7 @@ export class SpecialMoves {
   private pieces: PieceObject;
 
   castle(side: number, colour: number, pieceObj: PieceObject) {
-    const castleRefObj = new utils().getCastleRef();
+    const castleRefObj = utils.getCastleRef();
 
     const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } =
       castleRefObj;
@@ -28,24 +28,24 @@ export class SpecialMoves {
     const oldKingPos = this.pieces[oldKingCoord[colour]].position;
     const oldRookPos = this.pieces[oldRookCoord[colour][side]].position;
 
-    const isPieceInWayKing = new IsPieceInTheWay(
+    const isPieceInWayKing = IsPieceInTheWay.checkRankAndFile(
       oldKingPos,
       newKingPos,
       this.pieces
-    ).checkRankAndFile();
+    );
 
-    const isPieceInWayRook = new IsPieceInTheWay(
+    const isPieceInWayRook = IsPieceInTheWay.checkRankAndFile(
       oldRookPos,
       newRookPos,
       this.pieces
-    ).checkRankAndFile();
+    );
 
     const hasNotMoved = !king.hasMoved && !rook.hasMoved;
 
     try {
       if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
-        new MovementUtils().completeCastle(king, colour, side, this.pieces);
-        new MovementUtils().completeCastle(rook, colour, side, this.pieces);
+        MovementUtils.completeCastle(king, colour, side, this.pieces);
+        MovementUtils.completeCastle(rook, colour, side, this.pieces);
 
         return {
           msg: `${Colour[colour]} castled ${side ? "Queen" : "King"}side!`,

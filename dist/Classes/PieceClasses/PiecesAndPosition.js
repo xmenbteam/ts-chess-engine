@@ -7,7 +7,7 @@ class Position {
         this._position = { file, rank };
     }
     distanceFrom(otherPosition) {
-        const { letterRef } = new utils_1.utils().getLetterRefs();
+        const { letterRef } = utils_1.utils.getLetterRefs();
         const fileDiff = letterRef[this._position.file] - letterRef[otherPosition._position.file];
         const rankDiff = this._position.rank - otherPosition._position.rank;
         return { file: fileDiff, rank: rankDiff };

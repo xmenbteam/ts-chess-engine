@@ -11,7 +11,7 @@ class SpecialMoves {
         this.pieces = pieces;
     }
     castle(side, colour, pieceObj) {
-        const castleRefObj = new utils_1.utils().getCastleRef();
+        const castleRefObj = utils_1.utils.getCastleRef();
         const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } = castleRefObj;
         if (pieceObj[oldKingCoord[colour]].constructor.name !== "King")
             throw new Error();
@@ -23,13 +23,13 @@ class SpecialMoves {
         const newRookPos = new PiecesAndPosition_1.Position(newRookFile[side], rank[colour]);
         const oldKingPos = this.pieces[oldKingCoord[colour]].position;
         const oldRookPos = this.pieces[oldRookCoord[colour][side]].position;
-        const isPieceInWayKing = new IsPieceInTheWay_1.IsPieceInTheWay(oldKingPos, newKingPos, this.pieces).checkRankAndFile();
-        const isPieceInWayRook = new IsPieceInTheWay_1.IsPieceInTheWay(oldRookPos, newRookPos, this.pieces).checkRankAndFile();
+        const isPieceInWayKing = IsPieceInTheWay_1.IsPieceInTheWay.checkRankAndFile(oldKingPos, newKingPos, this.pieces);
+        const isPieceInWayRook = IsPieceInTheWay_1.IsPieceInTheWay.checkRankAndFile(oldRookPos, newRookPos, this.pieces);
         const hasNotMoved = !king.hasMoved && !rook.hasMoved;
         try {
             if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
-                new MovementUtils_1.MovementUtils().completeCastle(king, colour, side, this.pieces);
-                new MovementUtils_1.MovementUtils().completeCastle(rook, colour, side, this.pieces);
+                MovementUtils_1.MovementUtils.completeCastle(king, colour, side, this.pieces);
+                MovementUtils_1.MovementUtils.completeCastle(rook, colour, side, this.pieces);
                 return {
                     msg: `${Types_1.Colour[colour]} castled ${side ? "Queen" : "King"}side!`,
                 };

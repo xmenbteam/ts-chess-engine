@@ -46,11 +46,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("g", 5);
       const gamePieces = game.pieces;
 
-      const rankAnFileCheck = new IsPieceInTheWay(
+      const rankAnFileCheck = IsPieceInTheWay.checkRankAndFile(
         rookPos,
         destiPos,
         gamePieces
-      ).checkRankAndFile();
+      );
 
       expect(rankAnFileCheck).toBe(true);
     });
@@ -64,11 +64,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("b", 5);
       const gamePieces = game.pieces;
 
-      const rankAnFileCheck = new IsPieceInTheWay(
+      const rankAnFileCheck = IsPieceInTheWay.checkRankAndFile(
         rookPos,
         destiPos,
         gamePieces
-      ).checkRankAndFile();
+      );
 
       expect(rankAnFileCheck).toBe(true);
     });
@@ -82,11 +82,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("e", 7);
       const gamePieces = game.pieces;
 
-      const rankAnFileCheck = new IsPieceInTheWay(
+      const rankAnFileCheck = IsPieceInTheWay.checkRankAndFile(
         rookPos,
         destiPos,
         gamePieces
-      ).checkRankAndFile();
+      );
 
       expect(rankAnFileCheck).toBe(true);
     });
@@ -100,11 +100,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("e", 2);
       const gamePieces = game.pieces;
 
-      const rankAnFileCheck = new IsPieceInTheWay(
+      const rankAnFileCheck = IsPieceInTheWay.checkRankAndFile(
         rookPos,
         destiPos,
         gamePieces
-      ).checkRankAndFile();
+      );
 
       expect(rankAnFileCheck).toBe(true);
     });
@@ -118,11 +118,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("g", 5);
       const gamePieces = game.pieces;
 
-      const rankAnFileCheck = new IsPieceInTheWay(
+      const rankAnFileCheck = IsPieceInTheWay.checkRankAndFile(
         rookPos,
         destiPos,
         gamePieces
-      ).checkRankAndFile();
+      );
 
       expect(rankAnFileCheck).toBe(false);
     });
@@ -136,11 +136,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("b", 5);
       const gamePieces = game.pieces;
 
-      const rankAnFileCheck = new IsPieceInTheWay(
+      const rankAnFileCheck = IsPieceInTheWay.checkRankAndFile(
         rookPos,
         destiPos,
         gamePieces
-      ).checkRankAndFile();
+      );
 
       expect(rankAnFileCheck).toBe(false);
     });
@@ -154,11 +154,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("e", 2);
       const gamePieces = game.pieces;
 
-      const rankAnFileCheck = new IsPieceInTheWay(
+      const rankAnFileCheck = IsPieceInTheWay.checkRankAndFile(
         rookPos,
         destiPos,
         gamePieces
-      ).checkRankAndFile();
+      );
 
       expect(rankAnFileCheck).toBe(false);
     });
@@ -174,11 +174,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("f", 6);
       const gamePieces = game.pieces;
 
-      const diagonalCheck = new IsPieceInTheWay(
+      const diagonalCheck = IsPieceInTheWay.checkDiagonal(
         rookPos,
         destiPos,
         gamePieces
-      ).checkDiagonal();
+      );
 
       expect(diagonalCheck).toBe(true);
     });
@@ -192,11 +192,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("f", 2);
       const gamePieces = game.pieces;
 
-      const diagonalCheck = new IsPieceInTheWay(
+      const diagonalCheck = IsPieceInTheWay.checkDiagonal(
         rookPos,
         destiPos,
         gamePieces
-      ).checkDiagonal();
+      );
 
       expect(diagonalCheck).toBe(true);
     });
@@ -210,11 +210,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("b", 2);
       const gamePieces = game.pieces;
 
-      const diagonalCheck = new IsPieceInTheWay(
+      const diagonalCheck = IsPieceInTheWay.checkDiagonal(
         rookPos,
         destiPos,
         gamePieces
-      ).checkDiagonal();
+      );
 
       expect(diagonalCheck).toBe(true);
     });
@@ -228,11 +228,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("b", 6);
       const gamePieces = game.pieces;
 
-      const diagonalCheck = new IsPieceInTheWay(
+      const diagonalCheck = IsPieceInTheWay.checkDiagonal(
         rookPos,
         destiPos,
         gamePieces
-      ).checkDiagonal();
+      );
 
       expect(diagonalCheck).toBe(true);
     });
@@ -246,11 +246,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("f", 6);
       const gamePieces = game.pieces;
 
-      const diagonalCheck = new IsPieceInTheWay(
+      const diagonalCheck = IsPieceInTheWay.checkBoth(
         rookPos,
         destiPos,
         gamePieces
-      ).checkBoth();
+      );
 
       expect(diagonalCheck).toBe(false);
     });
@@ -264,11 +264,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("f", 2);
       const gamePieces = game.pieces;
 
-      const diagonalCheck = new IsPieceInTheWay(
+      const diagonalCheck = IsPieceInTheWay.checkBoth(
         rookPos,
         destiPos,
         gamePieces
-      ).checkBoth();
+      );
 
       expect(diagonalCheck).toBe(false);
     });
@@ -282,11 +282,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("b", 2);
       const gamePieces = game.pieces;
 
-      const diagonalCheck = new IsPieceInTheWay(
+      const diagonalCheck = IsPieceInTheWay.checkBoth(
         rookPos,
         destiPos,
         gamePieces
-      ).checkBoth();
+      );
 
       expect(diagonalCheck).toBe(false);
     });
@@ -300,11 +300,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("b", 6);
       const gamePieces = game.pieces;
 
-      const diagonalCheck = new IsPieceInTheWay(
+      const diagonalCheck = IsPieceInTheWay.checkBoth(
         rookPos,
         destiPos,
         gamePieces
-      ).checkBoth();
+      );
 
       expect(diagonalCheck).toBe(false);
     });
@@ -320,11 +320,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("f", 6);
       const gamePieces = game.pieces;
 
-      const diagonalCheck = new IsPieceInTheWay(
+      const diagonalCheck = IsPieceInTheWay.checkBoth(
         rookPos,
         destiPos,
         gamePieces
-      ).checkBoth();
+      );
 
       expect(diagonalCheck).toBe(true);
     });
@@ -338,11 +338,11 @@ describe("IsPieceInTheWay", () => {
       const destiPos = new Position("g", 5);
       const gamePieces = game.pieces;
 
-      const rankAnFileCheck = new IsPieceInTheWay(
+      const rankAnFileCheck = IsPieceInTheWay.checkBoth(
         rookPos,
         destiPos,
         gamePieces
-      ).checkBoth();
+      );
 
       expect(rankAnFileCheck).toBe(true);
     });
@@ -367,67 +367,35 @@ describe("IsPieceInTheWay", () => {
       const gamePieces = game.pieces;
 
       const e6 = new Position("e", 6);
-      const e6Check = new IsPieceInTheWay(
-        kingPos,
-        e6,
-        gamePieces
-      ).checkKingMove();
+      const e6Check = IsPieceInTheWay.checkKingMove(kingPos, e6, gamePieces);
 
       expect(e6Check).toBe(true);
       const f6 = new Position("f", 6);
-      const f6Check = new IsPieceInTheWay(
-        kingPos,
-        f6,
-        gamePieces
-      ).checkKingMove();
+      const f6Check = IsPieceInTheWay.checkKingMove(kingPos, f6, gamePieces);
 
       expect(f6Check).toBe(true);
       const f5 = new Position("f", 5);
-      const f5Check = new IsPieceInTheWay(
-        kingPos,
-        f5,
-        gamePieces
-      ).checkKingMove();
+      const f5Check = IsPieceInTheWay.checkKingMove(kingPos, f5, gamePieces);
 
       expect(f5Check).toBe(true);
       const f4 = new Position("f", 4);
-      const f4Check = new IsPieceInTheWay(
-        kingPos,
-        f4,
-        gamePieces
-      ).checkKingMove();
+      const f4Check = IsPieceInTheWay.checkKingMove(kingPos, f4, gamePieces);
 
       expect(f4Check).toBe(true);
       const e4 = new Position("e", 4);
-      const e4Check = new IsPieceInTheWay(
-        kingPos,
-        e4,
-        gamePieces
-      ).checkKingMove();
+      const e4Check = IsPieceInTheWay.checkKingMove(kingPos, e4, gamePieces);
 
       expect(e4Check).toBe(true);
       const d4 = new Position("d", 4);
-      const d4Check = new IsPieceInTheWay(
-        kingPos,
-        d4,
-        gamePieces
-      ).checkKingMove();
+      const d4Check = IsPieceInTheWay.checkKingMove(kingPos, d4, gamePieces);
 
       expect(d4Check).toBe(true);
       const d5 = new Position("d", 5);
-      const d5Check = new IsPieceInTheWay(
-        kingPos,
-        d5,
-        gamePieces
-      ).checkKingMove();
+      const d5Check = IsPieceInTheWay.checkKingMove(kingPos, d5, gamePieces);
 
       expect(d5Check).toBe(true);
       const d6 = new Position("d", 6);
-      const d6Check = new IsPieceInTheWay(
-        kingPos,
-        d6,
-        gamePieces
-      ).checkKingMove();
+      const d6Check = IsPieceInTheWay.checkKingMove(kingPos, d6, gamePieces);
 
       expect(d6Check).toBe(true);
     });

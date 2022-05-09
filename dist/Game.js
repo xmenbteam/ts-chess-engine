@@ -71,7 +71,7 @@ class Game {
         return ref[name];
     }
     static makeCustomPieces(pieces) {
-        const { pawnTest, fileReg, rankReg, nameTest } = new utils_1.utils().getRegex();
+        const { pawnTest, fileReg, rankReg, nameTest } = utils_1.utils.getRegex();
         const customPieces = {};
         pieces.forEach(({ piece, colour }, i) => {
             const f = piece.match(fileReg)[0];
@@ -97,7 +97,7 @@ class Game {
         this._isWhiteMove = value;
     }
     makeMove(move, colour) {
-        const { pawnTest, dubiousFile, dubiousRank } = new utils_1.utils().getRegex();
+        const { pawnTest, dubiousFile, dubiousRank } = utils_1.utils.getRegex();
         if (pawnTest.test(move))
             move = `P${move}`;
         if (move === "0-0" || move === "0-0-0") {
@@ -122,10 +122,10 @@ class Game {
             pieceThatCanMove.canMoveTo(destiPos))
             isPieceInWay = false;
         else
-            isPieceInWay = new IsPieceInTheWay_1.IsPieceInTheWay(pieceThatCanMove.position, destiPos, this.pieces).checkBoth();
+            isPieceInWay = IsPieceInTheWay_1.IsPieceInTheWay.checkBoth(pieceThatCanMove.position, destiPos, this.pieces);
         if (!isPieceInWay)
             try {
-                const piece = new MovementUtils_1.MovementUtils().completeMove(this.pieces, pieceThatCanMove, destiPos, move);
+                const piece = MovementUtils_1.MovementUtils.completeMove(this.pieces, pieceThatCanMove, destiPos, move);
                 return { msg: `${piece} moved to ${destiRankFile}!` };
             }
             catch (err) {
@@ -156,7 +156,7 @@ class Game {
         return king[0];
     }
     getPiece(positionMovingTo, move, colour) {
-        const { dubiousFile, dubiousRank } = new utils_1.utils().getRegex();
+        const { dubiousFile, dubiousRank } = utils_1.utils.getRegex();
         const pieceObj = this.pieces;
         const pieceArray = Object.entries(pieceObj);
         let match;
@@ -192,7 +192,7 @@ class Game {
         return finalPiece;
     }
     capturePiece(capturePiece, targetPiece) {
-        const { flagRefObj } = new utils_1.utils().getLetterRefs();
+        const { flagRefObj } = utils_1.utils.getLetterRefs();
         const { file: capFile, rank: capRank } = capturePiece.position.position;
         const { file, rank } = targetPiece.position.position;
         const pieceObj = this.pieces;
@@ -204,7 +204,7 @@ class Game {
         else
             canCapture = new CaptureClasses_1.Capture().canCapture(capturePiece, targetPiece);
         if (canCapture) {
-            new MovementUtils_1.MovementUtils().completeMove(pieceObj, capturePiece, targetPiece.position, `${flag}${capFile}${capRank}`);
+            MovementUtils_1.MovementUtils.completeMove(pieceObj, capturePiece, targetPiece.position, `${flag}${capFile}${capRank}`);
             targetPiece.isCaptured = true;
             return {
                 msg: `${targetPiece.colour} ${targetPiece.constructor.name} on ${file}${rank} Captured!`,
@@ -226,6 +226,7 @@ class Game {
     canPieceBlockCheck(colour) {
         const king = this.findKing(colour);
         const isKingInCheck = this.isKingInCheck(colour);
+        // const checkingPieces =
         return false;
     }
     // 3. Can the king move out of check?

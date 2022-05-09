@@ -79,7 +79,7 @@ export class Game {
   }
 
   private static makeCustomPieces(pieces: CustomPieceArray): PieceObject {
-    const { pawnTest, fileReg, rankReg, nameTest } = new utils().getRegex();
+    const { pawnTest, fileReg, rankReg, nameTest } = utils.getRegex();
 
     const customPieces: PieceObject = {};
 
@@ -117,7 +117,7 @@ export class Game {
   }
 
   makeMove(move: string, colour: number): { [msg: string]: string } {
-    const { pawnTest, dubiousFile, dubiousRank } = new utils().getRegex();
+    const { pawnTest, dubiousFile, dubiousRank } = utils.getRegex();
 
     if (pawnTest.test(move)) move = `P${move}`;
 
@@ -148,15 +148,15 @@ export class Game {
     )
       isPieceInWay = false;
     else
-      isPieceInWay = new IsPieceInTheWay(
+      isPieceInWay = IsPieceInTheWay.checkBoth(
         pieceThatCanMove.position,
         destiPos,
         this.pieces
-      ).checkBoth();
+      );
 
     if (!isPieceInWay)
       try {
-        const piece = new MovementUtils().completeMove(
+        const piece = MovementUtils.completeMove(
           this.pieces,
           pieceThatCanMove,
           destiPos,
@@ -199,7 +199,7 @@ export class Game {
   }
 
   getPiece(positionMovingTo: Position, move: string, colour: number): Piece {
-    const { dubiousFile, dubiousRank } = new utils().getRegex();
+    const { dubiousFile, dubiousRank } = utils.getRegex();
 
     const pieceObj: { [key: string]: Piece } = this.pieces;
     const pieceArray: PieceArray = Object.entries(pieceObj);
@@ -245,7 +245,7 @@ export class Game {
     capturePiece: Piece,
     targetPiece: Piece
   ): { [msg: string]: string } {
-    const { flagRefObj } = new utils().getLetterRefs();
+    const { flagRefObj } = utils.getLetterRefs();
 
     const { file: capFile, rank: capRank } = capturePiece.position.position;
 
@@ -263,7 +263,7 @@ export class Game {
     else canCapture = new Capture().canCapture(capturePiece, targetPiece);
 
     if (canCapture) {
-      new MovementUtils().completeMove(
+      MovementUtils.completeMove(
         pieceObj,
         capturePiece,
         targetPiece.position,
@@ -295,6 +295,8 @@ export class Game {
   canPieceBlockCheck(colour: number): boolean {
     const king = this.findKing(colour);
     const isKingInCheck = this.isKingInCheck(colour);
+
+    // const checkingPieces =
 
     return false;
   }
