@@ -12,9 +12,9 @@ export class SpecialMoves {
       castleRefObj;
 
     if (pieceObj[oldKingCoord[colour]].constructor.name !== "King")
-      throw new Error();
+      throw new Error("Not a Ring!");
     if (pieceObj[oldRookCoord[colour][side]].constructor.name !== "Rook")
-      throw new Error();
+      throw new Error("Not a Rook!");
 
     const king = pieceObj[oldKingCoord[colour]];
     const rook = pieceObj[oldRookCoord[colour][side]];

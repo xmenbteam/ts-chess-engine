@@ -11,9 +11,9 @@ class SpecialMoves {
         const castleRefObj = utils_1.utils.getCastleRef();
         const { oldKingCoord, oldRookCoord, newKingFile, newRookFile, rank } = castleRefObj;
         if (pieceObj[oldKingCoord[colour]].constructor.name !== "King")
-            throw new Error();
+            throw new Error("Not a Ring!");
         if (pieceObj[oldRookCoord[colour][side]].constructor.name !== "Rook")
-            throw new Error();
+            throw new Error("Not a Rook!");
         const king = pieceObj[oldKingCoord[colour]];
         const rook = pieceObj[oldRookCoord[colour][side]];
         const newKingPos = new PiecesAndPosition_1.Position(newKingFile[side], rank[colour]);
