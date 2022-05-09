@@ -35,7 +35,6 @@ class Rook extends PiecesAndPosition_1.Piece {
     moveTo(file, rank) {
         this.position.position = { file, rank };
         this.hasMoved = true;
-        return { hasMoved: this.hasMoved };
     }
 }
 exports.Rook = Rook;

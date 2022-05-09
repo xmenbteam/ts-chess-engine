@@ -23,7 +23,6 @@ class utils {
         };
         this.HasMovedPieces = ["King", "Rook", "Pawn"];
         this.files = ["a", "b", "c", "d", "e", "f", "g", "h"];
-        // private ranks: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
         this.pawnTest = /^[a-h]\d$/;
         this.pieceTest = /^[RNQBK][a-h]\d$/;
         this.nameTest = /[RNBQKP]/;

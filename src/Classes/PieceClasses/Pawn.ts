@@ -1,3 +1,4 @@
+import { MoveToObj } from "../../Types";
 import { Piece, Position } from "./PiecesAndPosition";
 
 export class Pawn extends Piece {
@@ -31,7 +32,7 @@ export class Pawn extends Piece {
     return false;
   }
 
-  moveTo(file: string, rank: number) {
+  moveTo(file: string, rank: number): MoveToObj {
     this.hasMoved = true;
     if (this.position.position.rank !== rank) this.moveCount = 1;
     this.position.position = { file, rank };

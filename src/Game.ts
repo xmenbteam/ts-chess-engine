@@ -180,7 +180,7 @@ export class Game {
   }
 
   findKing(colour: number): Piece {
-    const pieceArray = Object.values(this.pieces);
+    const pieceArray: Piece[] = Object.values(this.pieces);
 
     const king = pieceArray.filter((piece) => {
       return (
@@ -273,17 +273,21 @@ export class Game {
     return isInCheck;
   }
   // 2. Can piece block the check?
-  canPieceBlockCheck(colour: number): boolean {
+  // 4. Can the checking piece be taken?
+  canCheckBeStopped(colour: number): boolean {
     const king = this.findKing(colour);
     const isKingInCheck = this.isKingInCheck(colour);
 
     // const checkingPieces =
+    // Find all positions relating to piece that's moved
+    // All positions piece can move to between my piece and king
+    // All pieces for king in check - white is checking - all black pieces - for each of positions
+    // Find all positions including where the piece is, iterate through, can king's pieces move there?
+    // Would move MAKE check from another piece?
 
     return false;
   }
-  // 3. Can the king move out of check?
-
-  // 4. Can the checking piece be taken?
+  // 3. Can the king move out of check? / Would the king move into check?
 
   isKingInCheckMate(colour: number): boolean {
     let isKingInCheckMate: boolean = false;

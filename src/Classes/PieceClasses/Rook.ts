@@ -22,7 +22,6 @@ export class Rook extends Piece {
   moveTo(file: string, rank: number) {
     this.position.position = { file, rank };
     this.hasMoved = true;
-    return { hasMoved: this.hasMoved };
   }
 
   constructor(pieceColour: string, file: string, rank: number) {

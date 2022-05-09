@@ -22,7 +22,6 @@ export class utils {
   private HasMovedPieces: string[] = ["King", "Rook", "Pawn"];
 
   private files: string[] = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  // private ranks: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
 
   private pawnTest = /^[a-h]\d$/;
   private pieceTest = /^[RNQBK][a-h]\d$/;

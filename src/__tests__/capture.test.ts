@@ -220,7 +220,7 @@ describe("Can piece block check", () => {
 
     const game = new Game(pieces);
 
-    expect(game.canPieceBlockCheck(1)).toBe(true);
+    expect(game.canCheckBeStopped(1)).toBe(true);
   });
 });
 
