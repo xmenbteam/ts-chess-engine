@@ -31,5 +31,5 @@ export type PieceObject = {
 };
 export type CustomPieceObject = { piece: string; colour: number };
 export type CustomPieceArray = CustomPieceObject[];
-export type MoveToObj = { hasMoved: boolean; moveCount?: number };
+export type MoveToObj = { moveCount: number };
 export type PieceArray = [string, Piece][];

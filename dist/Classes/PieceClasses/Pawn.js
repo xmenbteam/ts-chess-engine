@@ -47,7 +47,7 @@ class Pawn extends PiecesAndPosition_1.Piece {
         if (this.position.position.rank !== rank)
             this.moveCount = 1;
         this.position.position = { file, rank };
-        return { hasMoved: this.hasMoved, moveCount: this.moveCount };
+        return { moveCount: this.moveCount };
     }
 }
 exports.Pawn = Pawn;

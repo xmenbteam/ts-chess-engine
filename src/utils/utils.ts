@@ -1,3 +1,5 @@
+import { Position } from "../Classes/PieceClasses/PiecesAndPosition";
+
 export class utils {
   private letterRef: { [file: string]: number } = {
     a: 0,
@@ -42,7 +44,7 @@ export class utils {
     rank: [1, 8],
   };
 
-  static diagonalDirRef(pieceFileDist: number, pieceRankDist: number) {
+  static checkDirection(pieceFileDist: number, pieceRankDist: number) {
     let direction: string = "";
 
     const directionRef = {
@@ -50,6 +52,10 @@ export class utils {
       SE: pieceFileDist > 0 && pieceRankDist < 0,
       NW: pieceFileDist < 0 && pieceRankDist > 0,
       SW: pieceFileDist < 0 && pieceRankDist < 0,
+      N: !pieceFileDist && pieceRankDist > 0,
+      S: !pieceFileDist && pieceRankDist < 0,
+      E: !pieceRankDist && pieceFileDist > 0,
+      W: !pieceRankDist && pieceFileDist < 0,
     };
 
     for (const [dir, cond] of Object.entries(directionRef)) {
@@ -59,21 +65,13 @@ export class utils {
     return direction;
   }
 
-  static rankAndFileDirRef(
-    pieceFileDist: number,
-    pieceRankDist: number
-  ): string {
-    let direction: string = "";
-    const refObj = {
-      N: !pieceFileDist && pieceRankDist > 0,
-      S: !pieceFileDist && pieceRankDist < 0,
-      E: !pieceRankDist && pieceFileDist > 0,
-      W: !pieceRankDist && pieceFileDist < 0,
-    };
-    for (const [dir, cond] of Object.entries(refObj)) {
-      if (cond) direction = dir;
-    }
-    return direction;
+  loopGenerator(direction: string, kingPos: Position, otherPos: Position) {
+    const positionsArray = [];
+
+    let r;
+    let f;
+
+    const ref = {};
   }
 
   static getLetterRefs() {

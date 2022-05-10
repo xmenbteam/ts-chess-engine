@@ -9,16 +9,14 @@ export class IsPieceInTheWay {
     allPieces: PieceObject
   ): boolean {
     let isInWay: boolean = false;
+    const { checkDirection } = utils;
     const { file: destiFileDist, rank: destiRankDist } =
       destiPos.distanceFrom(piecePos);
 
     for (let piece in allPieces) {
       const { file: pieceFileDist, rank: pieceRankDist } =
         allPieces[piece].position.distanceFrom(piecePos);
-      const dirFromPiece = utils.rankAndFileDirRef(
-        pieceFileDist,
-        pieceRankDist
-      );
+      const dirFromPiece = checkDirection(pieceFileDist, pieceRankDist);
 
       if (dirFromPiece === "N" && pieceRankDist < destiRankDist) isInWay = true;
       if (dirFromPiece === "S" && pieceRankDist > destiRankDist) isInWay = true;
@@ -29,19 +27,13 @@ export class IsPieceInTheWay {
     return isInWay;
   }
 
-  static setIsInWay(i: number, j: number, ignoreYourself: string[]) {
-    let isInWay: boolean = false;
-    const { files } = utils.getLetterRefs();
-    const square = `${files[i]}${j}`;
-    if (ignoreYourself.includes(square)) isInWay = true;
-  }
-
   static checkDiagonal(
     piecePos: Position,
     destiPos: Position,
     allPieces: PieceObject
   ) {
     let isInWay: boolean = false;
+    const { checkDirection } = utils;
     const { file: destiFileDist, rank: destiRankDist } =
       destiPos.distanceFrom(piecePos);
 
@@ -49,7 +41,7 @@ export class IsPieceInTheWay {
       const { file: pieceFileDist, rank: pieceRankDist } =
         allPieces[piece].position.distanceFrom(piecePos);
 
-      const dirFromPiece = utils.diagonalDirRef(pieceFileDist, pieceRankDist);
+      const dirFromPiece = checkDirection(pieceFileDist, pieceRankDist);
 
       if (
         dirFromPiece === "NE" &&

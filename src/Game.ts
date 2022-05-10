@@ -135,6 +135,7 @@ export class Game {
     }
 
     const pieceThatCanMove: Piece = this.getPiece(destiPos, move, colour);
+    const canMoveTo: boolean = pieceThatCanMove.canMoveTo(destiPos);
 
     if (
       pieceThatCanMove.constructor.name === "Knight" &&
@@ -142,11 +143,12 @@ export class Game {
     )
       isPieceInWay = false;
     else
-      isPieceInWay = IsPieceInTheWay.checkBoth(
-        pieceThatCanMove.position,
-        destiPos,
-        this.pieces
-      );
+      isPieceInWay =
+        IsPieceInTheWay.checkBoth(
+          pieceThatCanMove.position,
+          destiPos,
+          this.pieces
+        ) && canMoveTo;
 
     if (!isPieceInWay)
       try {
@@ -258,7 +260,7 @@ export class Game {
     }
     return { msg: "Could not capture!" };
   }
-  // 1. Is King in check?
+
   isKingInCheck(colour: number): boolean {
     let isInCheck: boolean = false;
 
@@ -272,42 +274,168 @@ export class Game {
 
     return isInCheck;
   }
-  // 2. Can piece block the check?
-  // 4. Can the checking piece be taken?
-  canCheckBeStopped(colour: number): boolean {
-    const king = this.findKing(colour);
-    const isKingInCheck = this.isKingInCheck(colour);
 
-    // const checkingPieces =
-    // Find all positions relating to piece that's moved
-    // All positions piece can move to between my piece and king
-    // All pieces for king in check - white is checking - all black pieces - for each of positions
-    // Find all positions including where the piece is, iterate through, can king's pieces move there?
-    // Would move MAKE check from another piece?
+  canCheckBeRuined(colour: number): {
+    canPieceBlock: boolean;
+    canPieceBeTaken: boolean;
+  } {
+    let canPieceBlock: boolean = false;
+    let canPieceBeTaken: boolean = false;
+    const { letterRef, files } = utils.getLetterRefs();
 
-    return false;
+    const king: Piece = this.findKing(colour);
+
+    const capturePieces: Piece[] = [];
+
+    for (let piece in this.pieces) {
+      const capPiece = this.pieces[piece];
+      const canCapture = Capture.canCapture(capPiece, king);
+      if (canCapture) capturePieces.push(capPiece);
+    }
+
+    const kingPos = king.position;
+    const otherPos = capturePieces[0].position;
+
+    const { rank, file } = kingPos.distanceFrom(otherPos);
+
+    const direction = utils.checkDirection(file, rank);
+
+    const positionsBetween = [];
+
+    const minRank = Math.min(otherPos.position.rank, kingPos.position.rank);
+    const maxRank = Math.max(otherPos.position.rank, kingPos.position.rank);
+
+    const minFile = Math.min(
+      letterRef[kingPos.position.file],
+      letterRef[otherPos.position.file]
+    );
+    const maxFile = Math.max(
+      letterRef[kingPos.position.file],
+      letterRef[otherPos.position.file]
+    );
+
+    console.log(direction);
+
+    if (direction === "N" || direction === "S")
+      for (let r = minRank + 1; r < maxRank - 1; r++) {
+        console.log({ r, minRank, maxRank });
+        positionsBetween.push(new Position(otherPos.position.file, r));
+      }
+
+    if (direction === "W" || direction === "E")
+      for (let f = minFile + 1; f < maxFile - 1; f++)
+        positionsBetween.push(new Position(files[f], otherPos.position.rank));
+
+    if (direction === "NE")
+      for (
+        let f = letterRef[otherPos.position.file] + 1,
+          r = otherPos.position.rank + 1;
+        f < letterRef[kingPos.position.file], r < kingPos.position.rank;
+        f++, r++
+      ) {
+        positionsBetween.push(new Position(files[f], r));
+      }
+    if (direction === "NW")
+      for (
+        let f = letterRef[otherPos.position.file] - 1,
+          r = otherPos.position.rank + 1;
+        f > letterRef[kingPos.position.file], r < kingPos.position.rank;
+        f--, r++
+      ) {
+        positionsBetween.push(new Position(files[f], r));
+      }
+    if (direction === "SW")
+      for (
+        let f = letterRef[otherPos.position.file] - 1,
+          r = otherPos.position.rank - 1;
+        f > letterRef[kingPos.position.file], r > kingPos.position.rank;
+        f--, r--
+      )
+        positionsBetween.push(new Position(files[f], r));
+
+    if (direction === "SE")
+      for (
+        let f = letterRef[otherPos.position.file] + 1,
+          r = otherPos.position.rank - 1;
+        f < letterRef[kingPos.position.file], r > kingPos.position.rank;
+        f++, r--
+      )
+        positionsBetween.push(new Position(files[f], r));
+
+    for (let piece in this.pieces) {
+      const capPiece = this.pieces[piece];
+      const isSameColour = Capture.isPieceSameColour(capPiece, king);
+      positionsBetween.forEach((pos) => {
+        const canMoveTo = capPiece.canMoveTo(pos);
+        if (canMoveTo && isSameColour) canPieceBlock = true;
+      });
+    }
+
+    for (let piece in this.pieces) {
+      const capPiece = this.pieces[piece];
+      const canCapture = Capture.canCapture(capPiece, capturePieces[0]);
+      if (canCapture) canPieceBeTaken = true;
+    }
+    return { canPieceBlock, canPieceBeTaken };
   }
-  // 3. Can the king move out of check? / Would the king move into check?
+
+  canKingMoveOutOfCheck(colour: number): boolean {
+    let canKingMove: boolean = true;
+
+    const { letterRef, files } = utils.getLetterRefs();
+    const king = this.findKing(colour);
+    const { file, rank } = king.position.position;
+    const fileNum = letterRef[file];
+
+    const positions = [];
+
+    for (let f = fileNum - 1; f > 0 && f <= fileNum + 1 && f < 8; f++) {
+      for (let r = rank - 1; r > 0 && r <= rank + 1 && r < 9; r++) {
+        positions.push(new Position(files[f], r));
+      }
+    }
+
+    for (let piece in this.pieces) {
+      const currPiece = this.pieces[piece];
+      const isSameColour = Capture.isPieceSameColour(currPiece, king);
+
+      canKingMove = !positions.some((pos) => {
+        const canMove = currPiece.canMoveTo(pos);
+        console.log(
+          currPiece.position.position.file,
+          currPiece.position.position.rank,
+          {
+            isSameColour,
+            canMove,
+          }
+        );
+        return !isSameColour && canMove;
+      });
+    }
+
+    return canKingMove;
+  }
 
   isKingInCheckMate(colour: number): boolean {
     let isKingInCheckMate: boolean = false;
-    const king = this.findKing(colour);
     const isKingInCheck = this.isKingInCheck(colour);
-    let canKingMove: boolean = true;
+    const canKingMoveOutOfCheck = this.canKingMoveOutOfCheck(colour);
+    const { canPieceBlock, canPieceBeTaken } = this.canCheckBeRuined(colour);
 
-    // If king moved to any of these squares, would it be in check?
-    // const positionsKingCanMoveTo =
-    // Find a way of looping through potential squares the king can move to
-    // piece.canMoveTo(position)
-    // If a king moved there, would it be in check?
-    /*
-    1. Check
-    2. Can't block
-    3. Can't move
-    4. 
-    */
+    console.log({
+      isKingInCheck,
+      canKingMoveOutOfCheck,
+      canPieceBeTaken,
+      canPieceBlock,
+    });
 
-    if (isKingInCheck && !canKingMove) isKingInCheckMate = true;
+    if (
+      isKingInCheck &&
+      !canKingMoveOutOfCheck &&
+      !canPieceBlock &&
+      !canPieceBeTaken
+    )
+      isKingInCheckMate = true;
 
     return isKingInCheckMate;
   }

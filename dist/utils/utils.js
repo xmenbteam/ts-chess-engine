@@ -41,13 +41,17 @@ class utils {
             rank: [1, 8],
         };
     }
-    static diagonalDirRef(pieceFileDist, pieceRankDist) {
+    static checkDirection(pieceFileDist, pieceRankDist) {
         let direction = "";
         const directionRef = {
             NE: pieceFileDist > 0 && pieceRankDist > 0,
             SE: pieceFileDist > 0 && pieceRankDist < 0,
             NW: pieceFileDist < 0 && pieceRankDist > 0,
             SW: pieceFileDist < 0 && pieceRankDist < 0,
+            N: !pieceFileDist && pieceRankDist > 0,
+            S: !pieceFileDist && pieceRankDist < 0,
+            E: !pieceRankDist && pieceFileDist > 0,
+            W: !pieceRankDist && pieceFileDist < 0,
         };
         for (const [dir, cond] of Object.entries(directionRef)) {
             if (cond)
@@ -55,19 +59,11 @@ class utils {
         }
         return direction;
     }
-    static rankAndFileDirRef(pieceFileDist, pieceRankDist) {
-        let direction = "";
-        const refObj = {
-            N: !pieceFileDist && pieceRankDist > 0,
-            S: !pieceFileDist && pieceRankDist < 0,
-            E: !pieceRankDist && pieceFileDist > 0,
-            W: !pieceRankDist && pieceFileDist < 0,
-        };
-        for (const [dir, cond] of Object.entries(refObj)) {
-            if (cond)
-                direction = dir;
-        }
-        return direction;
+    loopGenerator(direction, kingPos, otherPos) {
+        const positionsArray = [];
+        let r;
+        let f;
+        const ref = {};
     }
     static getLetterRefs() {
         return {

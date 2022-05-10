@@ -211,7 +211,7 @@ describe("Check", () => {
 });
 
 describe("Can piece block check", () => {
-  test("canPieceBlockCheck", () => {
+  test("canCheckBeRuined NORTH", () => {
     const pieces: CustomPieceArray = [
       { piece: "Kd7", colour: 1 },
       { piece: "Rc4", colour: 1 },
@@ -220,12 +220,139 @@ describe("Can piece block check", () => {
 
     const game = new Game(pieces);
 
-    expect(game.canCheckBeStopped(1)).toBe(true);
+    expect(game.canCheckBeRuined(1).canPieceBlock).toBe(true);
+  });
+  test("canCheckBeRuined rook on e4", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kd7", colour: 1 },
+      { piece: "Re4", colour: 1 },
+      { piece: "Rd2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canCheckBeRuined(1).canPieceBlock).toBe(true);
+  });
+  test("canCheckBeRuined SOUTH", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kd2", colour: 1 },
+      { piece: "Re4", colour: 1 },
+      { piece: "Rd7", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canCheckBeRuined(1).canPieceBlock).toBe(true);
+  });
+  test("canCheckBeRuined WEST", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kb5", colour: 1 },
+      { piece: "Re4", colour: 1 },
+      { piece: "Rg5", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canCheckBeRuined(1).canPieceBlock).toBe(true);
+  });
+  test("canCheckBeRuined EAST", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kg5", colour: 1 },
+      { piece: "Re4", colour: 1 },
+      { piece: "Rb5", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canCheckBeRuined(1).canPieceBlock).toBe(true);
+  });
+  test("canCheckBeRuined NORTHEAST", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kg7", colour: 1 },
+      { piece: "Re4", colour: 1 },
+      { piece: "Bb2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canCheckBeRuined(1).canPieceBlock).toBe(true);
+  });
+  test("canCheckBeRuined NORTHWEST", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kb6", colour: 1 },
+      { piece: "Re4", colour: 1 },
+      { piece: "Bf2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canCheckBeRuined(1).canPieceBlock).toBe(true);
+  });
+  test("canCheckBeRuined SOUTHWEST", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kb2", colour: 1 },
+      { piece: "Re4", colour: 1 },
+      { piece: "Bf6", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canCheckBeRuined(1).canPieceBlock).toBe(true);
+  });
+  test("canCheckBeRuined SOUTHEAST", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kf6", colour: 1 },
+      { piece: "Re4", colour: 1 },
+      { piece: "Bb2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canCheckBeRuined(1).canPieceBlock).toBe(true);
+  });
+});
+
+describe("Can checking piece be taken", () => {
+  test("canCheckingPieceBeTaken", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kf6", colour: 1 },
+      { piece: "Re2", colour: 1 },
+      { piece: "Bb2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canCheckBeRuined(1).canPieceBeTaken).toBe(true);
+  });
+});
+
+describe("Can King move out of Check", () => {
+  test("canKingMoveOutOfCheck", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kb6", colour: 1 },
+      { piece: "Re2", colour: 1 },
+      { piece: "Bf2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canKingMoveOutOfCheck(1)).toBe(true);
+  });
+  test("!canKingMoveOutOfCheck", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Ka6", colour: 1 },
+      { piece: "Ra1", colour: 0 },
+      { piece: "Qb1", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canKingMoveOutOfCheck(1)).toBe(false);
   });
 });
 
 describe("Checkmate", () => {
-  test("!isKingInCheckMate - king in corner", () => {
+  test.only("!isKingInCheckMate - king in corner", () => {
     const pieces: CustomPieceArray = [
       { piece: "Kh8", colour: 1 },
       { piece: "Rh2", colour: 0 },
@@ -236,7 +363,7 @@ describe("Checkmate", () => {
     expect(game.isKingInCheck(1)).toBe(true);
     expect(game.isKingInCheckMate(1)).toBe(false);
   });
-  xtest("isKingInCheckMate - king in corner", () => {
+  test("isKingInCheckMate - king in corner", () => {
     const pieces: CustomPieceArray = [
       { piece: "Kh8", colour: 1 },
       { piece: "Rh2", colour: 0 },

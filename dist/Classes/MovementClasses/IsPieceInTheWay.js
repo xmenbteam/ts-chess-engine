@@ -5,10 +5,11 @@ const utils_1 = require("../../utils/utils");
 class IsPieceInTheWay {
     static checkRankAndFile(piecePos, destiPos, allPieces) {
         let isInWay = false;
+        const { checkDirection } = utils_1.utils;
         const { file: destiFileDist, rank: destiRankDist } = destiPos.distanceFrom(piecePos);
         for (let piece in allPieces) {
             const { file: pieceFileDist, rank: pieceRankDist } = allPieces[piece].position.distanceFrom(piecePos);
-            const dirFromPiece = utils_1.utils.rankAndFileDirRef(pieceFileDist, pieceRankDist);
+            const dirFromPiece = checkDirection(pieceFileDist, pieceRankDist);
             if (dirFromPiece === "N" && pieceRankDist < destiRankDist)
                 isInWay = true;
             if (dirFromPiece === "S" && pieceRankDist > destiRankDist)
@@ -20,19 +21,13 @@ class IsPieceInTheWay {
         }
         return isInWay;
     }
-    static setIsInWay(i, j, ignoreYourself) {
-        let isInWay = false;
-        const { files } = utils_1.utils.getLetterRefs();
-        const square = `${files[i]}${j}`;
-        if (ignoreYourself.includes(square))
-            isInWay = true;
-    }
     static checkDiagonal(piecePos, destiPos, allPieces) {
         let isInWay = false;
+        const { checkDirection } = utils_1.utils;
         const { file: destiFileDist, rank: destiRankDist } = destiPos.distanceFrom(piecePos);
         for (let piece in allPieces) {
             const { file: pieceFileDist, rank: pieceRankDist } = allPieces[piece].position.distanceFrom(piecePos);
-            const dirFromPiece = utils_1.utils.diagonalDirRef(pieceFileDist, pieceRankDist);
+            const dirFromPiece = checkDirection(pieceFileDist, pieceRankDist);
             if (dirFromPiece === "NE" &&
                 Math.abs(pieceFileDist) === Math.abs(pieceRankDist) &&
                 pieceRankDist < destiRankDist &&

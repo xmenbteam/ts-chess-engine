@@ -36,7 +36,7 @@ export class Pawn extends Piece {
     this.hasMoved = true;
     if (this.position.position.rank !== rank) this.moveCount = 1;
     this.position.position = { file, rank };
-    return { hasMoved: this.hasMoved, moveCount: this.moveCount };
+    return { moveCount: this.moveCount };
   }
 
   constructor(pieceColour: string, file: string, rank: number) {
