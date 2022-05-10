@@ -25,7 +25,7 @@ export class Capture {
 
     if (!isPawn) throw new Error("Piece must be a pawn!");
 
-    const canCapture = file === 1 && Math.abs(rank) === 1;
+    const canCapture = Math.abs(file) === 1 && rank === 1;
 
     if (
       isPawn &&
