@@ -306,18 +306,29 @@ class Game {
                 positions.push(new PiecesAndPosition_1.Position(files[f], r));
             }
         }
-        for (let piece in this.pieces) {
-            const currPiece = this.pieces[piece];
-            const isSameColour = CaptureClasses_1.Capture.isPieceSameColour(currPiece, king);
-            canKingMove = !positions.some((pos) => {
-                const canMove = currPiece.canMoveTo(pos);
-                console.log(currPiece.position.position.file, currPiece.position.position.rank, {
-                    isSameColour,
-                    canMove,
-                });
-                return !isSameColour && canMove;
+        const values = Object.values(this.pieces);
+        canKingMove = positions.some((pos) => {
+            return values.some((piece) => {
+                const isDifferentColour = !CaptureClasses_1.Capture.isPieceSameColour(piece, king);
+                return piece.canMoveTo(pos) && isDifferentColour;
             });
-        }
+        });
+        // for (let piece in this.pieces) {
+        //   const currPiece = this.pieces[piece];
+        //   const isSameColour = Capture.isPieceSameColour(currPiece, king);
+        //   positions.forEach((pos) => {
+        //     const canMove = currPiece.canMoveTo(pos);
+        //     console.log(
+        //       currPiece.position.position.file,
+        //       currPiece.position.position.rank,
+        //       {
+        //         isSameColour,
+        //         canMove,
+        //       }
+        //     );
+        //     if (!isSameColour && canMove) canKingMove;
+        //   });
+        // }
         return canKingMove;
     }
     isKingInCheckMate(colour) {

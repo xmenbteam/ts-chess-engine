@@ -222,10 +222,10 @@ describe("Can piece block check", () => {
 
     expect(game.canCheckBeRuined(1).canPieceBlock).toBe(true);
   });
-  test("canCheckBeRuined rook on e4", () => {
+  test("canCheckBeRuined rook on h4", () => {
     const pieces: CustomPieceArray = [
       { piece: "Kd7", colour: 1 },
-      { piece: "Re4", colour: 1 },
+      { piece: "Rh4", colour: 1 },
       { piece: "Rd2", colour: 0 },
     ];
 
@@ -327,7 +327,7 @@ describe("Can checking piece be taken", () => {
 });
 
 describe("Can King move out of Check", () => {
-  test("canKingMoveOutOfCheck", () => {
+  test.only("canKingMoveOutOfCheck", () => {
     const pieces: CustomPieceArray = [
       { piece: "Kb6", colour: 1 },
       { piece: "Re2", colour: 1 },
@@ -336,6 +336,25 @@ describe("Can King move out of Check", () => {
 
     const game = new Game(pieces);
 
+    expect(game.canKingMoveOutOfCheck(1)).toBe(true);
+  });
+  test("canKingMoveOutOfCheck - king in corner", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kh8", colour: 1 },
+      { piece: "Rh2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+    expect(game.canKingMoveOutOfCheck(1)).toBe(true);
+  });
+  test("canKingMoveOutOfCheck - king in middle of board, more complex", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kd5", colour: 1 },
+      { piece: "Rd2", colour: 0 },
+      { piece: "Bg2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
     expect(game.canKingMoveOutOfCheck(1)).toBe(true);
   });
   test("!canKingMoveOutOfCheck", () => {
@@ -352,11 +371,10 @@ describe("Can King move out of Check", () => {
 });
 
 describe("Checkmate", () => {
-  test.only("!isKingInCheckMate - king in corner", () => {
+  test("!isKingInCheckMate - king in corner", () => {
     const pieces: CustomPieceArray = [
       { piece: "Kh8", colour: 1 },
       { piece: "Rh2", colour: 0 },
-      // { piece: "Qg2", colour: 0 },
     ];
 
     const game = new Game(pieces);
