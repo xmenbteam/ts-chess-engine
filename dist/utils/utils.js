@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.utils = void 0;
+const PiecesAndPosition_1 = require("../Classes/PieceClasses/PiecesAndPosition");
 class utils {
     constructor() {
         this.letterRef = {
@@ -59,11 +60,18 @@ class utils {
         }
         return direction;
     }
-    loopGenerator(direction, kingPos, otherPos) {
-        const positionsArray = [];
-        let r;
-        let f;
-        const ref = {};
+    static generateKingSquares(king) {
+        const { file, rank } = king.position.position;
+        const { letterRef, files } = utils.getLetterRefs();
+        const fileNum = letterRef[file];
+        const positions = [];
+        for (let f = fileNum > 0 ? fileNum - 1 : 0; f <= fileNum + 1 && f < 8; f++) {
+            for (let r = rank > 1 ? rank - 1 : 1; r <= rank + 1 && r < 9; r++) {
+                if (!(f === fileNum && r === king.position.position.rank))
+                    positions.push(new PiecesAndPosition_1.Position(files[f], r));
+            }
+        }
+        return positions;
     }
     static getLetterRefs() {
         return {

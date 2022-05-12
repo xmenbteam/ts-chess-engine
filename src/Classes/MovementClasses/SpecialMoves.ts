@@ -1,5 +1,5 @@
 import { Position } from "../PieceClasses/PiecesAndPosition";
-import { Colour, PieceObject, RankFile } from "../../Types";
+import { Colour, PieceObject } from "../../Types";
 import { IsPieceInTheWay } from "./IsPieceInTheWay";
 import { utils } from "../../utils/utils";
 import { MovementUtils } from "./MovementUtils";
@@ -26,22 +26,14 @@ export class SpecialMoves {
     const oldKingPos = pieceObj[oldKingCoord[colour]].position;
     const oldRookPos = pieceObj[oldRookCoord[colour][side]].position;
 
-    const isPieceInWayKing = IsPieceInTheWay.checkRankAndFile(
-      oldKingPos,
-      newKingPos,
-      pieceObj
-    );
-
-    const isPieceInWayRook = IsPieceInTheWay.checkRankAndFile(
-      oldRookPos,
-      newRookPos,
-      pieceObj
-    );
+    const isRouteClear =
+      !IsPieceInTheWay.checkRankAndFile(oldKingPos, newKingPos, pieceObj) &&
+      !IsPieceInTheWay.checkRankAndFile(oldRookPos, newRookPos, pieceObj);
 
     const hasNotMoved = !king.hasMoved && !rook.hasMoved;
 
     try {
-      if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
+      if (hasNotMoved && isRouteClear) {
         MovementUtils.completeCastle(king, colour, side, pieceObj);
         MovementUtils.completeCastle(rook, colour, side, pieceObj);
 

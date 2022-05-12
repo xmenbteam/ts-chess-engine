@@ -392,6 +392,17 @@ describe("Can King move out of Check", () => {
   });
 });
 
+describe("canKingMoveThere", () => {
+  test("!canKingMoveThere", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kf6", colour: 1 },
+      { piece: "Rc2", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+  });
+});
+
 describe("Checkmate", () => {
   test("!isKingInCheckMate - king in corner", () => {
     const pieces: CustomPieceArray = [

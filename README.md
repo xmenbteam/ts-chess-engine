@@ -1,71 +1,53 @@
-# TypeScript Chess
+# TypeScript Chess Engine
 
-This is an opportunity to explore all of the new class based syntax that TypeScript provides!
+## Introduction
 
-## Task
+- Hello! Welcome to my chess engine. This was my exploration into object orientated programming using TypeScript.
+- When creating this project, I tried to stick to [SOLID principles](https://medium.com/backticks-tildes/the-s-o-l-i-d-principles-in-pictures-b34ce2f1e898) as much as possible, but this was my first time so go easy on me.
 
-Build a chess engine using Classes.
+## How To Use
 
-This should be done using OOP principles. Below is a rough guideline of what each element of the sprint should need and some acceptance criteria. However, much of the implementation is left to you. Remember to, where appropriate, use the tools TypeScript provides you with to build your classes with SOLID principles in mind.
-
-As always, test your code. TypeScript works hand-in-hand with TDD. It allows for the elimination of edge cases for example, but will not have any impact on the actual behaviour of your logic, which will need to be tested. You may also find that you can see the impact of following SOLID principles inside your test file, via what TypeScript will and will not allow you to test.
-
-### **1. Position Class**
-
-You should have a class to represent a `Position`. This will have file (A-H) and rank (1-8) properties. You can make use of the `private` property modifier here to protect these values. `Position` should also have a `distanceFrom` method that will return the numerical file and rank distances from a given position.
+- So first of all, you'll need to create a new `Game`:
 
 ```js
-//positionOne ===> C, 3
-//otherPosition ===> B, 4
-positionOne.distanceFrom(otherPosition);
-//should evaluate to ----> {file: -1, rank: 1}
+import { Game } from "ChessGame";
+
+const game = new Game();
 ```
 
-### **2. Piece Class**
+- If you want to create a new game with custom pieces, you will have to create an array with the pieces you want and pass it as an argument when you create the game:
+- **ACHTUNG MINEFIELD** - The colours 'White' and 'Black' are represented by the numbers 0 and 1 respectively. This is because I wanted to use an enum. I'm aware that if something is one of two things it should be a boolean but this is my engine so sue me.
 
-You will need to have a `Piece` class that represents a generalised chess piece without any specifics attributed to the behaviour of different piece types. A `Piece` should be an `abstract` class and each game piece (knight, queen etc) should be a sub class.
-</br></br>
-Each Piece should: -
+```js
+const pieces = [
+  { piece: "Kg4", colour: 0 },
+  { piece: "Nd3", colour: 1 },
+  { piece: "d4", colour: 1 },
+];
 
-- have its constructor take the colour that it should be and a Rank and File to give it a starting position
-- know its `position` on the board
-  - this `position` should make use of the `Position` class and adhere to its constraints
-- have a `moveTo` method that will act as a setter for its position
-- have a `colour` property
-- have a `captured` property
-- have a `canMoveTo` method
-  - We would recommend `canMoveTo` being an abstract method on the `Piece` class. Each sub class(pawn, king etc) will have slightly different `canMoveTo` functionality but the method itself should be inherited.
-- have a setter for its `captured` property
+const game = new Game(pieces);
 
-### **3. Specific Piece Subclasses**
+// Will spawn a white king on square g4, a black knight on square d3, and a black pawn on square d4
+```
 
-- Each of the game pieces will have their own subclass. They will each have a different `canMoveTo` method and may have extra properties based on their in game functionality. For example a pawn may need a `hasMoved` property to check if it can move 2 spaces on the first move.
+- Also worthy of note is that I use standard chess notation as much as possible, so...
 
-Pick a couple of `Piece` subclasses with different movement behaviours and, once you have implemented them, move on to the `Game` class. You can return and complete the rest later.
+  - Named pieces are notated thus:
+    - K - King
+    - Q - Queen
+    - R - Rook
+    - N - Knight
+    - B - Bishop
+  - Pawns aren't notated, so if you just pass in a square it will generate a pawn in that square.
 
-## Advanced Tasks
+# Moving a piece
 
-### **1. Game Class**
+- The current colour's move can be found by running:
 
-`Game` should: -
+```js
+import { isWhiteMove } from "ChessGame";
 
-- have a `makePieces` method that will automatically generate the pieces in their starting positions upon creation
-  - this could be a private static method as the pieces only want to be 'made' once per game as part of instantiating a new game
-- have a `pieces` property that will store all the game pieces
-  - this could be a private property that makes use of `makePieces`
-- have a means to keep track of whose turn it is - `b/w`?
-- have a `makeMove` method that takes a chess notation string and updates the game pieces accordingly
-- have a method to return all the `pieces`
+console.log(isWhiteMove); // logs true/false
+```
 
-### **2. Piece Subclasses**
-
-- Complete the remaining `Piece` subclasses.
-- Think about how you are testing and whether you need any extra getter/setter functionality within these classes.
-- Try to refactor any classes that you think would benefit from stricter adherence to SOLID principles.
-
-## Learning Objectives
-
-- Create classes and subclasses using SOLID design principles
-- Use interfaces to design shapes of classes
-- Use an abstract class
-- Use access modifiers and keywords (e.g. public, private, static)
+The game will alternate the current colour at the end of the turn. This IS a boolean.

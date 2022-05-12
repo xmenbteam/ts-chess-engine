@@ -1,4 +1,4 @@
-import { Position } from "../Classes/PieceClasses/PiecesAndPosition";
+import { Piece, Position } from "../Classes/PieceClasses/PiecesAndPosition";
 
 export class utils {
   private letterRef: { [file: string]: number } = {
@@ -65,13 +65,22 @@ export class utils {
     return direction;
   }
 
-  loopGenerator(direction: string, kingPos: Position, otherPos: Position) {
-    const positionsArray = [];
-
-    let r;
-    let f;
-
-    const ref = {};
+  static generateKingSquares(king: Piece) {
+    const { file, rank } = king.position.position;
+    const { letterRef, files } = utils.getLetterRefs();
+    const fileNum = letterRef[file];
+    const positions = [];
+    for (
+      let f = fileNum > 0 ? fileNum - 1 : 0;
+      f <= fileNum + 1 && f < 8;
+      f++
+    ) {
+      for (let r = rank > 1 ? rank - 1 : 1; r <= rank + 1 && r < 9; r++) {
+        if (!(f === fileNum && r === king.position.position.rank))
+          positions.push(new Position(files[f], r));
+      }
+    }
+    return positions;
   }
 
   static getLetterRefs() {

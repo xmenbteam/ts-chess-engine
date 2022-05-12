@@ -115,9 +115,7 @@ class Game {
         if (pawnTest.test(move))
             move = `P${move}`;
         if (move === "0-0" || move === "0-0-0") {
-            let side = 0;
-            if (move === "0-0-0")
-                side = 1;
+            let side = move === "0-0" ? 0 : 1;
             return SpecialMoves_1.SpecialMoves.castle(side, colour, this.pieces);
         }
         let destiPos, destiRankFile, isPieceInWay;
@@ -142,6 +140,7 @@ class Game {
         if (!isPieceInWay)
             try {
                 const piece = MovementUtils_1.MovementUtils.completeMove(this.pieces, pieceThatCanMove, destiPos);
+                this.isWhiteMove = !this.isWhiteMove;
                 return { msg: `${piece} moved to ${destiRankFile}!` };
             }
             catch (err) {
@@ -213,6 +212,10 @@ class Game {
         let canCapture;
         if (capturePiece.constructor.name === "Pawn")
             canCapture = CaptureClasses_1.Capture.canPawnCapture(capturePiece, targetPiece);
+        else if (capturePiece.constructor.name === "Pawn" &&
+            targetPiece.constructor.name === "Pawn" &&
+            targetPiece.position.position.rank === targetPiece.position.position.rank)
+            canCapture = CaptureClasses_1.Capture.canEnPassant(capturePiece, targetPiece);
         else
             canCapture = CaptureClasses_1.Capture.canCapture(capturePiece, targetPiece);
         if (canCapture) {
@@ -291,19 +294,14 @@ class Game {
         }
         return { canPieceBlock, canPieceBeTaken };
     }
+    canKingMoveThere(colour, pos) {
+        const king = this.findKing(colour);
+        const positions = utils_1.utils.generateKingSquares(king);
+    }
     canKingMoveOutOfCheck(colour) {
         let canKingMove = true;
-        const { letterRef, files } = utils_1.utils.getLetterRefs();
         const king = this.findKing(colour);
-        const { file, rank } = king.position.position;
-        const fileNum = letterRef[file];
-        const positions = [];
-        for (let f = fileNum > 0 ? fileNum - 1 : 0; f <= fileNum + 1 && f < 8; f++) {
-            for (let r = rank > 1 ? rank - 1 : 1; r <= rank + 1 && r < 9; r++) {
-                if (!(f === fileNum && r === king.position.position.rank))
-                    positions.push(new PiecesAndPosition_1.Position(files[f], r));
-            }
-        }
+        const positions = utils_1.utils.generateKingSquares(king);
         const values = Object.values(this.pieces);
         canKingMove = positions.some((pos) => {
             return !values.some((piece) => {

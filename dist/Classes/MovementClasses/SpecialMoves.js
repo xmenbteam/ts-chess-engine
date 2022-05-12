@@ -20,11 +20,11 @@ class SpecialMoves {
         const newRookPos = new PiecesAndPosition_1.Position(newRookFile[side], rank[colour]);
         const oldKingPos = pieceObj[oldKingCoord[colour]].position;
         const oldRookPos = pieceObj[oldRookCoord[colour][side]].position;
-        const isPieceInWayKing = IsPieceInTheWay_1.IsPieceInTheWay.checkRankAndFile(oldKingPos, newKingPos, pieceObj);
-        const isPieceInWayRook = IsPieceInTheWay_1.IsPieceInTheWay.checkRankAndFile(oldRookPos, newRookPos, pieceObj);
+        const isRouteClear = !IsPieceInTheWay_1.IsPieceInTheWay.checkRankAndFile(oldKingPos, newKingPos, pieceObj) &&
+            !IsPieceInTheWay_1.IsPieceInTheWay.checkRankAndFile(oldRookPos, newRookPos, pieceObj);
         const hasNotMoved = !king.hasMoved && !rook.hasMoved;
         try {
-            if (hasNotMoved && !isPieceInWayKing && !isPieceInWayRook) {
+            if (hasNotMoved && isRouteClear) {
                 MovementUtils_1.MovementUtils.completeCastle(king, colour, side, pieceObj);
                 MovementUtils_1.MovementUtils.completeCastle(rook, colour, side, pieceObj);
                 return {

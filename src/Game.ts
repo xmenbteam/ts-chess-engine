@@ -116,8 +116,8 @@ export class Game {
     if (pawnTest.test(move)) move = `P${move}`;
 
     if (move === "0-0" || move === "0-0-0") {
-      let side: number = 0;
-      if (move === "0-0-0") side = 1;
+      let side: number = move === "0-0" ? 0 : 1;
+
       return SpecialMoves.castle(side, colour, this.pieces);
     }
 
@@ -157,6 +157,7 @@ export class Game {
           pieceThatCanMove,
           destiPos
         );
+        this.isWhiteMove = !this.isWhiteMove;
         return { msg: `${piece} moved to ${destiRankFile}!` };
       } catch (err: any) {
         return { msg: "Fail!", err };
@@ -248,6 +249,12 @@ export class Game {
 
     if (capturePiece.constructor.name === "Pawn")
       canCapture = Capture.canPawnCapture(capturePiece, targetPiece);
+    else if (
+      capturePiece.constructor.name === "Pawn" &&
+      targetPiece.constructor.name === "Pawn" &&
+      targetPiece.position.position.rank === targetPiece.position.position.rank
+    )
+      canCapture = Capture.canEnPassant(capturePiece, targetPiece);
     else canCapture = Capture.canCapture(capturePiece, targetPiece);
 
     if (canCapture) {
@@ -375,26 +382,18 @@ export class Game {
     return { canPieceBlock, canPieceBeTaken };
   }
 
+  canKingMoveThere(colour: number, pos: Position) {
+    const king = this.findKing(colour);
+    const positions = utils.generateKingSquares(king);
+  }
+
   canKingMoveOutOfCheck(colour: number): boolean {
     let canKingMove: boolean = true;
 
-    const { letterRef, files } = utils.getLetterRefs();
     const king = this.findKing(colour);
-    const { file, rank } = king.position.position;
-    const fileNum = letterRef[file];
 
-    const positions = [];
+    const positions = utils.generateKingSquares(king);
 
-    for (
-      let f = fileNum > 0 ? fileNum - 1 : 0;
-      f <= fileNum + 1 && f < 8;
-      f++
-    ) {
-      for (let r = rank > 1 ? rank - 1 : 1; r <= rank + 1 && r < 9; r++) {
-        if (!(f === fileNum && r === king.position.position.rank))
-          positions.push(new Position(files[f], r));
-      }
-    }
     const values = Object.values(this.pieces);
 
     canKingMove = positions.some((pos) => {
