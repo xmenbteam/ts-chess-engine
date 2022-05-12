@@ -389,38 +389,35 @@ export class Game {
 
     const positions = [];
 
-    for (let f = fileNum - 1; f > 0 && f <= fileNum + 1 && f < 8; f++) {
-      for (let r = rank - 1; r > 0 && r <= rank + 1 && r < 9; r++) {
-        positions.push(new Position(files[f], r));
+    for (
+      let f = fileNum > 0 ? fileNum - 1 : 0;
+      f <= fileNum + 1 && f < 8;
+      f++
+    ) {
+      for (let r = rank - 1; r <= rank + 1 && r < 9; r++) {
+        if (!(f === fileNum && r === king.position.position.rank))
+          positions.push(new Position(files[f], r));
       }
     }
+
+    positions.forEach((pos) => {
+      console.log(pos.position.file, pos.position.rank);
+    });
 
     const values = Object.values(this.pieces);
 
     canKingMove = positions.some((pos) => {
-      return values.some((piece) => {
+      return !values.some((piece) => {
+        const isKing = piece === king;
         const isDifferentColour = !Capture.isPieceSameColour(piece, king);
-        return piece.canMoveTo(pos) && isDifferentColour;
+        const canMove = piece.canMoveTo(pos);
+        console.log(
+          { isDifferentColour, canMove, isKing },
+          piece.constructor.name
+        );
+        return canMove && isDifferentColour && !isKing;
       });
     });
-
-    // for (let piece in this.pieces) {
-    //   const currPiece = this.pieces[piece];
-    //   const isSameColour = Capture.isPieceSameColour(currPiece, king);
-
-    //   positions.forEach((pos) => {
-    //     const canMove = currPiece.canMoveTo(pos);
-    //     console.log(
-    //       currPiece.position.position.file,
-    //       currPiece.position.position.rank,
-    //       {
-    //         isSameColour,
-    //         canMove,
-    //       }
-    //     );
-    //     if (!isSameColour && canMove) canKingMove;
-    //   });
-    // }
 
     return canKingMove;
   }

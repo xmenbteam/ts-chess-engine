@@ -327,7 +327,7 @@ describe("Can checking piece be taken", () => {
 });
 
 describe("Can King move out of Check", () => {
-  test.only("canKingMoveOutOfCheck", () => {
+  test("canKingMoveOutOfCheck", () => {
     const pieces: CustomPieceArray = [
       { piece: "Kb6", colour: 1 },
       { piece: "Re2", colour: 1 },
