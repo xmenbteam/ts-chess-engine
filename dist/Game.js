@@ -254,12 +254,9 @@ class Game {
         const maxRank = Math.max(otherPos.position.rank, kingPos.position.rank);
         const minFile = Math.min(letterRef[kingPos.position.file], letterRef[otherPos.position.file]);
         const maxFile = Math.max(letterRef[kingPos.position.file], letterRef[otherPos.position.file]);
-        console.log(direction);
         if (direction === "N" || direction === "S")
-            for (let r = minRank + 1; r < maxRank - 1; r++) {
-                console.log({ r, minRank, maxRank });
+            for (let r = minRank + 1; r < maxRank - 1; r++)
                 positionsBetween.push(new PiecesAndPosition_1.Position(otherPos.position.file, r));
-            }
         if (direction === "W" || direction === "E")
             for (let f = minFile + 1; f < maxFile - 1; f++)
                 positionsBetween.push(new PiecesAndPosition_1.Position(files[f], otherPos.position.rank));
@@ -302,21 +299,17 @@ class Game {
         const fileNum = letterRef[file];
         const positions = [];
         for (let f = fileNum > 0 ? fileNum - 1 : 0; f <= fileNum + 1 && f < 8; f++) {
-            for (let r = rank - 1; r <= rank + 1 && r < 9; r++) {
+            for (let r = rank > 1 ? rank - 1 : 1; r <= rank + 1 && r < 9; r++) {
                 if (!(f === fileNum && r === king.position.position.rank))
                     positions.push(new PiecesAndPosition_1.Position(files[f], r));
             }
         }
-        positions.forEach((pos) => {
-            console.log(pos.position.file, pos.position.rank);
-        });
         const values = Object.values(this.pieces);
         canKingMove = positions.some((pos) => {
             return !values.some((piece) => {
                 const isKing = piece === king;
                 const isDifferentColour = !CaptureClasses_1.Capture.isPieceSameColour(piece, king);
                 const canMove = piece.canMoveTo(pos);
-                console.log({ isDifferentColour, canMove, isKing }, piece.constructor.name);
                 return canMove && isDifferentColour && !isKing;
             });
         });
@@ -327,12 +320,6 @@ class Game {
         const isKingInCheck = this.isKingInCheck(colour);
         const canKingMoveOutOfCheck = this.canKingMoveOutOfCheck(colour);
         const { canPieceBlock, canPieceBeTaken } = this.canCheckBeRuined(colour);
-        console.log({
-            isKingInCheck,
-            canKingMoveOutOfCheck,
-            canPieceBeTaken,
-            canPieceBlock,
-        });
         if (isKingInCheck &&
             !canKingMoveOutOfCheck &&
             !canPieceBlock &&

@@ -368,6 +368,17 @@ describe("Can King move out of Check", () => {
 
     expect(game.canKingMoveOutOfCheck(1)).toBe(false);
   });
+  test("!canKingMoveOutOfCheck - other way round", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Ka1", colour: 1 },
+      { piece: "Ra8", colour: 0 },
+      { piece: "Qb8", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canKingMoveOutOfCheck(1)).toBe(false);
+  });
 });
 
 describe("Checkmate", () => {
