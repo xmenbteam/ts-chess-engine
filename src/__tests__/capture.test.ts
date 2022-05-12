@@ -324,6 +324,17 @@ describe("Can checking piece be taken", () => {
 
     expect(game.canCheckBeRuined(1).canPieceBeTaken).toBe(true);
   });
+  test("canCheckingPieceBeTaken", () => {
+    const pieces: CustomPieceArray = [
+      { piece: "Kf6", colour: 1 },
+      { piece: "Re2", colour: 1 },
+      { piece: "Ne4", colour: 0 },
+    ];
+
+    const game = new Game(pieces);
+
+    expect(game.canCheckBeRuined(1).canPieceBeTaken).toBe(true);
+  });
 });
 
 describe("Can King move out of Check", () => {
