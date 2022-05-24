@@ -7,10 +7,22 @@
 
 ## How To Use
 
-- So first of all, you'll need to create a new `Game`:
+- You can add the package as a dependency using npm:
 
 ```js
-import { Game } from "ChessGame";
+npm install @samcjparry/ts-chess
+```
+
+- Or using yarn:
+
+```js
+yarn add @samcjparry/ts-chess
+```
+
+- Then first of all, you'll need to create a new `Game`:
+
+```js
+import { Game } from "@samcjparry/ts-chess";
 
 const game = new Game();
 ```
