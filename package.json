@@ -1,11 +1,11 @@
 {
-  "name": "ts-chess",
-  "version": "1.0.0",
-  "main": "./dist/index.js",
+  "name": "@samcjparry/ts-chess",
+  "version": "1.0.1",
+  "main": "./dist/game.js",
   "repository": "https://github.com/xmenbteam/ts-chess.git",
   "author": "Sam Parry <67956822+xmenbteam@users.noreply.github.com>",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "scripts": {
     "tscw": "tsc --watch",
     "test-game": "jest ./src/__tests__/game.test.ts",
