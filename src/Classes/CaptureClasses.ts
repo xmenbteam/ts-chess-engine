@@ -6,15 +6,14 @@ export class Capture {
     const p1Colour = capturingPiece.colour;
     const p2Colour = targetPiece.colour;
 
-    return p1Colour === p2Colour ? true : false;
+    return p1Colour === p2Colour;
   }
 
   static canCapture(capturingPiece: Piece, targetPiece: Piece): boolean {
     const canMove = capturingPiece.canMoveTo(targetPiece.position);
     const isSameColour = this.isPieceSameColour(capturingPiece, targetPiece);
 
-    if (canMove && !isSameColour) return true;
-    return false;
+    return canMove && !isSameColour;
   }
 
   static canPawnCapture(capturingPiece: Piece, targetPiece: Piece): boolean {
@@ -27,14 +26,11 @@ export class Capture {
 
     const canCapture = Math.abs(file) === 1 && rank === 1;
 
-    if (
+    return (
       isPawn &&
       canCapture &&
       !this.isPieceSameColour(capturingPiece, targetPiece)
-    )
-      return true;
-
-    return false;
+    );
   }
 
   static canEnPassant(capturingPiece: Piece, targetPiece: Piece): boolean {

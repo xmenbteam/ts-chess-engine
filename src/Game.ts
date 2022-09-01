@@ -388,15 +388,13 @@ export class Game {
   }
 
   canKingMoveOutOfCheck(colour: number): boolean {
-    let canKingMove: boolean = true;
-
     const king = this.findKing(colour);
 
     const positions = utils.generateKingSquares(king);
 
     const values = Object.values(this.pieces);
 
-    canKingMove = positions.some((pos) => {
+    return positions.some((pos) => {
       return !values.some((piece) => {
         const isKing = piece === king;
         const isDifferentColour = !Capture.isPieceSameColour(piece, king);
@@ -404,25 +402,19 @@ export class Game {
         return canMove && isDifferentColour && !isKing;
       });
     });
-
-    return canKingMove;
   }
 
   isKingInCheckMate(colour: number): boolean {
-    let isKingInCheckMate: boolean = false;
     const isKingInCheck = this.isKingInCheck(colour);
     const canKingMoveOutOfCheck = this.canKingMoveOutOfCheck(colour);
     const { canPieceBlock, canPieceBeTaken } = this.canCheckBeRuined(colour);
 
-    if (
+    return (
       isKingInCheck &&
       !canKingMoveOutOfCheck &&
       !canPieceBlock &&
       !canPieceBeTaken
-    )
-      isKingInCheckMate = true;
-
-    return isKingInCheckMate;
+    );
   }
 
   constructor(pieces?: CustomPieceArray) {

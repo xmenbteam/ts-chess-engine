@@ -6,14 +6,12 @@ class Capture {
     static isPieceSameColour(capturingPiece, targetPiece) {
         const p1Colour = capturingPiece.colour;
         const p2Colour = targetPiece.colour;
-        return p1Colour === p2Colour ? true : false;
+        return p1Colour === p2Colour;
     }
     static canCapture(capturingPiece, targetPiece) {
         const canMove = capturingPiece.canMoveTo(targetPiece.position);
         const isSameColour = this.isPieceSameColour(capturingPiece, targetPiece);
-        if (canMove && !isSameColour)
-            return true;
-        return false;
+        return canMove && !isSameColour;
     }
     static canPawnCapture(capturingPiece, targetPiece) {
         const { file, rank } = targetPiece.position.distanceFrom(capturingPiece.position);
@@ -21,11 +19,9 @@ class Capture {
         if (!isPawn)
             throw new Error("Piece must be a pawn!");
         const canCapture = Math.abs(file) === 1 && rank === 1;
-        if (isPawn &&
+        return (isPawn &&
             canCapture &&
-            !this.isPieceSameColour(capturingPiece, targetPiece))
-            return true;
-        return false;
+            !this.isPieceSameColour(capturingPiece, targetPiece));
     }
     static canEnPassant(capturingPiece, targetPiece) {
         var _a, _b;
